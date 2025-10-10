@@ -1,4 +1,5 @@
-package com.andromeda.dreamshops.dto;
+package com.greenstack.farm2door.dto;
+
 
 
 import lombok.Data;
@@ -11,6 +12,6 @@ public class UserDto {
     private String firstName;
     private String lastName;
     private String email;
-    private List<com.andromeda.dreamshops.dto.OrderDto> orders;
-    private com.andromeda.dreamshops.dto.CartDto cart;
+    private List<OrderDto> orders;
+    private CartDto cart;
 }

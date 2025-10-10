@@ -1,6 +1,5 @@
-package com.andromeda.dreamshops.dto;
-
-import com.andromeda.dreamshops.model.Category;
+package com.greenstack.farm2door.dto;
+import com.greenstack.farm2door.model.Category;
 import lombok.Data;
 
 import java.math.BigDecimal;
@@ -15,5 +14,5 @@ public class ProductDto {
     private int inventory;
     private String description;
     private Category category;
-    private List<com.andromeda.dreamshops.dto.ImageDto> images;
+    private List<ImageDto> images;
 }

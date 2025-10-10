@@ -32,6 +32,10 @@ public class Order {
     private Set<OrderItems> orderItems = new HashSet<>();
 
     @ManyToOne
+    @JoinColumn(name = "shop_id")
+    private Shop shop;
+
+    @ManyToOne
     @JoinColumn(name = "user_id")
     private RegularUser user;
 }

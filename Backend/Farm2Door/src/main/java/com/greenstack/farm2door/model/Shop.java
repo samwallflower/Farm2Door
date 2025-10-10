@@ -33,6 +33,9 @@ public class Shop {
     @JoinColumn(name = "shop_owner_id", referencedColumnName = "id")
     private ShopOwner shopOwner;
 
+    @OneToMany(mappedBy = "shop")
+    private List<Order> orders;
+
     public Shop(String name) {
         this.name = name;
     }

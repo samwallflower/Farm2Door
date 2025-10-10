@@ -1,4 +1,4 @@
-package com.andromeda.dreamshops.dto;
+package com.greenstack.farm2door.dto;
 
 import lombok.Data;
 

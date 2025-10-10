@@ -41,8 +41,7 @@ public class Product {
                    int inventory,
                    String origin,
                    String unit,
-                   Category category,
-                   Shop shop) {
+                   Category category) {
         this.name = name;
         this.description = description;
         this.price = price;
@@ -50,7 +49,6 @@ public class Product {
         this.origin = origin;
         this.unit = unit;
         this.category = category;
-        this.shop = shop;
     }
 
 }

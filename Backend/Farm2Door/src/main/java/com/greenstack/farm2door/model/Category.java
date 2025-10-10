@@ -1,5 +1,6 @@
 package com.greenstack.farm2door.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -15,6 +16,7 @@ public class Category {
     private Long id;
     private String name;
 
+    @JsonIgnore //due to cyclic dependency we ignore this
     @OneToMany(mappedBy = "category")
     private List<Product> products;
 

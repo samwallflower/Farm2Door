@@ -1,15 +1,19 @@
 package com.greenstack.farm2door.service.shop;
 
+import com.greenstack.farm2door.dto.ShopDto;
 import com.greenstack.farm2door.exceptions.AlreadyExistsException;
 import com.greenstack.farm2door.exceptions.ResourceNotFoundException;
 import com.greenstack.farm2door.model.Order;
+import com.greenstack.farm2door.model.Product;
 import com.greenstack.farm2door.model.Shop;
 import com.greenstack.farm2door.model.ShopOwner;
 import com.greenstack.farm2door.repository.ShopRepository;
 import com.greenstack.farm2door.request.AddShopRequest;
 import com.greenstack.farm2door.request.UpdateShopRequest;
+import com.greenstack.farm2door.service.product.IProductService;
 import com.greenstack.farm2door.service.user.IUserService;
 import lombok.RequiredArgsConstructor;
+import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -19,7 +23,8 @@ import java.util.List;
 public class ShopService implements IShopService{
     private final ShopRepository shopRepository;
     private final IUserService userService;
-
+    private final IProductService productService;
+    private final ModelMapper modelMapper;
     @Override
     public Shop addShop(AddShopRequest shop, Long userId) {
         // check if the shop with the same name already exists
@@ -27,7 +32,7 @@ public class ShopService implements IShopService{
         // we should also check if the user already has a shop
         // if yes, then we should not allow to create another shop for the same user
         // as one user can have only one shop
-        if (shopRepository.existsByUserId(userId)) {
+        if (shopRepository.existsByShopOwnerId(userId)) {
             throw new AlreadyExistsException("User already has a shop with userId: " + userId);
         }
 
@@ -66,7 +71,8 @@ public class ShopService implements IShopService{
     @Override
     public Shop getShopById(Long id) {
         return shopRepository.findById(id)
-                .orElseThrow(()-> new ResourceNotFoundException("Shop not found with id: " + id));
+                .orElseThrow(()->
+                        new ResourceNotFoundException("Shop not found"));
     }
 
     @Override
@@ -76,7 +82,7 @@ public class ShopService implements IShopService{
         return shopRepository.findById(id)
                 .map(existingShop -> UpdateExistingShop(existingShop, shop))
                 .map(shopRepository::save)
-                .orElseThrow(()-> new ResourceNotFoundException("Shop not found with id: " + id));
+                .orElseThrow(()-> new ResourceNotFoundException("Shop not found"));
     }
 
     private Shop UpdateExistingShop(Shop existingShop, UpdateShopRequest shop) {
@@ -95,11 +101,11 @@ public class ShopService implements IShopService{
     @Override
     public void deleteShop(Long id) {
         // check if shop exists
-        // if exists, delete it
+        // if it exists, delete it
         // if not, throw exception
         shopRepository.findById(id)
                 .ifPresentOrElse(shopRepository::delete,
-                        ()-> {throw new ResourceNotFoundException("Shop not found with id: " + id);});
+                        ()-> {throw new ResourceNotFoundException("Shop not found");});
     }
 
     @Override
@@ -120,11 +126,33 @@ public class ShopService implements IShopService{
 
     @Override
     public Shop getShopByUserId(Long userId) {
-        return shopRepository.findByUserId(userId);
+        return shopRepository.findByShopOwnerId(userId);
     }
 
     @Override
     public boolean existsByUserId(Long userId) {
-        return shopRepository.existsByUserId(userId);
+        return shopRepository.existsByShopOwnerId(userId);
     }
+
+    @Override
+    public Long countProductsInShop(Long shopId) {
+        return productService.countProductsByShopId(shopId);
+    }
+
+    @Override
+    public ShopDto convertToDto(Shop shop) {
+        ShopDto shopDto = modelMapper.map(shop, ShopDto.class);
+        List<Product> products = productService.getAllProductsByShopId(shop.getId());
+        shopDto.setProducts(productService.getConvertedProducts(products));
+        // we will conver the orders later when we have Order Service .
+        return shopDto;
+    }
+
+    @Override
+    public List<ShopDto> getConvertedShops(List<Shop> shops) {
+        return shops.stream()
+                .map(this::convertToDto)
+                .toList();
+    }
+
 }

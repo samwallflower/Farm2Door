@@ -1,5 +1,6 @@
 package com.greenstack.farm2door.service.shop;
 
+import com.greenstack.farm2door.dto.ShopDto;
 import com.greenstack.farm2door.model.Order;
 import com.greenstack.farm2door.model.Shop;
 import com.greenstack.farm2door.request.AddShopRequest;
@@ -20,5 +21,8 @@ public interface IShopService {
     boolean existsByName(String shopName);
     Shop getShopByUserId(Long userId);// mainly shop owner id
     boolean existsByUserId(Long userId);
+    Long countProductsInShop(Long shopId);
+    ShopDto convertToDto(Shop shop);
+    List<ShopDto> getConvertedShops(List<Shop> shops);
 
 }

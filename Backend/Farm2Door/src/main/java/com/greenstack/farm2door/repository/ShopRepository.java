@@ -8,7 +8,8 @@ import org.springframework.stereotype.Repository;
 public interface ShopRepository extends JpaRepository<Shop,Long> {
     Shop findByName(String name);
     boolean existsByName(String name);
-    Shop findByUserId(Long userId);// mainly shop owner id
-    boolean existsByUserId(Long userId);
+
+    Shop findByShopOwnerId(Long shopOwnerId);
+    boolean existsByShopOwnerId(Long userId);
 
 }

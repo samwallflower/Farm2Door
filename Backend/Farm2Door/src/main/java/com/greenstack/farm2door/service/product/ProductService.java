@@ -1,15 +1,18 @@
 package com.greenstack.farm2door.service.product;
 
+import com.greenstack.farm2door.dto.ImageDto;
 import com.greenstack.farm2door.dto.ProductDto;
 import com.greenstack.farm2door.exceptions.AlreadyExistsException;
 import com.greenstack.farm2door.exceptions.ResourceNotFoundException;
 import com.greenstack.farm2door.model.Category;
+import com.greenstack.farm2door.model.Image;
 import com.greenstack.farm2door.model.Product;
 import com.greenstack.farm2door.model.Shop;
 import com.greenstack.farm2door.repository.ProductRepository;
 import com.greenstack.farm2door.request.AddProductRequest;
 import com.greenstack.farm2door.request.UpdateProductRequest;
 import com.greenstack.farm2door.service.category.ICategoryService;
+import com.greenstack.farm2door.service.image.ImageService;
 import com.greenstack.farm2door.service.shop.IShopService;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
@@ -25,6 +28,7 @@ public class ProductService implements IProductService{
     private final ProductRepository productRepository;
     private final IShopService shopService;
     private final ICategoryService categoryService;
+    private final ImageService imageService;
     private final ModelMapper modelMapper;
 
 
@@ -161,7 +165,12 @@ public class ProductService implements IProductService{
         ProductDto productDto = modelMapper.map(product, ProductDto.class);
         //get images
         //convert them to image dtos ...
-        return modelMapper.map(product, ProductDto.class);
+        List<Image> images = imageService.getImagesByProductId(product.getId());
+        List<ImageDto> imageDtos = images.stream()
+                .map(image -> modelMapper.map(image, ImageDto.class))
+                .toList();
+        productDto.setImages(imageDtos);
+        return productDto;
     }
 
     @Override

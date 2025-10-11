@@ -2,6 +2,8 @@ package com.greenstack.farm2door.dto;
 
 import lombok.Data;
 
+import java.util.List;
+
 @Data
 public class ShopDto {
     private Long id;
@@ -10,4 +12,6 @@ public class ShopDto {
     private String contactNumber; // these will be shown for contacting the shop
     private String contactEmail; // these will be shown for contacting the shop
     private String description;
+    private List<ProductDto> products;
+    private List<OrderDto> orders; // List of orders associated with the shop
 }

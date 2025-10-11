@@ -1,29 +1,73 @@
 package com.greenstack.farm2door.service.product;
 
 import com.greenstack.farm2door.dto.ProductDto;
+import com.greenstack.farm2door.exceptions.AlreadyExistsException;
 import com.greenstack.farm2door.exceptions.ResourceNotFoundException;
+import com.greenstack.farm2door.model.Category;
 import com.greenstack.farm2door.model.Product;
+import com.greenstack.farm2door.model.Shop;
 import com.greenstack.farm2door.repository.ProductRepository;
 import com.greenstack.farm2door.request.AddProductRequest;
 import com.greenstack.farm2door.request.UpdateProductRequest;
+import com.greenstack.farm2door.service.category.ICategoryService;
+import com.greenstack.farm2door.service.shop.IShopService;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
 public class ProductService implements IProductService{
 
     private final ProductRepository productRepository;
+    private final IShopService shopService;
+    private final ICategoryService categoryService;
     private final ModelMapper modelMapper;
 
 
 
     @Override
-    public Product addProduct(AddProductRequest request) {
-        return null;
+    public Product addProduct(AddProductRequest request, Long shopId) {
+        // first we will check if the category already exists in the database
+        // if it does, we will set it as the new product category
+        // if it doesn't, we will save it as a new category and then set it as the new product category
+        // finally we will save the product to the database
+        Shop shop = shopService.getShopById(shopId);
+        if (isProductExists(request.getName(), shop.getName())) {
+            throw new AlreadyExistsException("Product already exists with name: " + request.getName() + " in shop: " + shop.getName()
+                    + " , you may update this product instead.");
+        }
+
+        Category category = Optional.ofNullable(categoryService.getCategoryByName(request.getCategory().getName()))
+                .orElseGet(() -> {
+                    Category newCategory = new Category(request.getCategory().getName());
+                    return categoryService.addCategory(newCategory);
+                });
+        request.setCategory(category);
+        return productRepository.save(createProduct(request, category, shop));
+    }
+
+    private Product createProduct(AddProductRequest request, Category category, Shop shop){
+        Product product = new Product(
+                request.getName(),
+                request.getDescription(),
+                request.getPrice(),
+                request.getInventory(),
+                request.getOrigin(),
+                request.getUnit(),
+                category
+        );
+        product.setShop(shop);
+        return product;
+    }
+
+    private boolean isProductExists(String name , String shopName){
+        // checking if product already exists in a shop as every product belongs to a particular shop
+        // as no product can exist without a shop
+        return productRepository.existsByNameAndShop(name, shopName);
     }
 
     @Override
@@ -33,13 +77,40 @@ public class ProductService implements IProductService{
     }
 
     @Override
-    public void deleteProductById(Long id) {
+    public void deleteProductById(Long id, Long shopId) {
+        // first we will check if the product exists in the shop with the given id
+        // if it does, we will delete it
+        // if it doesn't, we will throw an exception
+        productRepository.findByIdAndShopId(id, shopId)
+                .ifPresentOrElse(productRepository::delete,
+                        ()-> {throw new ResourceNotFoundException("Product not found with id: " + id + " in shop with id: " + shopId);});
 
     }
 
     @Override
-    public Product updateProduct(UpdateProductRequest request, Long productId) {
-        return null;
+    public Product updateProduct(UpdateProductRequest request, Long productId, Long shopId) {
+
+        return productRepository.findByIdAndShopId(productId, shopId)
+                .map(existingProduct -> UpdateExistingProduct(existingProduct, request))
+                .map(productRepository::save)
+                .orElseThrow(()-> new ResourceNotFoundException("Product not found with id: " + productId));
+    }
+
+    private Product UpdateExistingProduct(Product existingProduct, UpdateProductRequest request) {
+        existingProduct.setName(request.getName());
+        existingProduct.setDescription(request.getDescription());
+        existingProduct.setPrice(request.getPrice());
+        existingProduct.setInventory(request.getInventory());
+        existingProduct.setOrigin(request.getOrigin());
+        existingProduct.setUnit(request.getUnit());
+        // check if category exists
+        Category category = Optional.ofNullable(categoryService.getCategoryByName(request.getCategory().getName()))
+                .orElseGet(()->{
+                    Category newCategory = new Category(request.getCategory().getName());
+                    return categoryService.addCategory(newCategory);
+                });
+        existingProduct.setCategory(category);
+        return existingProduct;
     }
 
     //get all products
@@ -54,7 +125,8 @@ public class ProductService implements IProductService{
 
         return productRepository.findByName(name);
     }
-
+    // all vegetables or all fruits
+    // all products in a particular category
     @Override
     public List<Product> getAllProductsByCategory(String category) {
 
@@ -90,6 +162,11 @@ public class ProductService implements IProductService{
         //get images
         //convert them to image dtos ...
         return modelMapper.map(product, ProductDto.class);
+    }
+
+    @Override
+    public Long countProductsByShopId(Long shopId) {
+        return productRepository.countByShopId(shopId); // Counting all products in a shop
     }
 
 

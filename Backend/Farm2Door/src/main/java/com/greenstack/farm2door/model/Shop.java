@@ -29,7 +29,7 @@ public class Shop {
     @JoinColumn(name = "shop_id")
     private List<Product> products;
 
-    @OneToOne
+    @OneToOne(cascade = CascadeType.ALL, orphanRemoval = true)
     @JoinColumn(name = "shop_owner_id", referencedColumnName = "id")
     private ShopOwner shopOwner;
 
@@ -38,5 +38,17 @@ public class Shop {
 
     public Shop(String name) {
         this.name = name;
+    }
+
+    public Shop(String name,
+                String address,
+                String contactNumber,
+                String contactEmail,
+                String description) {
+        this.name = name;
+        this.address = address;
+        this.contactNumber = contactNumber;
+        this.contactEmail = contactEmail;
+        this.description = description;
     }
 }

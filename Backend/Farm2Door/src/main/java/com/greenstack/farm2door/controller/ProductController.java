@@ -1,19 +1,20 @@
 package com.greenstack.farm2door.controller;
 
 import com.greenstack.farm2door.dto.ProductDto;
+import com.greenstack.farm2door.exceptions.AlreadyExistsException;
 import com.greenstack.farm2door.exceptions.ResourceNotFoundException;
 import com.greenstack.farm2door.model.Product;
+import com.greenstack.farm2door.request.AddProductRequest;
+import com.greenstack.farm2door.request.UpdateProductRequest;
 import com.greenstack.farm2door.response.ApiResponse;
 import com.greenstack.farm2door.service.product.IProductService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
+import static org.springframework.http.HttpStatus.CONFLICT;
 import static org.springframework.http.HttpStatus.NOT_FOUND;
 
 @RequiredArgsConstructor
@@ -98,6 +99,42 @@ public class ProductController {
                 : ResponseEntity.ok(new ApiResponse("Products for shop name: " + shopName + " and category: " + categoryName + " retrieved successfully", convertedProducts));
     }
 
+    //add product to a shop
+    @PostMapping("/shop/{shopId}/product/add")
+    public ResponseEntity<ApiResponse> addProduct(@RequestBody AddProductRequest productRequest,@PathVariable Long shopId) {
+        try{
+            Product savedProduct = productService.addProduct(productRequest, shopId);
+            ProductDto productDto = productService.convertToDto(savedProduct);
+            return ResponseEntity.ok(new ApiResponse("Product added successfully", productDto));
+        }catch (AlreadyExistsException e){
+            return ResponseEntity.status(CONFLICT).body(
+                    new ApiResponse(e.getMessage(), null));
+        }
+    }
 
+    // update product details
+    @PutMapping("/shop/{shopId}/product/{productId}/update")
+    public ResponseEntity<ApiResponse> updateProduct(@PathVariable Long productId, @RequestBody UpdateProductRequest request, @PathVariable Long shopId) {
+        try{
+            Product updatedProduct = productService.updateProduct( request, productId, shopId);
+            ProductDto productDto = productService.convertToDto(updatedProduct);
+            return ResponseEntity.ok(new ApiResponse("Product updated successfully", productDto));
+        } catch (ResourceNotFoundException e) {
+            return ResponseEntity.status(NOT_FOUND)
+                    .body(new ApiResponse(e.getMessage(), null));
+        }
+    }
+
+    //delete product by id
+    @DeleteMapping("/shop/{shopId}/product/{productId}/delete")
+    public ResponseEntity<ApiResponse> deleteProduct(@PathVariable Long productId, @PathVariable Long shopId) {
+        try {
+            productService.deleteProductById(productId, shopId);
+            return ResponseEntity.ok(new ApiResponse("Product deleted successfully", productId));
+        } catch (ResourceNotFoundException e) {
+            return ResponseEntity.status(NOT_FOUND)
+                    .body(new ApiResponse(e.getMessage(), null));
+        }
+    }
 
 }

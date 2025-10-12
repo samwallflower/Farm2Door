@@ -1,0 +1,148 @@
+/* LoginPage.css */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+.login-container {
+  min-height: 100vh;
+  width: 100vw;
+  background-image: url('https://images.unsplash.com/photo-1625246333195-78d9c38ad449?w=1920&q=80');
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+  position: relative;
+  overflow: hidden;
+}
+
+.login-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.3);
+  z-index: 1;
+}
+
+.login-content {
+  position: relative;
+  z-index: 2;
+  text-align: center;
+  max-width: 800px;
+  width: 100%;
+  margin: 0 auto;
+}
+
+.branding {
+  margin-bottom: 60px;
+}
+
+.branding-tagline {
+  font-family: 'Brush Script MT', cursive;
+  font-size: 2rem;
+  color: white;
+  margin: 0 0 10px 0;
+  font-weight: 400;
+  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+}
+
+.branding-name {
+  font-family: 'Brush Script MT', cursive;
+  font-size: 5rem;
+  color: white;
+  margin: 0;
+  font-weight: 400;
+  line-height: 1;
+  text-shadow: 3px 3px 6px rgba(0, 0, 0, 0.6);
+}
+
+.branding-subtitle {
+  font-family: 'Georgia', serif;
+  font-size: 1.5rem;
+  color: white;
+  margin: 15px 0 0 0;
+  font-style: italic;
+  font-weight: 300;
+  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+}
+
+.login-options {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  align-items: center;
+}
+
+.login-button {
+  background: rgba(0, 0, 0, 0.75);
+  color: white;
+  border: none;
+  border-radius: 50px;
+  padding: 20px 60px;
+  font-size: 1.3rem;
+  font-weight: 400;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  min-width: 350px;
+  text-align: center;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+}
+
+.login-button:hover {
+  background: rgba(0, 0, 0, 0.85);
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.4);
+}
+
+.login-button:active {
+  transform: translateY(0);
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .branding-tagline {
+    font-size: 1.5rem;
+  }
+
+  .branding-name {
+    font-size: 3.5rem;
+  }
+
+  .branding-subtitle {
+    font-size: 1.2rem;
+  }
+
+  .login-button {
+    min-width: 280px;
+    padding: 18px 40px;
+    font-size: 1.1rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .branding-tagline {
+    font-size: 1.2rem;
+  }
+
+  .branding-name {
+    font-size: 2.5rem;
+  }
+
+  .branding-subtitle {
+    font-size: 1rem;
+  }
+
+  .login-button {
+    min-width: 240px;
+    padding: 16px 30px;
+    font-size: 1rem;
+  }
+}

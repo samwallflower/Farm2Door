@@ -51,10 +51,7 @@ public class ImageService implements IImageService {
                 imageRepository.save(savedImage); // saving again to update the download url
 
                 // Converting to ImageDto
-                ImageDto imageDto = new ImageDto();
-                imageDto.setId(savedImage.getId());
-                imageDto.setFileName(savedImage.getFileName());
-                imageDto.setDownloadUrl(savedImage.getDownloadUrl());
+                ImageDto imageDto = convertToDto(savedImage);
 
                 savedImageDto.add(imageDto); // adding to the imagedto list
             } catch (SQLException | IOException e) {
@@ -91,4 +88,21 @@ public class ImageService implements IImageService {
     public List<Image> getImagesByProductId(Long productId) {
         return imageRepository.findByProductId(productId);
     }
+
+    @Override
+    public ImageDto convertToDto(Image image) {
+        ImageDto dto = new ImageDto();
+        dto.setId(image.getId());
+        dto.setFileName(image.getFileName());
+        dto.setDownloadUrl(image.getDownloadUrl());
+        return dto;
+    }
+
+    @Override
+    public List<ImageDto> convertToDtoList(List<Image> images) {
+        return images.stream()
+                .map(this::convertToDto)
+                .toList();
+    }
+
 }

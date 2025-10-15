@@ -77,4 +77,16 @@ public class ImageController {
         }
         return ResponseEntity.status(INTERNAL_SERVER_ERROR).body(new ApiResponse("Delete failed!", INTERNAL_SERVER_ERROR));
     }
+
+    //get images by product id
+    @GetMapping("/product/{productId}/images")
+    public ResponseEntity<ApiResponse> getImagesByProductId(@PathVariable Long productId) {
+        try {
+            List<Image> images = imageService.getImagesByProductId(productId);
+            List<ImageDto> imageDtos = imageService.convertToDtoList(images);
+            return ResponseEntity.ok(new ApiResponse("Images fetched successfully", imageDtos));
+        } catch (ResourceNotFoundException e) {
+            return ResponseEntity.status(NOT_FOUND).body(new ApiResponse(e.getMessage(), null));
+        }
+    }
 }

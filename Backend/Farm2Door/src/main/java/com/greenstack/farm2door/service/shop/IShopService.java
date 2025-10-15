@@ -13,11 +13,13 @@ public interface IShopService {
     Shop getShopByName(String name);
     Shop getShopById(Long id);
     Shop updateShop(Long id, UpdateShopRequest shop);
-    void deleteShop(Long id);
+    void deleteShopById(Long id);
     // this should be in the order service but for simplicity we will keep it here for now
     // later we can move it to order service
     List<Order> getOrdersByShopId(Long shopId);
     List<Shop> getAllShops();
+    Shop getShopByOwnerId(Long ownerId);
+    boolean existsByOwnerId(Long ownerId);
     boolean existsByName(String shopName);
     Shop getShopByUserId(Long userId);// mainly shop owner id
     boolean existsByUserId(Long userId);

@@ -24,14 +24,14 @@ public class Product {
     private String origin; // e.g., farm location
     private String unit; // e.g., kg, lb, dozen
 
-    @ManyToOne(cascade = CascadeType.ALL)
+    @ManyToOne
     @JoinColumn(name = "category_id")
     private Category category;
 
     @OneToMany(mappedBy = "product", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Image> images;
 
-    @ManyToOne(cascade = CascadeType.ALL)
+    @ManyToOne
     @JoinColumn(name = "shop_id")
     private Shop shop;
 

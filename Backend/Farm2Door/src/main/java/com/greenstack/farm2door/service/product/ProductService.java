@@ -8,7 +8,10 @@ import com.greenstack.farm2door.model.Category;
 import com.greenstack.farm2door.model.Image;
 import com.greenstack.farm2door.model.Product;
 import com.greenstack.farm2door.model.Shop;
+import com.greenstack.farm2door.repository.CategoryRepository;
+import com.greenstack.farm2door.repository.ImageRepository;
 import com.greenstack.farm2door.repository.ProductRepository;
+import com.greenstack.farm2door.repository.ShopRepository;
 import com.greenstack.farm2door.request.AddProductRequest;
 import com.greenstack.farm2door.request.UpdateProductRequest;
 import com.greenstack.farm2door.service.category.ICategoryService;
@@ -26,9 +29,9 @@ import java.util.Optional;
 public class ProductService implements IProductService{
 
     private final ProductRepository productRepository;
-    private final IShopService shopService;
-    private final ICategoryService categoryService;
-    private final ImageService imageService;
+    private final ShopRepository shopRepository;
+    private final CategoryRepository categoryRepository;
+    private final ImageRepository imageRepository;
     private final ModelMapper modelMapper;
 
 
@@ -39,16 +42,17 @@ public class ProductService implements IProductService{
         // if it does, we will set it as the new product category
         // if it doesn't, we will save it as a new category and then set it as the new product category
         // finally we will save the product to the database
-        Shop shop = shopService.getShopById(shopId);
+        Shop shop = shopRepository.findById(shopId)
+                .orElseThrow(()-> new ResourceNotFoundException("Shop not found with id: " + shopId));
         if (isProductExists(request.getName(), shop.getName())) {
             throw new AlreadyExistsException("Product already exists with name: " + request.getName() + " in shop: " + shop.getName()
                     + " , you may update this product instead.");
         }
 
-        Category category = Optional.ofNullable(categoryService.getCategoryByName(request.getCategory().getName()))
+        Category category = Optional.ofNullable(categoryRepository.findByName(request.getCategory().getName()))
                 .orElseGet(() -> {
                     Category newCategory = new Category(request.getCategory().getName());
-                    return categoryService.addCategory(newCategory);
+                    return categoryRepository.save(newCategory);
                 });
         request.setCategory(category);
         return productRepository.save(createProduct(request, category, shop));
@@ -71,7 +75,7 @@ public class ProductService implements IProductService{
     private boolean isProductExists(String name , String shopName){
         // checking if product already exists in a shop as every product belongs to a particular shop
         // as no product can exist without a shop
-        return productRepository.existsByNameAndShop(name, shopName);
+        return productRepository.existsByNameAndShopName(name, shopName);
     }
 
     @Override
@@ -108,10 +112,10 @@ public class ProductService implements IProductService{
         existingProduct.setOrigin(request.getOrigin());
         existingProduct.setUnit(request.getUnit());
         // check if category exists
-        Category category = Optional.ofNullable(categoryService.getCategoryByName(request.getCategory().getName()))
+        Category category = Optional.ofNullable(categoryRepository.findByName(request.getCategory().getName()))
                 .orElseGet(()->{
                     Category newCategory = new Category(request.getCategory().getName());
-                    return categoryService.addCategory(newCategory);
+                    return categoryRepository.save(newCategory);
                 });
         existingProduct.setCategory(category);
         return existingProduct;
@@ -148,6 +152,7 @@ public class ProductService implements IProductService{
         return productRepository.findByShopName(shopName);
     }
 
+    // all vegetables in green farm shop
     @Override
     public List<Product> getAllProductsByShopAndCategory(String shopName, String categoryName) {
         return productRepository.findByShopNameAndCategoryName(shopName, categoryName);
@@ -165,7 +170,7 @@ public class ProductService implements IProductService{
         ProductDto productDto = modelMapper.map(product, ProductDto.class);
         //get images
         //convert them to image dtos ...
-        List<Image> images = imageService.getImagesByProductId(product.getId());
+        List<Image> images = imageRepository.findByProductId(product.getId());
         List<ImageDto> imageDtos = images.stream()
                 .map(image -> modelMapper.map(image, ImageDto.class))
                 .toList();

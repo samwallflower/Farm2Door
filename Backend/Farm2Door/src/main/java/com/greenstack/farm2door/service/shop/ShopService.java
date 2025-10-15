@@ -1,17 +1,18 @@
 package com.greenstack.farm2door.service.shop;
 
+import com.greenstack.farm2door.dto.ProductDto;
 import com.greenstack.farm2door.dto.ShopDto;
 import com.greenstack.farm2door.exceptions.AlreadyExistsException;
 import com.greenstack.farm2door.exceptions.ResourceNotFoundException;
-import com.greenstack.farm2door.model.Order;
-import com.greenstack.farm2door.model.Product;
-import com.greenstack.farm2door.model.Shop;
-import com.greenstack.farm2door.model.ShopOwner;
+import com.greenstack.farm2door.model.*;
+import com.greenstack.farm2door.repository.ProductRepository;
+import com.greenstack.farm2door.repository.ShopOwnerRepository;
 import com.greenstack.farm2door.repository.ShopRepository;
+import com.greenstack.farm2door.repository.UserRepository;
 import com.greenstack.farm2door.request.AddShopRequest;
 import com.greenstack.farm2door.request.UpdateShopRequest;
-import com.greenstack.farm2door.service.product.IProductService;
 import com.greenstack.farm2door.service.user.IUserService;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
@@ -23,7 +24,9 @@ import java.util.List;
 public class ShopService implements IShopService{
     private final ShopRepository shopRepository;
     private final IUserService userService;
-    private final IProductService productService;
+    private final UserRepository userRepository;
+    private final ProductRepository productRepository;
+    private final ShopOwnerRepository shopOwnerRepository;
     private final ModelMapper modelMapper;
     @Override
     public Shop addShop(AddShopRequest shop, Long userId) {
@@ -32,7 +35,7 @@ public class ShopService implements IShopService{
         // we should also check if the user already has a shop
         // if yes, then we should not allow to create another shop for the same user
         // as one user can have only one shop
-        if (shopRepository.existsByShopOwnerId(userId)) {
+        if (shopRepository.existsByShopOwner_User_Id(userId)) {
             throw new AlreadyExistsException("User already has a shop with userId: " + userId);
         }
 
@@ -40,16 +43,23 @@ public class ShopService implements IShopService{
             throw new AlreadyExistsException("Shop already exists with name: " + shop.getName());
         }
 
+        // this is a temporary solution
+        // ideally we should have a separate service to handle shop owners
+        // but for now, we will create a shop owner from the user
         // we need to get the shop Owner object from the user repo then use it to set the shop owner
-        ShopOwner shopOwner = (ShopOwner) userService.getUserById(userId);
+        User user = userService.getUserById(userId);
         // here we get the user object from the user repository using the userId
-        // then we cast it to ShopOwner object
+        // then we use it to create a ShopOwner object
+        ShopOwner shopOwner = new ShopOwner();
+        shopOwner.setUser(user);
+        ShopOwner savedShopOwner = shopOwnerRepository.save(shopOwner);
+
         Shop newShop = createShop(shop);
         newShop.setShopOwner(shopOwner);// here we need shopOwner object
-        // should we save the shop owner too?
         Shop savedShop = shopRepository.save(newShop);
-        shopOwner.setShop(savedShop);
 
+        savedShopOwner.setShop(savedShop);
+        shopOwnerRepository.save(savedShopOwner);
         return savedShop;
     }
 
@@ -98,14 +108,40 @@ public class ShopService implements IShopService{
         return existingShop;
     }
 
+    @Transactional
     @Override
-    public void deleteShop(Long id) {
+    public void deleteShopById(Long id) {
         // check if shop exists
         // if it exists, delete it
         // if not, throw exception
-        shopRepository.findById(id)
-                .ifPresentOrElse(shopRepository::delete,
-                        ()-> {throw new ResourceNotFoundException("Shop not found");});
+
+//        shopRepository.findById(id)
+//                .ifPresentOrElse(shopRepository::delete,
+//                       ()-> {throw new ResourceNotFoundException("Shop not found");});
+        try{
+        Shop shop = shopRepository.findById(id)
+                .orElseThrow(()-> new ResourceNotFoundException("Shop not found"));
+
+        // first we need to dissociate the shop from the shop owner
+        ShopOwner shopOwner = shop.getShopOwner();
+        if (shopOwner != null) {
+            shopOwner.setShop(null);
+            shop.setShopOwner(null);
+            shopOwnerRepository.delete(shopOwner);
+            shopOwnerRepository.flush();
+            System.out.println("Associated shop owner with id " + shopOwner.getId() + " deleted successfully");
+        }
+        shopRepository.delete(shop);
+        shopRepository.flush();
+
+
+
+        System.out.println("Shop with id " + id + " deleted successfully");
+        } catch (Exception e) {
+            System.out.println("Error deleting shop with id " + id + ": " + e.getMessage());
+            e.printStackTrace();
+            throw e;
+        }
     }
 
     @Override
@@ -120,30 +156,43 @@ public class ShopService implements IShopService{
     }
 
     @Override
+    public Shop getShopByOwnerId(Long ownerId) {
+        return shopRepository.findByShopOwnerId(ownerId);
+    }
+
+    @Override
+    public boolean existsByOwnerId(Long ownerId) {
+        return shopRepository.existsByShopOwnerId(ownerId);
+    }
+
+    @Override
     public boolean existsByName(String shopName) {
         return shopRepository.existsByName(shopName);
     }
 
     @Override
     public Shop getShopByUserId(Long userId) {
-        return shopRepository.findByShopOwnerId(userId);
+        return shopRepository.findByShopOwner_User_Id(userId);
     }
 
     @Override
     public boolean existsByUserId(Long userId) {
-        return shopRepository.existsByShopOwnerId(userId);
+        return shopRepository.existsByShopOwner_User_Id(userId);
     }
 
     @Override
     public Long countProductsInShop(Long shopId) {
-        return productService.countProductsByShopId(shopId);
+        return productRepository.countByShopId(shopId);
     }
 
     @Override
     public ShopDto convertToDto(Shop shop) {
         ShopDto shopDto = modelMapper.map(shop, ShopDto.class);
-        List<Product> products = productService.getAllProductsByShopId(shop.getId());
-        shopDto.setProducts(productService.getConvertedProducts(products));
+        List<Product> products = productRepository.findByShopId(shop.getId());
+        List<ProductDto> productDtos = products.stream()
+                .map(product -> modelMapper.map(product, ProductDto.class))
+                .toList();
+        shopDto.setProducts(productDtos);
         // we will conver the orders later when we have Order Service .
         return shopDto;
     }

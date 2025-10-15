@@ -70,7 +70,7 @@ public class ProductController {
     }
 
     //get all products by shop id
-    @GetMapping("/shop/{shopId}/products")
+    @GetMapping("/shops/{shopId}/products")
     public ResponseEntity<ApiResponse> getAllProductsByShopId(@PathVariable Long shopId) {
         List<Product> products = productService.getAllProductsByShopId(shopId);
         List<ProductDto> convertedProducts = productService.getConvertedProducts(products);
@@ -80,8 +80,8 @@ public class ProductController {
     }
 
     //get all products by shop name
-    @GetMapping("/shop/{shopName}/products")
-    public ResponseEntity<ApiResponse> getAllProductsByShopName(@PathVariable String shopName) {
+    @GetMapping("/shops/shopName/products")
+    public ResponseEntity<ApiResponse> getAllProductsByShopName(@RequestParam String shopName) {
         List<Product> products = productService.getAllProductsByShopName(shopName);
         List<ProductDto> convertedProducts = productService.getConvertedProducts(products);
         return convertedProducts.isEmpty()
@@ -90,8 +90,8 @@ public class ProductController {
     }
 
     //get all products by shop name and category - greenfarm vegetables , greenfarm fruits , greenfarm dairy , greenfarm grains
-    @GetMapping("/shop/{shopName}/category/{categoryName}/products")
-    public ResponseEntity<ApiResponse> getAllProductsByShopAndCategory(@PathVariable String shopName, @PathVariable String categoryName) {
+    @GetMapping("/shops/shopName/category/categoryName/products")
+    public ResponseEntity<ApiResponse> getAllProductsByShopAndCategory(@RequestParam String shopName, @RequestParam String categoryName) {
         List<Product> products = productService.getAllProductsByShopAndCategory(shopName, categoryName);
         List<ProductDto> convertedProducts = productService.getConvertedProducts(products);
         return convertedProducts.isEmpty()

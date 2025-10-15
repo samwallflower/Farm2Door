@@ -6,4 +6,6 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface ShopOwnerRepository extends JpaRepository<ShopOwner, Long> {
+    ShopOwner findByUserId(Long userId);
+    boolean existsByUserId(Long userId);
 }

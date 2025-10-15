@@ -25,7 +25,7 @@ public class Shop {
     private String contactEmail; // these will be shown for contacting the shop
     private String description;
 
-    @OneToMany
+    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
     @JoinColumn(name = "shop_id")
     private List<Product> products;
 

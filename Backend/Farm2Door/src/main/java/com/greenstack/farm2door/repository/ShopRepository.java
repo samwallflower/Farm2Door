@@ -7,9 +7,13 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface ShopRepository extends JpaRepository<Shop,Long> {
     Shop findByName(String name);
+
     boolean existsByName(String name);
 
     Shop findByShopOwnerId(Long shopOwnerId);
-    boolean existsByShopOwnerId(Long userId);
+    boolean existsByShopOwnerId(Long shopOwnerId);
+
+    Shop findByShopOwner_User_Id(Long userId);
+    boolean existsByShopOwner_User_Id(Long userId);
 
 }

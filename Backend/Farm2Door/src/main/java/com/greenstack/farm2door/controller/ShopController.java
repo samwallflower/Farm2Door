@@ -45,7 +45,7 @@ public class ShopController {
     }
 
     // get shop by name
-    @GetMapping("/shop/shopName/shop")
+    @GetMapping("/shop/by-shopName")
     public ResponseEntity<ApiResponse> getShopByName(@RequestParam String shopName){
         try {
             Shop shop = shopService.getShopByName(shopName);
@@ -58,15 +58,29 @@ public class ShopController {
         }
     }
 
-    // get shop by shopOwner id
-    @GetMapping("/shop/{userId}/shop")
-    public ResponseEntity<ApiResponse> getShopByOwnerId(@PathVariable Long userId) {
+    // get shop by user id
+    @GetMapping("/shop/user/{userId}/shop")
+    public ResponseEntity<ApiResponse> getShopByUserId(@PathVariable Long userId) {
         try {
             Shop shop = shopService.getShopByUserId(userId);
             ShopDto shopDto = shopService.convertToDto(shop);
             return shopDto != null ?
                     ResponseEntity.ok(new ApiResponse("Shop retrieved successfully", shopDto)):
                     ResponseEntity.status(NOT_FOUND).body(new ApiResponse("No shop found for the given userId", null));
+        } catch (Exception e) {
+            return ResponseEntity.status(INTERNAL_SERVER_ERROR).body(new ApiResponse(e.getMessage(), null));
+        }
+    }
+
+    //get shop by shop Owner id
+    @GetMapping("/shop/owner/{ownerId}/shop")
+    public ResponseEntity<ApiResponse> getShopByOwnerId(@PathVariable Long ownerId) {
+        try {
+            Shop shop = shopService.getShopByOwnerId(ownerId);
+            ShopDto shopDto = shopService.convertToDto(shop);
+            return shopDto!= null ?
+                    ResponseEntity.ok(new ApiResponse("Shops retrieved successfully", shopDto)) :
+                    ResponseEntity.status(NOT_FOUND).body(new ApiResponse("No shops found for the given ownerId", null));
         } catch (Exception e) {
             return ResponseEntity.status(INTERNAL_SERVER_ERROR).body(new ApiResponse(e.getMessage(), null));
         }
@@ -115,7 +129,7 @@ public class ShopController {
     @DeleteMapping("/shop/{shopId}/delete")
     public ResponseEntity<ApiResponse> deleteShop(@PathVariable Long shopId) {
         try {
-            shopService.deleteShop(shopId);
+            shopService.deleteShopById(shopId);
             return ResponseEntity.ok(new ApiResponse("Shop deleted successfully", shopId));
         } catch (ResourceNotFoundException e) {
             return ResponseEntity.status(NOT_FOUND).body(new ApiResponse(e.getMessage(), null));

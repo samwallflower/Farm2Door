@@ -6,6 +6,7 @@ import lombok.*;
 
 import java.util.Collection;
 import java.util.HashSet;
+import java.util.List;
 
 @Getter
 @Setter
@@ -13,13 +14,20 @@ import java.util.HashSet;
 @AllArgsConstructor
 @Entity
 @Table(name = "users")
-@Inheritance(strategy = InheritanceType.JOINED)
 public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private String email;
     private String password;
+    private String FirstName;
+    private String LastName;
+
+    @OneToOne(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
+    private Cart cart;
+
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Order> orders;
 
     @ManyToMany(fetch = FetchType.EAGER, cascade =
             { CascadeType.DETACH, CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REFRESH})
@@ -28,5 +36,9 @@ public class User {
             inverseJoinColumns = @JoinColumn(name = "role_id", referencedColumnName = "id")
     )
     private Collection<Role> roles = new HashSet<>();
+
+    // A user can be a shop owner
+    @OneToOne(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
+    private ShopOwner shopOwner;
 
 }

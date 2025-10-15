@@ -1,6 +1,7 @@
 package com.greenstack.farm2door.repository;
 
 import com.greenstack.farm2door.model.Product;
+import com.greenstack.farm2door.model.Shop;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
@@ -18,10 +19,9 @@ public interface ProductRepository extends JpaRepository<Product, Long> {
     List<Product> findByName(String name);
 
     List<Product> findByShopName(String shopName);
-
     List<Product> findByShopNameAndCategoryName(String shopName, String categoryName);
 
-    boolean existsByNameAndShop(String name, String shopName);
+    boolean existsByNameAndShopName(String name, String shopName);
 
     Long countByShopId(Long shopId);// Counting all products in a shop
 

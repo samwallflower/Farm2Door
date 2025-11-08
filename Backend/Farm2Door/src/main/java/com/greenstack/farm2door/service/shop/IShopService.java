@@ -18,8 +18,6 @@ public interface IShopService {
     // later we can move it to order service
     List<Order> getOrdersByShopId(Long shopId);
     List<Shop> getAllShops();
-    Shop getShopByOwnerId(Long ownerId);
-    boolean existsByOwnerId(Long ownerId);
     boolean existsByName(String shopName);
     Shop getShopByUserId(Long userId);// mainly shop owner id
     boolean existsByUserId(Long userId);

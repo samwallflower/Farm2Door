@@ -10,10 +10,9 @@ public interface ShopRepository extends JpaRepository<Shop,Long> {
 
     boolean existsByName(String name);
 
-    Shop findByShopOwnerId(Long shopOwnerId);
-    boolean existsByShopOwnerId(Long shopOwnerId);
 
-    Shop findByShopOwner_User_Id(Long userId);
-    boolean existsByShopOwner_User_Id(Long userId);
+    boolean existsByShopOwnerId(Long userId);
+
+    Shop findByShopOwnerId(Long userId);
 
 }

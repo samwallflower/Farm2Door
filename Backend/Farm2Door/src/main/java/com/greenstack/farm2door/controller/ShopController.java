@@ -72,19 +72,6 @@ public class ShopController {
         }
     }
 
-    //get shop by shop Owner id
-    @GetMapping("/shop/owner/{ownerId}/shop")
-    public ResponseEntity<ApiResponse> getShopByOwnerId(@PathVariable Long ownerId) {
-        try {
-            Shop shop = shopService.getShopByOwnerId(ownerId);
-            ShopDto shopDto = shopService.convertToDto(shop);
-            return shopDto!= null ?
-                    ResponseEntity.ok(new ApiResponse("Shops retrieved successfully", shopDto)) :
-                    ResponseEntity.status(NOT_FOUND).body(new ApiResponse("No shops found for the given ownerId", null));
-        } catch (Exception e) {
-            return ResponseEntity.status(INTERNAL_SERVER_ERROR).body(new ApiResponse(e.getMessage(), null));
-        }
-    }
 
     // count products in shop
     @GetMapping("/shop/{shopId}/products/count")

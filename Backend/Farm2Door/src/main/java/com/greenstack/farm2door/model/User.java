@@ -37,8 +37,7 @@ public class User {
     )
     private Collection<Role> roles = new HashSet<>();
 
-    // A user can be a shop owner
-    @OneToOne(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
-    private ShopOwner shopOwner;
+    @OneToOne(mappedBy = "shopOwner", cascade = CascadeType.ALL, orphanRemoval = true)
+    private Shop shop;
 
 }

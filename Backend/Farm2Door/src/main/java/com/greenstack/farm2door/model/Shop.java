@@ -29,9 +29,9 @@ public class Shop {
     @JoinColumn(name = "shop_id")
     private List<Product> products;
 
-    @OneToOne(cascade = CascadeType.ALL, orphanRemoval = true)
-    @JoinColumn(name = "shop_owner_id", referencedColumnName = "id")
-    private ShopOwner shopOwner;
+    @OneToOne
+    @JoinColumn(name = "user_id", referencedColumnName = "id")
+    private User shopOwner;
 
     @OneToMany(mappedBy = "shop")
     private List<Order> orders;

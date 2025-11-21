@@ -1,46 +1,44 @@
-import React from 'react';
-import './LoginPage.css';
+import React from "react";
+import "./LoginPage.css";
+import bgImage from "./loginback.jpg";
 
-function LoginPage() {
-  const handleUserLogin = () => {
-    console.log('User login clicked');
-    // Add your user login logic here
-  };
-
-  const handleShopOwnerLogin = () => {
-    console.log('Shop owner login clicked');
-    // Add your shop owner login logic here
-  };
-
+const LoginPage = () => {
   return (
-    <div className="login-container">
-      <div className="login-overlay"></div>
-      
-      <div className="login-content">
-        <div className="branding">
-          <p className="branding-tagline">Always Fresh</p>
-          <h1 className="branding-name">Farm2Door</h1>
-          <p className="branding-subtitle">Bring the best food right to your doorstep</p>
-        </div>
+    <div
+      className="login-page"
+      style={{ backgroundImage: `url(${bgImage})` }}
+    >
+      <div className="login-overlay">
+        <div className="login-content">
+          {/* Branding */}
+          <header className="login-header">
+            <p className="login-always-fresh">Always Fresh</p>
+            <h1 className="login-logo">Farm2Door</h1>
+            <h2 className="login-title">Login</h2>
+          </header>
 
-        <div className="login-options">
-          <button 
-            className="login-button"
-            onClick={handleUserLogin}
-          >
-            Login as a user
-          </button>
+          {/* Form */}
+          <main className="login-form-wrapper">
+            <form className="login-form">
+              <label className="login-input-pill">
+                <span>Username</span>
+                <input type="text" placeholder="Username" />
+              </label>
 
-          <button 
-            className="login-button"
-            onClick={handleShopOwnerLogin}
-          >
-            Login as a shop-owner
-          </button>
+              <label className="login-input-pill">
+                <span>Password</span>
+                <input type="password" placeholder="Password" />
+              </label>
+
+              <button type="submit" className="login-submit-btn">
+                Login
+              </button>
+            </form>
+          </main>
         </div>
       </div>
     </div>
   );
-}
+};
 
 export default LoginPage;

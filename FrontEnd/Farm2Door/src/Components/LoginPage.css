@@ -1,148 +1,159 @@
-n/* LoginPage.css */
-* {
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
-}
-
-.login-container {
-  min-height: 100vh;
-  width: 100vw;
-  background-image: url('https://images.unsplash.com/photo-1625246333195-78d9c38ad449?w=1920&q=80');
+/* Full-screen background */
+.login-page {
+  position: relative;
+  height: 100vh;
+  width: 100%;
   background-size: cover;
   background-position: center;
   background-repeat: no-repeat;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  padding: 20px;
-  position: relative;
-  overflow: hidden;
+  color: #ffffff;
 }
 
+/* Dark overlay for readability */
 .login-overlay {
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  width: 100%;
-  height: 100%;
-  background: rgba(0, 0, 0, 0.3);
-  z-index: 1;
-}
-
-.login-content {
   position: relative;
-  z-index: 2;
-  text-align: center;
-  max-width: 800px;
+  inset: 0;
+  height: 100%;
   width: 100%;
-  margin: 0 auto;
+  background: radial-gradient(
+      circle at top,
+      rgba(0, 0, 0, 0.2),
+      rgba(0, 0, 0, 0.55)
+    );
 }
 
-.branding {
-  margin-bottom: 60px;
-}
-
-.branding-tagline {
-  font-family: 'Brush Script MT', cursive;
-  font-size: 2rem;
-  color: white;
-  margin: 0 0 10px 0;
-  font-weight: 400;
-  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
-}
-
-.branding-name {
-  font-family: 'Brush Script MT', cursive;
-  font-size: 5rem;
-  color: white;
-  margin: 0;
-  font-weight: 400;
-  line-height: 1;
-  text-shadow: 3px 3px 6px rgba(0, 0, 0, 0.6);
-}
-
-.branding-subtitle {
-  font-family: 'Georgia', serif;
-  font-size: 1.5rem;
-  color: white;
-  margin: 15px 0 0 0;
-  font-style: italic;
-  font-weight: 300;
-  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
-}
-
-.login-options {
+/* Center content horizontally, a bit down from the top */
+.login-content {
+  height: 100%;
   display: flex;
   flex-direction: column;
-  gap: 20px;
   align-items: center;
+  padding-top: 60px;
 }
 
-.login-button {
-  background: rgba(0, 0, 0, 0.75);
-  color: white;
-  border: none;
-  border-radius: 50px;
-  padding: 20px 60px;
-  font-size: 1.3rem;
-  font-weight: 400;
-  cursor: pointer;
-  transition: all 0.3s ease;
-  min-width: 350px;
+/* Header text */
+.login-header {
   text-align: center;
-  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+  margin-bottom: 32px;
 }
 
-.login-button:hover {
-  background: rgba(0, 0, 0, 0.85);
-  transform: translateY(-2px);
-  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.4);
+.login-always-fresh {
+  margin: 0;
+  font-size: 22px;
+  font-family: "Dancing Script", cursive;
+  text-shadow: 0 2px 6px rgba(0, 0, 0, 0.9);
 }
 
-.login-button:active {
+.login-logo {
+  margin: 0;
+  font-size: 46px;
+  font-family: "Dancing Script", cursive;
+  text-shadow: 0 3px 10px rgba(0, 0, 0, 0.9);
+}
+
+.login-title {
+  margin-top: 10px;
+  font-size: 28px;
+  font-weight: 600;
+  color: #b3f3b3; /* light green */
+  text-shadow: 0 2px 6px rgba(0, 0, 0, 0.8);
+}
+
+/* Form container */
+.login-form-wrapper {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+}
+
+.login-form {
+  width: 100%;
+  max-width: 480px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+/* Glass input "pill" */
+.login-input-pill {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  padding: 6px 22px;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.35);
+  backdrop-filter: blur(6px);
+  -webkit-backdrop-filter: blur(6px);
+}
+
+/* Label text */
+.login-input-pill > span {
+  position: absolute;
+  left: 24px;
+  top: 7px;
+  font-size: 14px;
+}
+
+/* Inputs */
+.login-input-pill input {
+  margin-top: 20px;
+  border: none;
+  outline: none;
+  background: transparent;
+  color: #ffffff;
+  font-size: 15px;
+  padding: 4px 0 8px 0;
+}
+
+.login-input-pill input::placeholder {
+  color: rgba(255, 255, 255, 0.95);
+}
+
+/* Submit button (also glassy) */
+.login-submit-btn {
+  margin-top: 16px;
+  align-self: center;
+  padding: 10px 40px;
+  border-radius: 999px;
+  border: none;
+  cursor: pointer;
+  font-size: 20px;
+  font-weight: 700;
+  background: rgba(255, 255, 255, 0.35);
+  backdrop-filter: blur(6px);
+  -webkit-backdrop-filter: blur(6px);
+  color: #000;
+  box-shadow: 0 5px 14px rgba(0, 0, 0, 0.55);
+  transition: transform 0.15s ease, box-shadow 0.15s ease,
+    background 0.15s ease;
+}
+
+.login-submit-btn:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.6);
+  background: rgba(255, 255, 255, 0.45);
+}
+
+.login-submit-btn:active {
   transform: translateY(0);
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.5);
 }
 
-/* Responsive Design */
-@media (max-width: 768px) {
-  .branding-tagline {
-    font-size: 1.5rem;
+/* Responsive tweaks */
+@media (max-width: 600px) {
+  .login-content {
+    padding-top: 40px;
   }
 
-  .branding-name {
-    font-size: 3.5rem;
+  .login-logo {
+    font-size: 38px;
   }
 
-  .branding-subtitle {
-    font-size: 1.2rem;
+  .login-title {
+    font-size: 24px;
   }
 
-  .login-button {
-    min-width: 280px;
-    padding: 18px 40px;
-    font-size: 1.1rem;
-  }
-}
-
-@media (max-width: 480px) {
-  .branding-tagline {
-    font-size: 1.2rem;
-  }
-
-  .branding-name {
-    font-size: 2.5rem;
-  }
-
-  .branding-subtitle {
-    font-size: 1rem;
-  }
-
-  .login-button {
-    min-width: 240px;
-    padding: 16px 30px;
-    font-size: 1rem;
+  .login-form {
+    max-width: 90%;
   }
 }

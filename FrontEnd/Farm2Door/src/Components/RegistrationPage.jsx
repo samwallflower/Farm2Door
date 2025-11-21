@@ -1,6 +1,6 @@
 import React from "react";
-import "./Registration.css";
-import regBg from "./registration-bg.jpg"; // put your image in Components folder and rename if needed
+import "./RegistrationPage.css";
+import regBg from "./loginback.jpg"; // put your image in Components folder and rename if needed
 
 const Registration = () => {
   return (

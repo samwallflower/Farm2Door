@@ -11,7 +11,7 @@ import java.math.BigDecimal;
 @Setter
 @NoArgsConstructor
 @Entity
-public class OrderItems {
+public class OrderItem {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -27,10 +27,10 @@ public class OrderItems {
     @JoinColumn(name="product_id")
     private Product product;
 
-    public OrderItems(Order order,
-                      Product product,
-                      int quantity,
-                      BigDecimal price) {
+    public OrderItem(Order order,
+                     Product product,
+                     int quantity,
+                     BigDecimal price) {
 
         this.order = order;
         this.product = product;

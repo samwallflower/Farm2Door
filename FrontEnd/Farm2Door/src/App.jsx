@@ -1,22 +1,31 @@
 // src/App.jsx
 import React, { useState } from "react";
 import HomeComponent from "./Components/HomeComponent.jsx";
-import Shopcreation from "./Components/Shopcreation.jsx";
 import LoginPage from "./Components/LoginPage.jsx";
-import RegistrationPage from "./Components/RegistrationPage.jsx";
+import Registration from "./Components/Registration.jsx";
 
 function App() {
-  const [page, setPage] = useState("home"); // 'home' | 'shops' | 'account'
+  const [page, setPage] = useState("login"); // 'home' | 'login' | 'register'
 
   const renderPage = () => {
     switch (page) {
-      case "shops":
-        return <Shopcreation />;
-      case "account":
-        return <LoginPage />;
       case "home":
-      default:
         return <HomeComponent onNavigate={setPage} />;
+
+      case "register":
+        return (
+          <Registration
+            onBackToLogin={() => setPage("login")}
+          />
+        );
+
+      case "login":
+      default:
+        return (
+          <LoginPage
+            onRegister={() => setPage("register")}
+          />
+        );
     }
   };
 

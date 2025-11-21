@@ -1,0 +1,150 @@
+/* full-page background */
+.reg-page {
+  position: relative;
+  height: 100vh;
+  width: 100%;
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  color: #ffffff;
+}
+
+/* soft dark overlay for readability */
+.reg-overlay {
+  position: relative;
+  inset: 0;
+  height: 100%;
+  width: 100%;
+  background: radial-gradient(
+      circle at top,
+      rgba(0, 0, 0, 0.2),
+      rgba(0, 0, 0, 0.55)
+    );
+}
+
+/* content positioned slightly from left, vertically centered */
+.reg-content {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding: 40px 16px 40px 70px;
+  max-width: 480px;
+}
+
+/* header text */
+.reg-header {
+  margin-bottom: 24px;
+}
+
+.reg-always-fresh {
+  margin: 0;
+  font-size: 20px;
+  font-weight: 400;
+  font-family: "Dancing Script", cursive;
+  text-shadow: 0 2px 6px rgba(0, 0, 0, 0.8);
+}
+
+.reg-logo {
+  margin: 0;
+  font-size: 42px;
+  font-weight: 700;
+  font-family: "Dancing Script", cursive;
+  text-shadow: 0 3px 10px rgba(0, 0, 0, 0.85);
+}
+
+.reg-title {
+  margin: 4px 0 0 0;
+  font-size: 24px;
+  font-weight: 600;
+  color: #a3f29b; /* light green like the screenshot */
+  text-shadow: 0 2px 6px rgba(0, 0, 0, 0.8);
+}
+
+/* form container */
+.reg-form-wrapper {
+  margin-top: 8px;
+}
+
+.reg-form {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+/* glassy input pill */
+.reg-input-pill {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  padding: 6px 18px;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.3);
+  backdrop-filter: blur(6px);
+  -webkit-backdrop-filter: blur(6px);
+}
+
+/* label text */
+.reg-input-pill > span {
+  position: absolute;
+  left: 22px;
+  top: 7px;
+  font-size: 13px;
+}
+
+/* text fields */
+.reg-input-pill input {
+  margin-top: 18px; /* to clear the label text */
+  border: none;
+  outline: none;
+  background: transparent;
+  color: #ffffff;
+  font-size: 14px;
+  padding: 4px 0 8px 0;
+}
+
+.reg-input-pill input::placeholder {
+  color: rgba(255, 255, 255, 0.9);
+}
+
+/* submit button */
+.reg-submit-btn {
+  margin-top: 10px;
+  align-self: flex-start;
+  padding: 8px 26px;
+  border-radius: 999px;
+  border: none;
+  cursor: pointer;
+  font-size: 14px;
+  font-weight: 600;
+  background: rgba(255, 255, 255, 0.9);
+  color: #2f3c1f;
+  box-shadow: 0 5px 14px rgba(0, 0, 0, 0.5);
+  transition: transform 0.15s ease, box-shadow 0.15s ease;
+}
+
+.reg-submit-btn:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.55);
+}
+
+.reg-submit-btn:active {
+  transform: translateY(0);
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.5);
+}
+
+/* responsive tweaks */
+@media (max-width: 600px) {
+  .reg-content {
+    padding: 32px 16px;
+    max-width: 100%;
+  }
+
+  .reg-logo {
+    font-size: 34px;
+  }
+
+  .reg-title {
+    font-size: 20px;
+  }
+}

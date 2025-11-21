@@ -1,4 +1,4 @@
-/* Full-screen background */
+/* full-screen background */
 .login-page {
   position: relative;
   height: 100vh;
@@ -9,7 +9,7 @@
   color: #ffffff;
 }
 
-/* Dark overlay for readability */
+/* dark overlay to improve contrast */
 .login-overlay {
   position: relative;
   inset: 0;
@@ -22,7 +22,7 @@
     );
 }
 
-/* Center content horizontally, a bit down from the top */
+/* center content, a bit down from the top */
 .login-content {
   height: 100%;
   display: flex;
@@ -31,7 +31,7 @@
   padding-top: 60px;
 }
 
-/* Header text */
+/* header / branding */
 .login-header {
   text-align: center;
   margin-bottom: 32px;
@@ -52,14 +52,14 @@
 }
 
 .login-title {
-  margin-top: 10px;
+  margin-top: 12px;
   font-size: 28px;
   font-weight: 600;
   color: #b3f3b3; /* light green */
   text-shadow: 0 2px 6px rgba(0, 0, 0, 0.8);
 }
 
-/* Form container */
+/* form container */
 .login-form-wrapper {
   width: 100%;
   display: flex;
@@ -68,13 +68,13 @@
 
 .login-form {
   width: 100%;
-  max-width: 480px;
+  max-width: 520px;
   display: flex;
   flex-direction: column;
   gap: 16px;
 }
 
-/* Glass input "pill" */
+/* glass input pill */
 .login-input-pill {
   position: relative;
   display: flex;
@@ -86,7 +86,7 @@
   -webkit-backdrop-filter: blur(6px);
 }
 
-/* Label text */
+/* label text inside pill */
 .login-input-pill > span {
   position: absolute;
   left: 24px;
@@ -94,7 +94,7 @@
   font-size: 14px;
 }
 
-/* Inputs */
+/* text fields */
 .login-input-pill input {
   margin-top: 20px;
   border: none;
@@ -109,15 +109,22 @@
   color: rgba(255, 255, 255, 0.95);
 }
 
-/* Submit button (also glassy) */
-.login-submit-btn {
+/* container for the two buttons */
+.login-actions {
   margin-top: 16px;
-  align-self: center;
-  padding: 10px 40px;
+  display: flex;
+  justify-content: center;
+  gap: 20px;
+}
+
+/* shared button style */
+.login-submit-btn,
+.login-register-btn {
+  padding: 10px 46px;
   border-radius: 999px;
   border: none;
   cursor: pointer;
-  font-size: 20px;
+  font-size: 22px;
   font-weight: 700;
   background: rgba(255, 255, 255, 0.35);
   backdrop-filter: blur(6px);
@@ -128,32 +135,4 @@
     background 0.15s ease;
 }
 
-.login-submit-btn:hover {
-  transform: translateY(-1px);
-  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.6);
-  background: rgba(255, 255, 255, 0.45);
-}
-
-.login-submit-btn:active {
-  transform: translateY(0);
-  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.5);
-}
-
-/* Responsive tweaks */
-@media (max-width: 600px) {
-  .login-content {
-    padding-top: 40px;
-  }
-
-  .login-logo {
-    font-size: 38px;
-  }
-
-  .login-title {
-    font-size: 24px;
-  }
-
-  .login-form {
-    max-width: 90%;
-  }
-}
+/* tiny d*

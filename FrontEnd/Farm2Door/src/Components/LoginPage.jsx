@@ -1,8 +1,17 @@
 import React from "react";
 import "./LoginPage.css";
-import bgImage from "./loginback.jpg";
+import bgImage from "./bg.jpg"; // make sure this image exists in the Components folder
 
-const LoginPage = () => {
+const LoginPage = ({ onRegister }) => {
+  const handleRegisterClick = () => {
+    // if you pass a function from App.jsx, use that
+    if (onRegister) {
+      onRegister();
+    } else {
+      console.log("Register clicked");
+    }
+  };
+
   return (
     <div
       className="login-page"
@@ -10,7 +19,7 @@ const LoginPage = () => {
     >
       <div className="login-overlay">
         <div className="login-content">
-          {/* Branding */}
+          {/* Brand / title */}
           <header className="login-header">
             <p className="login-always-fresh">Always Fresh</p>
             <h1 className="login-logo">Farm2Door</h1>
@@ -30,9 +39,19 @@ const LoginPage = () => {
                 <input type="password" placeholder="Password" />
               </label>
 
-              <button type="submit" className="login-submit-btn">
-                Login
-              </button>
+              <div className="login-actions">
+                <button type="submit" className="login-submit-btn">
+                  Login
+                </button>
+
+                <button
+                  type="button"
+                  className="login-register-btn"
+                  onClick={handleRegisterClick}
+                >
+                  Register
+                </button>
+              </div>
             </form>
           </main>
         </div>

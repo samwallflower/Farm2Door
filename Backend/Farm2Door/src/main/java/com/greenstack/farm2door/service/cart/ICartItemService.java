@@ -7,4 +7,5 @@ public interface ICartItemService {
     void removeItemFromCart(Long cartId, Long productId,  int quantity);
     void updateCartItems(Long cartId, Long productId,  int quantity);
     CartItem getCartItemById(Long cartId, Long productId);
+
 }

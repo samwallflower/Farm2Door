@@ -9,9 +9,13 @@ import com.greenstack.farm2door.service.order.IOrderService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+
+import static org.springframework.http.HttpStatus.INTERNAL_SERVER_ERROR;
+import static org.springframework.http.HttpStatus.NOT_FOUND;
 
 @RequiredArgsConstructor
 @RestController
@@ -28,7 +32,7 @@ public class OrderController {
             OrderDto orderDto = orderService.convertToDto(order);
             return ResponseEntity.ok(new ApiResponse("Order placed successfully", orderDto));
         } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+            return ResponseEntity.status(INTERNAL_SERVER_ERROR)
                     .body(new ApiResponse("Failed to place order: " + e.getMessage(), null));
         }
     }
@@ -38,18 +42,34 @@ public class OrderController {
             OrderDto order = orderService.getOrderById(orderId);
             return ResponseEntity.ok(new ApiResponse("Order retrieved successfully", order));
         } catch (ResourceNotFoundException e) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND)
+            return ResponseEntity.status(NOT_FOUND)
                     .body(new ApiResponse(e.getMessage(), null));
         }
     }
-    @GetMapping("/{userId}/orders")
+    @GetMapping("/user/{userId}/orders")
     public ResponseEntity<ApiResponse> getUserOrders(@PathVariable Long userId) {
         try {
             List<OrderDto> orders = orderService.getUserOrders(userId);
-            return ResponseEntity.ok(new ApiResponse("Orders retrieved successfully", orders));
-        } catch (ResourceNotFoundException e) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND)
-                    .body(new ApiResponse(e.getMessage(), null));
+            return orders.isEmpty()
+                    ? ResponseEntity.status(NOT_FOUND).body(new ApiResponse("Orders not found for current user!!", null))
+                    : ResponseEntity.ok(new ApiResponse("Orders retrieved successfully", orders));
+        } catch (Exception e) {
+            return ResponseEntity.status(INTERNAL_SERVER_ERROR)
+                    .body(new ApiResponse("Error retrieving orders: " + e.getMessage(), null));
+        }
+    }
+
+    @PreAuthorize("hasAnyRole('ROLE_SHOP_OWNER', 'ROLE_ADMIN')")
+    @GetMapping("/shop/{shopId}/orders")
+    public ResponseEntity<ApiResponse> getOrdersByShopId(@PathVariable Long shopId) {
+        try {
+            List<OrderDto> orders = orderService.getOrdersByShopId(shopId);
+            return orders.isEmpty()
+                    ? ResponseEntity.status(NOT_FOUND).body(new ApiResponse("Orders not found for current shop", null))
+                    : ResponseEntity.ok(new ApiResponse("Orders retrieved successfully", orders));
+        } catch (Exception e) {
+            return ResponseEntity.status(INTERNAL_SERVER_ERROR)
+                    .body(new ApiResponse("Error retrieving orders: " + e.getMessage(), null));
         }
     }
 }

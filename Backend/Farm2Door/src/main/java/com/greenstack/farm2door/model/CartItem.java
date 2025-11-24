@@ -25,11 +25,11 @@ public class CartItem {
     //Many cartItems can have one product .
     // like many people can buy same product at the same time
     @ManyToOne
-    @JoinColumn(name="product_id")
+    @JoinColumn(name="product_id", referencedColumnName = "id")
     private Product product;
 
     @ManyToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name="cart_id")
+    @JoinColumn(name="cart_id", referencedColumnName = "id")
     private Cart cart;
 
     public void setTotalPrice() {

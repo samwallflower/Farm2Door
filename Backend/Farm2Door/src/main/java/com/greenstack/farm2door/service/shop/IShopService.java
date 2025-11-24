@@ -1,5 +1,6 @@
 package com.greenstack.farm2door.service.shop;
 
+import com.greenstack.farm2door.dto.OrderDto;
 import com.greenstack.farm2door.dto.ShopDto;
 import com.greenstack.farm2door.model.Order;
 import com.greenstack.farm2door.model.Shop;
@@ -16,7 +17,7 @@ public interface IShopService {
     void deleteShopById(Long id);
     // this should be in the order service but for simplicity we will keep it here for now
     // later we can move it to order service
-    List<Order> getOrdersByShopId(Long shopId);
+    List<OrderDto> getOrdersByShopId(Long shopId);
     List<Shop> getAllShops();
     boolean existsByName(String shopName);
     Shop getShopByUserId(Long userId);// mainly shop owner id

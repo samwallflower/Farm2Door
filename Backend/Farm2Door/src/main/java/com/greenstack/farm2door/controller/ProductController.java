@@ -10,6 +10,7 @@ import com.greenstack.farm2door.response.ApiResponse;
 import com.greenstack.farm2door.service.product.IProductService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -43,7 +44,7 @@ public class ProductController {
             ProductDto productDto = productService.convertToDto(product);
             return ResponseEntity.ok(new ApiResponse("Product retrieved successfully", productDto));
         } catch (ResourceNotFoundException e) {
-            return ResponseEntity.status(404)
+            return ResponseEntity.status(NOT_FOUND)
                     .body(new ApiResponse(e.getMessage(), null));
         }
     }
@@ -100,6 +101,7 @@ public class ProductController {
     }
 
     //add product to a shop
+    @PreAuthorize("hasAnyRole('ROLE_SHOP_OWNER', 'ROLE_ADMIN')")
     @PostMapping("/shop/{shopId}/product/add")
     public ResponseEntity<ApiResponse> addProduct(@RequestBody AddProductRequest productRequest,@PathVariable Long shopId) {
         try{
@@ -113,6 +115,7 @@ public class ProductController {
     }
 
     // update product details
+    @PreAuthorize("hasAnyRole('ROLE_SHOP_OWNER', 'ROLE_ADMIN')")
     @PutMapping("/shop/{shopId}/product/{productId}/update")
     public ResponseEntity<ApiResponse> updateProduct(@PathVariable Long productId, @RequestBody UpdateProductRequest request, @PathVariable Long shopId) {
         try{
@@ -126,6 +129,7 @@ public class ProductController {
     }
 
     //delete product by id
+    @PreAuthorize("hasAnyRole('ROLE_SHOP_OWNER', 'ROLE_ADMIN')")
     @DeleteMapping("/shop/{shopId}/product/{productId}/delete")
     public ResponseEntity<ApiResponse> deleteProduct(@PathVariable Long productId, @PathVariable Long shopId) {
         try {

@@ -1,5 +1,6 @@
 package com.greenstack.farm2door.service.shop;
 
+import com.greenstack.farm2door.dto.OrderDto;
 import com.greenstack.farm2door.dto.ProductDto;
 import com.greenstack.farm2door.dto.ShopDto;
 import com.greenstack.farm2door.exceptions.AlreadyExistsException;
@@ -11,6 +12,7 @@ import com.greenstack.farm2door.repository.ShopRepository;
 import com.greenstack.farm2door.repository.UserRepository;
 import com.greenstack.farm2door.request.AddShopRequest;
 import com.greenstack.farm2door.request.UpdateShopRequest;
+import com.greenstack.farm2door.service.order.IOrderService;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
@@ -25,6 +27,7 @@ public class ShopService implements IShopService{
     private final UserRepository userRepository;
     private final ProductRepository productRepository;
     private final RoleRepository roleRepository;
+    private final IOrderService orderService;
     private final ModelMapper modelMapper;
     @Override
     public Shop addShop(AddShopRequest shop, Long userId) {
@@ -48,9 +51,12 @@ public class ShopService implements IShopService{
         Shop newShop = createShop(shop);
         newShop.setShopOwner(user);
         user.setShop(newShop);
-        Role role = roleRepository.findByName("SHOP_OWNER")
-                        .orElseGet(()-> roleRepository.save(new Role("SHOP_OWNER")));
-        user.getRoles().add(role); // assign SHOP_OWNER role to the user
+        Role role = roleRepository.findByName("ROLE_SHOP_OWNER")
+                        .orElseThrow(() -> new ResourceNotFoundException("Role not found: ROLE_SHOP_OWNER"));
+
+        if(!user.getRoles().contains(role))
+            user.getRoles().add(role);
+        // assign SHOP_OWNER role to the user
 
         return shopRepository.save(newShop);
     }
@@ -108,8 +114,13 @@ public class ShopService implements IShopService{
         // if not, throw exception
         Shop shop = shopRepository.findById(id)
                 .orElseThrow(()-> new ResourceNotFoundException("Shop not found with id: " + id));
+
+        Role role = roleRepository.findByName("ROLE_SHOP_OWNER")
+                .orElseThrow(() -> new ResourceNotFoundException("Role not found: ROLE_SHOP_OWNER"));
+
         User shopOwner = shop.getShopOwner();
         if (shopOwner != null) {
+            shopOwner.getRoles().removeIf(role::equals);
             shopOwner.setShop(null);
             userRepository.save(shopOwner);
         }
@@ -117,9 +128,8 @@ public class ShopService implements IShopService{
     }
 
     @Override
-    public List<Order> getOrdersByShopId(Long shopId) {
-        return List.of(); // This should ideally fetch orders from an OrderRepository based on shopId
-        // we will implement this later when we have OrderRepository
+    public List<OrderDto> getOrdersByShopId(Long shopId) {
+        return orderService.getOrdersByShopId(shopId);
     }
 
     @Override
@@ -156,7 +166,9 @@ public class ShopService implements IShopService{
                 .map(product -> modelMapper.map(product, ProductDto.class))
                 .toList();
         shopDto.setProducts(productDtos);
-        // we will conver the orders later when we have Order Service .
+        //orders
+        List<OrderDto> orderDtos = orderService.getOrdersByShopId(shop.getId());
+        shopDto.setOrders(orderDtos);
         return shopDto;
     }
 

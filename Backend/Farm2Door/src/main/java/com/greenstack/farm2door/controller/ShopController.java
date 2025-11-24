@@ -1,5 +1,6 @@
 package com.greenstack.farm2door.controller;
 
+import com.greenstack.farm2door.dto.OrderDto;
 import com.greenstack.farm2door.dto.ShopDto;
 import com.greenstack.farm2door.exceptions.AlreadyExistsException;
 import com.greenstack.farm2door.exceptions.ResourceNotFoundException;
@@ -10,6 +11,7 @@ import com.greenstack.farm2door.response.ApiResponse;
 import com.greenstack.farm2door.service.shop.IShopService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -85,6 +87,7 @@ public class ShopController {
     }
 
     // add a shop
+    @PreAuthorize("hasAnyRole('ROLE_USER', 'ROLE_ADMIN')")
     @PostMapping("/add/{userId}/shop")
     public ResponseEntity<ApiResponse> addShop(@RequestBody AddShopRequest shop, @PathVariable Long userId) {
         try {
@@ -99,6 +102,7 @@ public class ShopController {
     }
 
     // update shop details
+    @PreAuthorize("hasAnyRole('ROLE_SHOP_OWNER', 'ROLE_ADMIN')")
     @PutMapping("/shop/{shopId}/update")
     public ResponseEntity<ApiResponse> updateShop(@PathVariable Long shopId, @RequestBody UpdateShopRequest shop) {
         try {
@@ -113,6 +117,7 @@ public class ShopController {
     }
 
     // delete shop
+    @PreAuthorize("hasAnyRole('ROLE_SHOP_OWNER', 'ROLE_ADMIN')")
     @DeleteMapping("/shop/{shopId}/delete")
     public ResponseEntity<ApiResponse> deleteShop(@PathVariable Long shopId) {
         try {
@@ -120,6 +125,20 @@ public class ShopController {
             return ResponseEntity.ok(new ApiResponse("Shop deleted successfully", shopId));
         } catch (ResourceNotFoundException e) {
             return ResponseEntity.status(NOT_FOUND).body(new ApiResponse(e.getMessage(), null));
+        } catch (Exception e) {
+            return ResponseEntity.status(INTERNAL_SERVER_ERROR).body(new ApiResponse(e.getMessage(), null));
+        }
+    }
+
+    //get all orders for a shop
+    @PreAuthorize("hasAnyRole('ROLE_SHOP_OWNER', 'ROLE_ADMIN')")
+    @GetMapping("/shop/{shopId}/orders")
+    public ResponseEntity<ApiResponse> getOrdersByShopId(@PathVariable Long shopId) {
+        try {
+            List<OrderDto> orders = shopService.getOrdersByShopId(shopId);
+            return !orders.isEmpty() ?
+                    ResponseEntity.ok(new ApiResponse("Orders retrieved successfully", orders)) :
+                    ResponseEntity.status(NOT_FOUND).body(new ApiResponse("No orders found for the shop", null));
         } catch (Exception e) {
             return ResponseEntity.status(INTERNAL_SERVER_ERROR).body(new ApiResponse(e.getMessage(), null));
         }

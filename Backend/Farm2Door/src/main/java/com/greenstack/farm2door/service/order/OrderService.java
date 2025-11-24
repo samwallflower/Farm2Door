@@ -3,10 +3,7 @@ package com.greenstack.farm2door.service.order;
 import com.greenstack.farm2door.dto.OrderDto;
 import com.greenstack.farm2door.enums.OrderStatus;
 import com.greenstack.farm2door.exceptions.ResourceNotFoundException;
-import com.greenstack.farm2door.model.Cart;
-import com.greenstack.farm2door.model.Order;
-import com.greenstack.farm2door.model.OrderItem;
-import com.greenstack.farm2door.model.Product;
+import com.greenstack.farm2door.model.*;
 import com.greenstack.farm2door.repository.OrderRepository;
 import com.greenstack.farm2door.repository.ProductRepository;
 import com.greenstack.farm2door.service.cart.CartService;
@@ -42,6 +39,12 @@ public class OrderService implements IOrderService {
 
     private Order createOrder(Cart cart){
         Order order = new Order();
+        Shop shop = cart.getItems()
+                .stream()
+                .findFirst()
+                .map(cartItem -> cartItem.getProduct().getShop())
+                .orElseThrow(()-> new ResourceNotFoundException("No items in cart found. Add items to cart before placing an order."));
+        order.setShop(shop);
         order.setUser(cart.getUser());
         order.setOrderStatus(OrderStatus.PENDING);
         order.setOrderDate(LocalDate.now());
@@ -85,6 +88,14 @@ public class OrderService implements IOrderService {
     public List<OrderDto> getUserOrders(Long userId) {
         List<Order> orders = orderRepository.findByUserId(userId);
 
+        return orders.stream()
+                .map(this::convertToDto)
+                .toList();
+    }
+
+    @Override
+    public List<OrderDto> getOrdersByShopId(Long shopId) {
+        List<Order> orders = orderRepository.findByShopId(shopId);
         return orders.stream()
                 .map(this::convertToDto)
                 .toList();

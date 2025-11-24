@@ -1,5 +1,6 @@
 package com.greenstack.farm2door.service.cart;
 
+import com.greenstack.farm2door.exceptions.GeneralException;
 import com.greenstack.farm2door.exceptions.ResourceNotFoundException;
 import com.greenstack.farm2door.model.Cart;
 import com.greenstack.farm2door.model.CartItem;
@@ -7,6 +8,7 @@ import com.greenstack.farm2door.model.Product;
 import com.greenstack.farm2door.repository.CartItemRepository;
 import com.greenstack.farm2door.repository.CartRepository;
 import com.greenstack.farm2door.service.product.IProductService;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -14,22 +16,30 @@ import java.math.BigDecimal;
 
 @Service
 @RequiredArgsConstructor
-
 public class CartItemService implements ICartItemService {
     private final CartItemRepository cartItemRepository;
     private final CartRepository cartRepository;
     private final IProductService productService;
     private final ICartService cartService;
+
     @Override
+    @Transactional
     public void addItemToCart(Long cartId, Long productId, int quantity) {
         Cart cart = cartService.getCart(cartId);
         Product product = productService.getProductById(productId);
+        cart.getItems().stream()
+                .findFirst()
+                .ifPresent(item -> {
+                    if (!item.getProduct().getShop().getId().equals(product.getShop().getId())) {
+                        throw new GeneralException("Cannot add products from different shops to the same cart.");
+                    }
+                });
         CartItem cartItem = cart.getItems()
                 .stream()
                 .filter(item -> item.getProduct().getId().equals(productId))
                 .findFirst()
                 .orElse(new CartItem());
-        if(cartItem.getId()== null){
+        if(cartItem.getId() == null){
             cartItem.setCart(cart);
             cartItem.setProduct(product);
             cartItem.setQuantity(quantity);
@@ -46,7 +56,7 @@ public class CartItemService implements ICartItemService {
     }
 
     @Override
-    public void removeItemFromCart(Long cartId, Long productId, int quantity) {
+    public void removeItemFromCart(Long cartId, Long productId) {
         Cart cart = cartService.getCart(cartId);
         CartItem itemToRemove = getCartItemById(cartId, productId);
 
@@ -56,7 +66,7 @@ public class CartItemService implements ICartItemService {
     }
 
     @Override
-    public void updateCartItems(Long cartId, Long productId, int quantity) {
+    public void updateItemQuantity(Long cartId, Long productId, int quantity) {
 
         Cart cart = cartService.getCart(cartId);
         cart.getItems()

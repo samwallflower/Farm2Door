@@ -1,6 +1,7 @@
 package com.greenstack.farm2door.controller;
 
 
+import com.greenstack.farm2door.exceptions.GeneralException;
 import com.greenstack.farm2door.exceptions.ResourceNotFoundException;
 import com.greenstack.farm2door.model.Cart;
 import com.greenstack.farm2door.model.User;
@@ -8,12 +9,13 @@ import com.greenstack.farm2door.response.ApiResponse;
 import com.greenstack.farm2door.service.cart.ICartItemService;
 import com.greenstack.farm2door.service.cart.ICartService;
 import com.greenstack.farm2door.service.user.IUserService;
+import io.jsonwebtoken.JwtException;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import static org.springframework.http.HttpStatus.NOT_FOUND;
-import static org.springframework.http.HttpStatus.UNAUTHORIZED;
+import static org.springframework.http.HttpStatus.*;
 
 @RequiredArgsConstructor
 @RestController
@@ -36,7 +38,10 @@ public class CartItemController {
         } catch (ResourceNotFoundException e) {
             return ResponseEntity.status(NOT_FOUND)
                     .body(new ApiResponse( e.getMessage(), null));
-        }catch (JwtException e){
+        }catch (GeneralException e){
+            return ResponseEntity.status(CONFLICT)
+                    .body(new ApiResponse( e.getMessage(), null));
+        } catch (JwtException e){
             return ResponseEntity.status(UNAUTHORIZED)
                     .body(new ApiResponse(e.getMessage(), null));
         }

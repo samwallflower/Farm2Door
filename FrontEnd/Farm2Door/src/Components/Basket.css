@@ -1,33 +1,273 @@
-/* TOTAL DISPLAY (not a button) */
-.basket-total-display {
-  margin-top: 20px;
+:root {
+  --basket-yellow: #f6d66c;
+  --basket-yellow-soft: #f9edc7;
+  --basket-cream: #f5efe6;
+  --basket-brown: #3e3625;
+  --basket-gray: #7a7468;
+  --basket-radius-lg: 24px;
+}
+
+/* PAGE WRAPPER */
+
+.basket-page {
+  min-height: 100vh;
+  background: var(--basket-cream);
+  font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI",
+    sans-serif;
+  color: var(--basket-brown);
+}
+
+/* HEADER – same as other pages */
+
+.basket-header {
+  position: sticky;
+  top: 0;
+  z-index: 20;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 12px 40px;
+  background: rgba(255, 255, 255, 0.95);
+  backdrop-filter: blur(6px);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+}
+
+.basket-logo {
+  font-weight: 800;
+  font-size: 22px;
+}
+
+.basket-nav {
+  display: flex;
+  gap: 10px;
+}
+
+.basket-nav button {
+  border: none;
+  padding: 6px 16px;
+  border-radius: 999px;
+  font-size: 14px;
+  font-weight: 600;
+  background: transparent;
+  cursor: pointer;
+  color: var(--basket-brown);
+}
+
+.basket-nav button:hover {
+  background: rgba(0, 0, 0, 0.04);
+}
+
+/* MAIN */
+
+.basket-main {
+  padding: 30px 24px 40px;
+  display: flex;
+  justify-content: center;
+}
+
+/* CARD */
+
+.basket-card {
+  width: 100%;
+  max-width: 780px;
   background: #ffffff;
-  padding: 16px 20px;
-  border-radius: 16px;
-  box-shadow: 0 3px 8px rgba(0,0,0,0.06);
+  border-radius: var(--basket-radius-lg);
+  padding: 22px 24px 24px;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.08);
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.basket-card-header {
   display: flex;
   justify-content: space-between;
+  align-items: flex-start;
+  gap: 16px;
+}
+
+.basket-eyebrow {
+  text-transform: uppercase;
+  font-size: 11px;
+  letter-spacing: 0.18em;
+  color: var(--basket-gray);
+  margin: 0 0 6px;
+}
+
+.basket-title {
+  margin: 0 0 6px;
+  font-size: 26px;
+}
+
+.basket-subtitle {
+  margin: 0;
+  font-size: 14px;
+  color: var(--basket-gray);
+}
+
+/* Delivery info block */
+
+.basket-delivery {
+  background: var(--basket-yellow-soft);
+  border-radius: 999px;
+  padding: 8px 14px;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  font-size: 12px;
+}
+
+/* LIST */
+
+.basket-list {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.basket-empty {
+  color: var(--basket-gray);
+  font-size: 14px;
+}
+
+/* ITEM */
+
+.basket-item {
+  display: flex;
   align-items: center;
-  font-size: 18px;
+  gap: 12px;
+  padding: 10px 10px;
+  border-radius: 18px;
+  background: #f8f5ef;
+}
+
+.basket-item-img-wrap {
+  width: 72px;
+  height: 72px;
+  border-radius: 18px;
+  overflow: hidden;
+  flex-shrink: 0;
+  background: #ece6d8;
+}
+
+.basket-item-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.basket-info {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.basket-name {
+  margin: 0;
+  font-size: 14px;
   font-weight: 600;
 }
 
-/* PAY NOW BUTTON */
-.basket-pay-btn {
-  margin-top: 18px;
-  width: 100%;
-  padding: 15px;
-  background: #2e7d32;
-  color: #fff;
-  font-size: 18px;
-  font-weight: 700;
-  border-radius: 30px;
-  border: none;
-  cursor: pointer;
-  box-shadow: 0 5px 10px rgba(0,0,0,0.12);
-  transition: 0.2s;
+.basket-rating {
+  font-size: 12px;
 }
 
-.basket-pay-btn:hover {
-  background: #256528;
+.basket-price {
+  margin: 0;
+  font-size: 14px;
+  font-weight: 700;
+}
+
+/* QUANTITY CONTROLS */
+
+.basket-qty {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.qty-btn {
+  border-radius: 999px;
+  border: none;
+  width: 28px;
+  height: 28px;
+  font-size: 16px;
+  font-weight: 700;
+  cursor: pointer;
+  background: #fff;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+}
+
+.qty-number {
+  min-width: 20px;
+  text-align: center;
+}
+
+/* FOOTER TOTAL */
+
+.basket-footer {
+  margin-top: 4px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 12px;
+}
+
+.basket-total-text {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  font-size: 14px;
+}
+
+.basket-total-text strong {
+  font-size: 18px;
+}
+
+/* Checkout button */
+
+.basket-checkout-btn {
+  border-radius: 999px;
+  border: none;
+  padding: 10px 20px;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  background: var(--basket-yellow);
+  color: #2a2417;
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+  transition: transform 0.12s ease, box-shadow 0.12s ease;
+}
+
+.basket-checkout-btn:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 8px 18px rgba(0, 0, 0, 0.2);
+}
+
+.basket-checkout-btn:active {
+  transform: translateY(0);
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
+}
+
+/* RESPONSIVE */
+
+@media (max-width: 768px) {
+  .basket-header {
+    padding: 10px 16px;
+    gap: 8px;
+  }
+
+  .basket-main {
+    padding: 22px 16px 32px;
+  }
+
+  .basket-card {
+    padding: 20px 18px 22px;
+  }
+
+  .basket-card-header {
+    flex-direction: column;
+    align-items: flex-start;
+  }
 }

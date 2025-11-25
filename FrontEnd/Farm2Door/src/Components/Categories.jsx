@@ -1,6 +1,6 @@
 import React from "react";
 import "./Categories.css";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import CartIcon from "./CartIcon";
 
 import heroImage from "./back3.jpg";
@@ -39,9 +39,10 @@ const favorites = [
 ];
 
 const Categories = () => {
+  const navigate = useNavigate(); // hook for navigation
+
   return (
     <div className="cat-page">
-
       {/* HEADER */}
       <header className="cat-header">
         <div className="cat-logo">Farm2Door</div>
@@ -53,12 +54,16 @@ const Categories = () => {
           <Link className="cat-nav-link" to="/user">Account</Link>
         </nav>
       </header>
-      <CartIcon />   {/* <-- Add this */}
+
+      {/* floating / fixed cart icon */}
+      <CartIcon />
 
       <main className="cat-main">
-
         {/* HERO */}
-        <section className="cat-hero" style={{ backgroundImage: `url(${heroImage})` }}>
+        <section
+          className="cat-hero"
+          style={{ backgroundImage: `url(${heroImage})` }}
+        >
           <div className="cat-hero-inner">
             <div className="cat-hero-text">
               <p className="cat-eyebrow">FARM2DOOR</p>
@@ -66,8 +71,6 @@ const Categories = () => {
               <p className="cat-hero-description">
                 Shop our seasonal produce and pantry staples — harvested with love.
               </p>
-
-              {/* ❌ Removed the 2 hero buttons */}
               <p className="cat-info-text">Explore our fresh categories below.</p>
             </div>
           </div>
@@ -134,19 +137,23 @@ const Categories = () => {
 
                   <div className="cat-fav-price">
                     <span className="cat-price">{item.price}</span>
-                    {item.oldPrice && <span className="cat-old-price">{item.oldPrice}</span>}
+                    {item.oldPrice && (
+                      <span className="cat-old-price">{item.oldPrice}</span>
+                    )}
                   </div>
 
-                  {/* ✔ KEEP Add to Cart button */}
-                  <button className="cat-btn cat-btn-small cat-btn-outline">
+                  {/* Add to Cart -> Basket page */}
+                  <button
+                    className="cat-btn cat-btn-small cat-btn-outline"
+                    type="button"
+                    onClick={() => navigate("/basket")}
+                  >
                     Add to Cart
                   </button>
                 </div>
               </article>
             ))}
           </div>
-
-          {/* ❌ Removed "Browse All Products" button */}
         </section>
 
         {/* PROMO */}
@@ -162,14 +169,12 @@ const Categories = () => {
                 <li>Cancel anytime.</li>
               </ul>
 
-              {/* ❌ Removed "Start Your Farm Box" button */}
               <p className="cat-info-text">Join our weekly organic program.</p>
             </div>
 
             <div className="cat-promo-image-placeholder"></div>
           </div>
         </section>
-
       </main>
     </div>
   );

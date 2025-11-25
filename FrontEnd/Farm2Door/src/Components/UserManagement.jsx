@@ -1,11 +1,11 @@
 import React from "react";
 import "./UserManagement.css";
 import sampleProduct from "./Product.jpg"; // replace with your own image
+import { useNavigate } from "react-router-dom";
 
-export default function UserManagement({ onNavigate }) {
-  const goTo = (page) => {
-    if (onNavigate) onNavigate(page);
-  };
+export default function UserManagement() {
+  // 👇 hooks MUST be inside the component function
+  const navigate = useNavigate();
 
   return (
     <div className="um-page">
@@ -14,10 +14,12 @@ export default function UserManagement({ onNavigate }) {
         <div className="um-logo">Farm2Door</div>
 
         <nav className="um-nav">
-          <button onClick={() => goTo && goTo("home")}>Home</button>
-          <button onClick={() => goTo && goTo("categories")}>Categories</button>
-          <button onClick={() => goTo && goTo("shops")}>Shops</button>
-          <button className="active">Account</button>
+          <button onClick={() => navigate("/home")}>Home</button>
+          <button onClick={() => navigate("/categories")}>Categories</button>
+          <button onClick={() => navigate("/shop-management")}>Shops</button>
+          <button className="active" onClick={() => navigate("/user")}>
+            Account
+          </button>
         </nav>
       </header>
 
@@ -91,7 +93,11 @@ export default function UserManagement({ onNavigate }) {
               <input type="text" placeholder="jane@example.com" />
             </div>
 
-            <button className="um-btn um-btn-primary um-full-width">
+            {/* ➜ go to UpdateInfo page */}
+            <button
+              className="um-btn um-btn-primary um-full-width"
+              onClick={() => navigate("/update-info")}
+            >
               Update Info
             </button>
           </section>
@@ -101,8 +107,8 @@ export default function UserManagement({ onNavigate }) {
             <h2 className="um-section-title">Contact Support</h2>
 
             <p className="um-support-text">
-              Need help with an order, your account, or your farm box?
-              We’re here for you.
+              Need help with an order, your account, or your farm box? We’re
+              here for you.
             </p>
 
             <div className="um-input-group">
@@ -115,7 +121,11 @@ export default function UserManagement({ onNavigate }) {
               <input type="text" placeholder="support@farm2door.com" />
             </div>
 
-            <button className="um-btn um-btn-outline um-full-width">
+            {/* ➜ go to ShopManagement page */}
+            <button
+              className="um-btn um-btn-outline um-full-width"
+              onClick={() => navigate("/shop-management")}
+            >
               Shop Management Menu
             </button>
           </section>
@@ -124,4 +134,5 @@ export default function UserManagement({ onNavigate }) {
     </div>
   );
 }
+
 

@@ -3,61 +3,105 @@ import "./HomeComponent.css";
 import bgImage from "./bg.jpg";
 
 const HomeComponent = ({ onNavigate }) => {
-  return (
-    <div className="home-container">
-      <header className="header">
-        <div className="logo">Farm2Door</div>
+  const goTo = (page) => {
+    if (onNavigate) onNavigate(page);
+  };
 
-        <nav className="nav">
+  return (
+    <div className="home-page">
+      {/* Top bar – visually matches Categories header */}
+      <header className="home-header">
+        <div className="home-logo">Farm2Door</div>
+
+        <nav className="home-nav">
           <button
-            className="nav-link active"
-            onClick={() => onNavigate("home")}
+            className="home-nav-link active"
+            onClick={() => goTo("home")}
           >
             Home
           </button>
-
           <button
-            className="nav-link"
-            onClick={() => onNavigate("categories")}
+            className="home-nav-link"
+            onClick={() => goTo("categories")}
           >
             Categories
           </button>
-
           <button
-            className="nav-link"
-            onClick={() => onNavigate("shops")}
+            className="home-nav-link"
+            onClick={() => goTo("shops")}
           >
             Shops
           </button>
-
           <button
-            className="nav-link"
-            onClick={() => onNavigate("account")}
+            className="home-nav-link"
+            onClick={() => goTo("account")}
           >
             Account
           </button>
         </nav>
 
-        <div className="search-container">
-          <input type="text" className="search-input" placeholder="" />
-          <button className="search-button">
-            <span className="search-icon">🔍</span>
+        <div className="home-search">
+          <input className="home-search-input" type="text" />
+          <button className="home-search-button">
+            <span className="home-search-icon">🔍</span>
           </button>
         </div>
       </header>
 
-      <section
-        className="hero"
-        style={{ backgroundImage: `url(${bgImage})` }}
-      >
-        <div className="hero-content">
-          <p className="hero-subtitle">Always Fresh</p>
-          <h1 className="hero-title">Farm2Door</h1>
-          <p className="hero-tagline">
-            Bring the best food right to your doorstep
-          </p>
-        </div>
-      </section>
+      <main className="home-main">
+        {/* HERO WITH BACKGROUND IMAGE + CREAM CARD */}
+        <section
+          className="home-hero"
+          style={{ backgroundImage: `url(${bgImage})` }}
+        >
+          <div className="home-hero-inner">
+            <div className="home-hero-card">
+              <p className="home-eyebrow">Always Fresh</p>
+              <h1 className="home-title">Farm2Door</h1>
+              <p className="home-subtitle">
+                Bring the best food right to your doorstep.
+              </p>
+
+              <div className="home-hero-buttons">
+                <button
+                  className="home-btn home-btn-primary"
+                  onClick={() => goTo("categories")}
+                >
+                  Shop Now
+                </button>
+                <button
+                  className="home-btn home-btn-outline"
+                  onClick={() => goTo("shops")}
+                >
+                  Browse Shops
+                </button>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        {/* LITTLE FEATURE STRIP TO MATCH CATEGORIES FEEL */}
+        <section className="home-features">
+          <div className="home-features-inner">
+            <div className="home-feature">
+              <h3>Local &amp; Seasonal</h3>
+              <p>Fresh picks from nearby farms, updated every week.</p>
+            </div>
+            <div className="home-feature">
+              <h3>From Farm to Door</h3>
+              <p>Cold-chain delivery keeps your produce crisp and tasty.</p>
+            </div>
+            <div className="home-feature">
+              <h3>Fair to Farmers</h3>
+              <p>Transparent pricing that supports local growers.</p>
+            </div>
+            <div className="home-feature">
+              <h3>Easy Ordering</h3>
+              <p>Shop by category, by shop, or with a weekly farm box.</p>
+            </div>
+          </div>
+        </section>
+      </main>
     </div>
   );
 };

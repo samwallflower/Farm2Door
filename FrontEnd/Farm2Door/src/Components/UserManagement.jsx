@@ -1,86 +1,127 @@
 import React from "react";
 import "./UserManagement.css";
+import sampleProduct from "./Product.jpg"; // replace with your own image
 
-export default function UserManagement() {
+export default function UserManagement({ onNavigate }) {
+  const goTo = (page) => {
+    if (onNavigate) onNavigate(page);
+  };
+
   return (
-    <div className="dashboard-bg">
+    <div className="um-page">
+      {/* Header / Nav – same style family as Home & Categories */}
+      <header className="um-header">
+        <div className="um-logo">Farm2Door</div>
 
-      {/* Header Logo */}
-      <h1 className="logo">Farm2Door</h1>
+        <nav className="um-nav">
+          <button onClick={() => goTo && goTo("home")}>Home</button>
+          <button onClick={() => goTo && goTo("categories")}>Categories</button>
+          <button onClick={() => goTo && goTo("shops")}>Shops</button>
+          <button className="active">Account</button>
+        </nav>
+      </header>
 
-      {/* Main Container */}
-      <div className="grid-container">
+      <main className="um-main">
+        <h1 className="um-page-title">User Management</h1>
 
-        {/* Orders Section */}
-        <div className="orders-section">
-          <h2 className="section-title">Orders</h2>
+        <div className="um-grid">
+          {/* Orders */}
+          <section className="um-card um-orders">
+            <h2 className="um-section-title">Recent Orders</h2>
 
-          <div className="order-card">
-            <img
-              src="/mnt/data/Screenshot 2025-11-25 144917.png"
-              alt="product"
-              className="product-img"
-            />
-            <div className="order-text">
-              <p>Product name ***</p>
-              <p>Price***</p>
+            <div className="um-order-card">
+              <div className="um-order-image-wrap">
+                <img
+                  src={sampleProduct}
+                  alt="product"
+                  className="um-product-img"
+                />
+              </div>
+              <div className="um-order-text">
+                <p className="um-order-name">Farm Fresh Veggie Box</p>
+                <p className="um-order-meta">Order #12345 · $39.99</p>
+              </div>
             </div>
-          </div>
+
+            <div className="um-order-card">
+              <div className="um-order-image-wrap">
+                <img
+                  src={sampleProduct}
+                  alt="product"
+                  className="um-product-img"
+                />
+              </div>
+              <div className="um-order-text">
+                <p className="um-order-name">Seasonal Fruit Crate</p>
+                <p className="um-order-meta">Order #12344 · $29.99</p>
+              </div>
+            </div>
+
+            <button className="um-btn um-btn-outline um-full-width">
+              View All Orders
+            </button>
+          </section>
+
+          {/* Account Info */}
+          <section className="um-card um-account">
+            <h2 className="um-section-title">Account Info</h2>
+
+            <div className="um-input-group">
+              <label>Name</label>
+              <input type="text" placeholder="Jane Doe" />
+            </div>
+
+            <div className="um-input-group">
+              <label>Address</label>
+              <input type="text" placeholder="123 Farm Lane, Green Valley" />
+            </div>
+
+            <div className="um-input-group">
+              <label>Phone Number</label>
+              <input type="text" placeholder="+1 (555) 123-4567" />
+            </div>
+
+            <div className="um-input-group">
+              <label>Billing Method</label>
+              <input type="text" placeholder="Visa •••• 4242" />
+            </div>
+
+            <div className="um-input-group">
+              <label>Email Address</label>
+              <input type="text" placeholder="jane@example.com" />
+            </div>
+
+            <button className="um-btn um-btn-primary um-full-width">
+              Update Info
+            </button>
+          </section>
+
+          {/* Contact Support */}
+          <section className="um-card um-contact">
+            <h2 className="um-section-title">Contact Support</h2>
+
+            <p className="um-support-text">
+              Need help with an order, your account, or your farm box?
+              We’re here for you.
+            </p>
+
+            <div className="um-input-group">
+              <label>Phone Number</label>
+              <input type="text" placeholder="+1 (800) 000-0000" />
+            </div>
+
+            <div className="um-input-group">
+              <label>Email</label>
+              <input type="text" placeholder="support@farm2door.com" />
+            </div>
+
+            <button className="um-btn um-btn-outline um-full-width">
+              Shop Management Menu
+            </button>
+          </section>
         </div>
-
-        {/* User Management Title */}
-        <h2 className="center-title">User Management</h2>
-
-        {/* Account Info Section */}
-        <div className="account-section">
-          <h2 className="section-title">Account Info</h2>
-
-          <div className="input-group">
-            <label>Name:</label>
-            <input type="text" />
-          </div>
-
-          <div className="input-group">
-            <label>Address:</label>
-            <input type="text" />
-          </div>
-
-          <div className="input-group">
-            <label>Phone Number:</label>
-            <input type="text" />
-          </div>
-
-          <div className="input-group">
-            <label>Billing method:</label>
-            <input type="text" />
-          </div>
-
-          <div className="input-group">
-            <label>Email Address:</label>
-            <input type="text" />
-          </div>
-
-          <button className="update-btn">Update Info</button>
-        </div>
-
-        {/* Contact Support Section */}
-        <div className="contact-section">
-          <h2 className="section-title">Contact support</h2>
-
-          <div className="input-group">
-            <label>Phone Number***</label>
-            <input type="text" />
-          </div>
-
-          <div className="input-group">
-            <label>Email***</label>
-            <input type="text" />
-          </div>
-
-          <button className="menu-btn">Shop Management Menu</button>
-        </div>
-
-      </div>
+      </main>
     </div>
   );
 }
+

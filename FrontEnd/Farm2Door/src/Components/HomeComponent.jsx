@@ -1,11 +1,10 @@
 import React from "react";
 import "./HomeComponent.css";
 import bgImage from "./bg.jpg";
+import { useNavigate } from "react-router-dom";
 
-const HomeComponent = ({ onNavigate }) => {
-  const goTo = (page) => {
-    if (onNavigate) onNavigate(page);
-  };
+const HomeComponent = () => {
+  const navigate = useNavigate();
 
   return (
     <div className="home-page">
@@ -16,25 +15,25 @@ const HomeComponent = ({ onNavigate }) => {
         <nav className="home-nav">
           <button
             className="home-nav-link active"
-            onClick={() => goTo("home")}
+            onClick={() => navigate("/home")}
           >
             Home
           </button>
           <button
             className="home-nav-link"
-            onClick={() => goTo("categories")}
+            onClick={() => navigate("/categories")}
           >
             Categories
           </button>
           <button
             className="home-nav-link"
-            onClick={() => goTo("shops")}
+            onClick={() => navigate("/shop-management")}
           >
             Shops
           </button>
           <button
             className="home-nav-link"
-            onClick={() => goTo("account")}
+            onClick={() => navigate("/user")}
           >
             Account
           </button>
@@ -65,13 +64,13 @@ const HomeComponent = ({ onNavigate }) => {
               <div className="home-hero-buttons">
                 <button
                   className="home-btn home-btn-primary"
-                  onClick={() => goTo("categories")}
+                  onClick={() => navigate("/categories")}
                 >
                   Shop Now
                 </button>
                 <button
                   className="home-btn home-btn-outline"
-                  onClick={() => goTo("shops")}
+                  onClick={() => navigate("/shop-management")}
                 >
                   Browse Shops
                 </button>
@@ -107,4 +106,5 @@ const HomeComponent = ({ onNavigate }) => {
 };
 
 export default HomeComponent;
+
 

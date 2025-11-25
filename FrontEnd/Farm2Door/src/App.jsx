@@ -12,6 +12,7 @@ import UpdateProduct from "./Components/UpdateProduct.jsx";
 import ProductPage from "./Components/ProductPage.jsx";
 import UpdateShop from "./Components/UpdateShop.jsx";
 import ShopManagement from "./Components/ShopManagement.jsx";
+import Categories from "./Components/Categories.jsx";
 
 export default function App() {
   return (
@@ -20,6 +21,7 @@ export default function App() {
         <Route path="/" element={<LoginPage />} />
         <Route path="/register" element={<Registration />} />
         <Route path="/home" element={<HomeComponent />} />
+        <Route path="/categories" element={<Categories />} />
         <Route path="/user" element={<UserManagement />} />
         <Route path="/update-info" element={<UpdateInfo />} />
         <Route path="/orders" element={<OrderPage />} />

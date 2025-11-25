@@ -25,12 +25,14 @@ const HomeComponent = () => {
           >
             Categories
           </button>
-          <button
-            className="home-nav-link"
-            onClick={() => navigate("/shop-management")}
-          >
-            Shops
-          </button>
+
+        <button
+          className="home-nav-link"
+          onClick={() => navigate("/shops")}
+        >
+          Shops
+        </button>
+
           <button
             className="home-nav-link"
             onClick={() => navigate("/user")}

@@ -11,17 +11,14 @@
 }
 
 /* PAGE WRAPPER */
-
 .cat-page {
   min-height: 100vh;
   background: var(--cat-cream);
-  font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI",
-    sans-serif;
+  font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
   color: var(--cat-brown);
 }
 
 /* HEADER / NAV */
-
 .cat-header {
   position: sticky;
   top: 0;
@@ -40,29 +37,34 @@
   font-size: 22px;
 }
 
+/* NAV LINKS — styled like buttons, NOT purple links */
 .cat-nav {
   display: flex;
-  gap: 10px;
+  gap: 12px;
 }
 
-.cat-nav button {
-  border: none;
-  padding: 6px 16px;
+.cat-nav-link {
+  text-decoration: none;
+  padding: 6px 18px;
   border-radius: 999px;
+  background: transparent;
+  color: var(--cat-brown);
   font-size: 14px;
   font-weight: 600;
-  background: transparent;
-  cursor: pointer;
-  color: var(--cat-brown);
+  transition: 0.15s ease;
+  display: inline-block;
 }
 
-.cat-nav button.active {
+.cat-nav-link:hover {
+  background: rgba(0, 0, 0, 0.08);
+}
+
+.cat-nav-link.active {
   background: var(--cat-brown);
   color: #fff;
 }
 
 /* MAIN */
-
 .cat-main {
   display: flex;
   flex-direction: column;
@@ -70,7 +72,6 @@
 }
 
 /* HERO */
-
 .cat-hero {
   background-size: cover;
   background-position: center;
@@ -119,7 +120,6 @@
 }
 
 /* GENERIC BUTTONS */
-
 .cat-btn {
   border-radius: 999px;
   border: none;
@@ -164,7 +164,6 @@
 }
 
 /* FEATURES */
-
 .cat-features {
   padding: 0 24px;
 }
@@ -191,8 +190,7 @@
   color: var(--cat-gray);
 }
 
-/* CATEGORY ROW */
-
+/* CATEGORY GRID */
 .cat-categories {
   padding: 10px 24px 0;
 }
@@ -252,7 +250,6 @@
 }
 
 /* FAVORITES */
-
 .cat-favorites {
   padding: 30px 24px 10px;
 }
@@ -339,12 +336,11 @@
   border-radius: 999px;
 }
 
+/* PROMO */
 .cat-browse-all {
   text-align: center;
   margin: 20px 0 0;
 }
-
-/* PROMO BAND */
 
 .cat-promo {
   padding: 30px 24px 40px;
@@ -387,7 +383,6 @@
 }
 
 /* RESPONSIVE */
-
 @media (max-width: 768px) {
   .cat-header {
     padding: 10px 16px;
@@ -414,3 +409,4 @@
     grid-template-columns: 1fr;
   }
 }
+

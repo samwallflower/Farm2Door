@@ -1,6 +1,7 @@
 import React from "react";
 import "./Categories.css";
-import { Link, useNavigate } from "react-router-dom";  // 👈 added useNavigate
+import { Link } from "react-router-dom";
+import CartIcon from "./CartIcon";
 
 import heroImage from "./back3.jpg";
 import cat1 from "./veg1.jpg";
@@ -38,8 +39,6 @@ const favorites = [
 ];
 
 const Categories = () => {
-  const navigate = useNavigate();  // 👈 hook
-
   return (
     <div className="cat-page">
 
@@ -54,6 +53,7 @@ const Categories = () => {
           <Link className="cat-nav-link" to="/user">Account</Link>
         </nav>
       </header>
+      <CartIcon />   {/* <-- Add this */}
 
       <main className="cat-main">
 
@@ -66,6 +66,8 @@ const Categories = () => {
               <p className="cat-hero-description">
                 Shop our seasonal produce and pantry staples — harvested with love.
               </p>
+
+              {/* ❌ Removed the 2 hero buttons */}
               <p className="cat-info-text">Explore our fresh categories below.</p>
             </div>
           </div>
@@ -132,23 +134,19 @@ const Categories = () => {
 
                   <div className="cat-fav-price">
                     <span className="cat-price">{item.price}</span>
-                    {item.oldPrice && (
-                      <span className="cat-old-price">{item.oldPrice}</span>
-                    )}
+                    {item.oldPrice && <span className="cat-old-price">{item.oldPrice}</span>}
                   </div>
 
-
-                 <button
-                   className="cat-btn cat-btn-small cat-btn-outline"
-                   type="button"
-                   onClick={() => navigate("/basket")}   // 👈 use the route path, lowercase
-                 >
-                   Add to Cart
-                 </button>
+                  {/* ✔ KEEP Add to Cart button */}
+                  <button className="cat-btn cat-btn-small cat-btn-outline">
+                    Add to Cart
+                  </button>
                 </div>
               </article>
             ))}
           </div>
+
+          {/* ❌ Removed "Browse All Products" button */}
         </section>
 
         {/* PROMO */}
@@ -164,6 +162,7 @@ const Categories = () => {
                 <li>Cancel anytime.</li>
               </ul>
 
+              {/* ❌ Removed "Start Your Farm Box" button */}
               <p className="cat-info-text">Join our weekly organic program.</p>
             </div>
 

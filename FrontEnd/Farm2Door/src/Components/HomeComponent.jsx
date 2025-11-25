@@ -2,6 +2,8 @@ import React from "react";
 import "./HomeComponent.css";
 import bgImage from "./bg.jpg";
 import { useNavigate } from "react-router-dom";
+import CartIcon from "./CartIcon";
+
 
 const HomeComponent = () => {
   const navigate = useNavigate();
@@ -10,6 +12,7 @@ const HomeComponent = () => {
     <div className="home-page">
       {/* Top bar – visually matches Categories header */}
       <header className="home-header">
+
         <div className="home-logo">Farm2Door</div>
 
         <nav className="home-nav">
@@ -49,6 +52,9 @@ const HomeComponent = () => {
           </button>
         </div>
       </header>
+
+
+      <CartIcon />   {/* <-- Add this */}
 
       <main className="home-main">
         {/* HERO WITH BACKGROUND IMAGE */}

@@ -101,9 +101,17 @@ export default function Basket() {
         <strong>20–25 min</strong>
       </div>
 
-      <button className="basket-total-btn">
-        Total ${total}
+      {/* ✅ TOTAL (not a button) */}
+      <div className="basket-total-display">
+        <span>Total</span>
+        <strong>${total}</strong>
+      </div>
+
+      {/* ✅ NEW PAY BUTTON */}
+      <button className="basket-pay-btn">
+        Pay Now
       </button>
     </div>
   );
 }
+

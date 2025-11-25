@@ -1,6 +1,7 @@
 import React from "react";
 import "./AddProduct.css";
 import { useNavigate } from "react-router-dom";
+import CartIcon from "./CartIcon";
 
 export default function AddProduct() {
   const navigate = useNavigate();
@@ -29,6 +30,7 @@ export default function AddProduct() {
           <button onClick={() => navigate("/user")}>Account</button>
         </nav>
       </header>
+      <CartIcon />   {/* <-- Add this */}
 
       <main className="ap-main">
         <div className="ap-card">

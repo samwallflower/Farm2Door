@@ -1,0 +1,26 @@
+.cart-icon-container {
+  position: fixed;
+  bottom: 18px;       /* moved from top → bottom */
+  right: 18px;
+  background: white;
+  padding: 8px 10px;  /* smaller size */
+  border-radius: 50%;
+  font-size: 18px;    /* smaller icon */
+  cursor: pointer;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.15);
+  z-index: 9999;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.cart-count {
+  position: absolute;
+  top: -6px;         /* repositioned for smaller icon */
+  right: -6px;
+  background: #2e7d32;
+  color: white;
+  font-size: 10px;
+  padding: 2px 5px;
+  border-radius: 999px;
+}

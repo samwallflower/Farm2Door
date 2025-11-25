@@ -15,13 +15,14 @@ import ShopManagement from "./Components/ShopManagement.jsx";
 import Categories from "./Components/Categories.jsx";
 import ShopsMenu from "./Components/ShopsMenu.jsx";
 import ShopDetails from "./Components/ShopDetails.jsx";
-
+import Basket from "./Components/Basket.jsx";
 export default function App() {
   return (
     <Router>
       <Routes>
           <Route path="/shops" element={<ShopsMenu />} />
-          <Route path="/shops/:shopId" element={<ShopDetails />} />
+        <Route path="/shops/:shopId" element={<ShopDetails />} />
+        <Route path="/basket" element={<Basket />} />
         <Route path="/" element={<LoginPage />} />
         <Route path="/register" element={<Registration />} />
         <Route path="/home" element={<HomeComponent />} />

@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import "./Basket.css";
-
+import { useNavigate } from "react-router-dom";
 // TEMP sample items — replace with your own data
 const sampleItems = [
   {

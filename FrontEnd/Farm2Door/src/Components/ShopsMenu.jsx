@@ -67,7 +67,11 @@ export default function ShopsMenu() {
         <section className="shops-list-section">
           <div className="shops-list">
             {shops.map((shop) => (
-              <article key={shop.id} className="shop-card">
+              <article
+                key={shop.id}
+                className="shop-card"
+                onClick={() => navigate(`/shops/${shop.id}`)}
+              >
                 <div className="shop-card-header">
                   <h2>{shop.name}</h2>
                   <p className="shop-location">{shop.location}</p>
@@ -83,14 +87,6 @@ export default function ShopsMenu() {
                     ))}
                   </div>
                 </div>
-
-                {/* Optional: you can wire this to a shop details page later */}
-                {/* <button
-                  className="shops-btn shops-btn-outline"
-                  onClick={() => navigate(`/shop/${shop.id}`)}
-                >
-                  View Shop
-                </button> */}
               </article>
             ))}
           </div>

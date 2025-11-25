@@ -1,0 +1,246 @@
+:root {
+  --sd-yellow: #f6d66c;
+  --sd-yellow-soft: #f9edc7;
+  --sd-cream: #f5efe6;
+  --sd-brown: #3e3625;
+  --sd-gray: #7a7468;
+  --sd-radius-lg: 24px;
+  --sd-radius-md: 18px;
+}
+
+/* PAGE WRAPPER */
+
+.sd-page {
+  min-height: 100vh;
+  background: var(--sd-cream);
+  font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI",
+    sans-serif;
+  color: var(--sd-brown);
+}
+
+/* HEADER – same family as other pages */
+
+.sd-header {
+  position: sticky;
+  top: 0;
+  z-index: 20;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 12px 40px;
+  background: rgba(255, 255, 255, 0.95);
+  backdrop-filter: blur(6px);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+}
+
+.sd-logo {
+  font-weight: 800;
+  font-size: 22px;
+}
+
+.sd-nav {
+  display: flex;
+  gap: 10px;
+}
+
+.sd-nav button {
+  border: none;
+  padding: 6px 16px;
+  border-radius: 999px;
+  font-size: 14px;
+  font-weight: 600;
+  background: transparent;
+  cursor: pointer;
+  color: var(--sd-brown);
+}
+
+.sd-nav button.active {
+  background: var(--sd-brown);
+  color: #fff;
+}
+
+/* MAIN */
+
+.sd-main {
+  padding: 26px 24px 40px;
+}
+
+/* HERO / SHOP SUMMARY */
+
+.sd-hero {
+  max-width: 1120px;
+  margin: 0 auto 22px;
+}
+
+.sd-hero-inner {
+  background: var(--sd-yellow-soft);
+  border-radius: var(--sd-radius-lg);
+  padding: 22px 24px;
+}
+
+.sd-eyebrow {
+  text-transform: uppercase;
+  font-size: 11px;
+  letter-spacing: 0.18em;
+  color: var(--sd-gray);
+  margin: 0 0 6px;
+}
+
+.sd-title {
+  margin: 0 0 6px;
+  font-size: 26px;
+}
+
+.sd-address {
+  margin: 0 0 4px;
+  font-size: 14px;
+  color: var(--sd-gray);
+}
+
+.sd-description {
+  margin: 4px 0 12px;
+  font-size: 14px;
+  color: var(--sd-brown);
+}
+
+/* BUTTONS */
+
+.sd-btn {
+  border-radius: 999px;
+  border: none;
+  padding: 9px 20px;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: transform 0.12s ease, box-shadow 0.12s ease,
+    background 0.12s ease, color 0.12s ease;
+}
+
+.sd-btn-primary {
+  background: var(--sd-yellow);
+  color: #2a2417;
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+}
+
+.sd-btn-outline {
+  background: #fff;
+  color: var(--sd-brown);
+  border: 1px solid rgba(0, 0, 0, 0.08);
+}
+
+.sd-btn:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 8px 18px rgba(0, 0, 0, 0.2);
+}
+
+.sd-btn:active {
+  transform: translateY(0);
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
+}
+
+/* PRODUCTS SECTION */
+
+.sd-products-section {
+  max-width: 1120px;
+  margin: 0 auto;
+}
+
+.sd-products-title {
+  margin: 0 0 14px;
+  font-size: 22px;
+}
+
+.sd-products-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(230px, 1fr));
+  gap: 16px;
+}
+
+.sd-product-card {
+  background: #ffffff;
+  border-radius: var(--sd-radius-lg);
+  padding: 14px 16px 16px;
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.08);
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.sd-product-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.sd-product-name {
+  margin: 0;
+  font-size: 15px;
+}
+
+.sd-product-meta {
+  display: flex;
+  justify-content: space-between;
+  gap: 10px;
+  align-items: baseline;
+  font-size: 13px;
+}
+
+.sd-product-price {
+  font-weight: 700;
+}
+
+.sd-product-amount {
+  color: var(--sd-gray);
+}
+
+/* Add to cart button */
+
+.sd-add-btn {
+  align-self: flex-end;
+  margin-top: 4px;
+}
+
+/* RESPONSIVE */
+.sd-product-card {
+  background: #ffffff;
+  border-radius: var(--sd-radius-lg);
+  padding: 14px 16px 16px;
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.08);
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+/* NEW: image at the top of each product card */
+.sd-product-image-wrap {
+  width: 100%;
+  height: 140px;
+  border-radius: 18px;
+  overflow: hidden;
+  background: #f8f5ef;
+}
+
+.sd-product-image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+@media (max-width: 768px) {
+  .sd-header {
+    padding: 10px 16px;
+    gap: 8px;
+  }
+
+  .sd-nav {
+    gap: 4px;
+  }
+
+  .sd-main {
+    padding: 22px 16px 32px;
+  }
+
+  .sd-hero-inner {
+    padding: 18px;
+  }
+}

@@ -14,12 +14,14 @@ import UpdateShop from "./Components/UpdateShop.jsx";
 import ShopManagement from "./Components/ShopManagement.jsx";
 import Categories from "./Components/Categories.jsx";
 import ShopsMenu from "./Components/ShopsMenu.jsx";
+import ShopDetails from "./Components/ShopDetails.jsx";
 
 export default function App() {
   return (
     <Router>
       <Routes>
           <Route path="/shops" element={<ShopsMenu />} />
+          <Route path="/shops/:shopId" element={<ShopDetails />} />
         <Route path="/" element={<LoginPage />} />
         <Route path="/register" element={<Registration />} />
         <Route path="/home" element={<HomeComponent />} />

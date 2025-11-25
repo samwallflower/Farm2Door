@@ -147,6 +147,15 @@
   flex-wrap: wrap;
   gap: 6px;
 }
+.shop-card {
+  cursor: pointer;
+  transition: transform 0.12s ease, box-shadow 0.12s ease;
+}
+
+.shop-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 10px 24px rgba(0, 0, 0, 0.12);
+}
 
 .shop-chip {
   padding: 5px 10px;

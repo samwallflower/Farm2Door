@@ -1,6 +1,7 @@
 import React from "react";
 import "./Categories.css";
 import { Link } from "react-router-dom";
+import CartIcon from "./CartIcon";
 
 import heroImage from "./back3.jpg";
 import cat1 from "./veg1.jpg";
@@ -52,6 +53,7 @@ const Categories = () => {
           <Link className="cat-nav-link" to="/user">Account</Link>
         </nav>
       </header>
+      <CartIcon />   {/* <-- Add this */}
 
       <main className="cat-main">
 

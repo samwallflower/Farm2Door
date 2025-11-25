@@ -15,18 +15,30 @@ import ShopManagement from "./Components/ShopManagement.jsx";
 import Categories from "./Components/Categories.jsx";
 import ShopsMenu from "./Components/ShopsMenu.jsx";
 import ShopDetails from "./Components/ShopDetails.jsx";
+import Basket from "./Components/Basket.jsx";   // ✅ ADD THIS
 
 export default function App() {
   return (
     <Router>
       <Routes>
-          <Route path="/shops" element={<ShopsMenu />} />
-          <Route path="/shops/:shopId" element={<ShopDetails />} />
+
+        {/* ⭐ Shops Menu + Shop Details */}
+        <Route path="/shops" element={<ShopsMenu />} />
+        <Route path="/shops/:shopId" element={<ShopDetails />} />
+
+        {/* ⭐ Cart/Basket Page */}
+        <Route path="/basket" element={<Basket />} />   {/* ✅ FIXED */}
+
+        {/* ⭐ Login + Register */}
         <Route path="/" element={<LoginPage />} />
         <Route path="/register" element={<Registration />} />
+
+        {/* ⭐ Main Pages */}
         <Route path="/home" element={<HomeComponent />} />
         <Route path="/categories" element={<Categories />} />
         <Route path="/user" element={<UserManagement />} />
+
+        {/* ⭐ User / Orders / Products / Shop Management */}
         <Route path="/update-info" element={<UpdateInfo />} />
         <Route path="/orders" element={<OrderPage />} />
         <Route path="/add-product" element={<AddProduct />} />
@@ -34,6 +46,7 @@ export default function App() {
         <Route path="/product" element={<ProductPage />} />
         <Route path="/update-shop" element={<UpdateShop />} />
         <Route path="/shop-management" element={<ShopManagement />} />
+
       </Routes>
     </Router>
   );

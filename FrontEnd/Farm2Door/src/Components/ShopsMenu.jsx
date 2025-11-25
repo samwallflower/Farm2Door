@@ -1,6 +1,7 @@
 import React from "react";
 import "./ShopsMenu.css";
 import { useNavigate } from "react-router-dom";
+import CartIcon from "./CartIcon";
 
 const shops = [
   {
@@ -50,6 +51,8 @@ export default function ShopsMenu() {
           <button onClick={() => navigate("/user")}>Account</button>
         </nav>
       </header>
+
+      <CartIcon />   {/* <-- Add this */}
 
       <main className="shops-main">
         {/* Hero / intro */}

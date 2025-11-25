@@ -1,6 +1,7 @@
 import React from "react";
 import "./ProductPage.css";
 import { useNavigate } from "react-router-dom";
+import CartIcon from "./CartIcon";
 
 export default function ProductPage() {
   const navigate = useNavigate();
@@ -23,6 +24,7 @@ export default function ProductPage() {
           <button onClick={() => navigate("/user")}>Account</button>
         </nav>
       </header>
+      <CartIcon />   {/* <-- Add this */}
 
       <main className="pp-main">
         <div className="pp-card">

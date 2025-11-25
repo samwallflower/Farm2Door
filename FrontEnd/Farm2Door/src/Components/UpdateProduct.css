@@ -1,0 +1,59 @@
+/* Background */
+.update-bg {
+  width: 100vw;
+  height: 100vh;
+  background-image: url("Product.png");
+  background-size: cover;
+  background-position: center;
+  padding: 40px;
+  color: white;
+  text-shadow: 0 2px 4px rgba(0,0,0,0.7);
+}
+
+/* Title */
+.update-title {
+  font-size: 48px;
+  font-weight: bold;
+  margin-bottom: 35px;
+}
+
+/* Form Wrapper */
+.form-wrapper {
+  width: 380px;
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+}
+
+/* Labels */
+.input-group label {
+  font-size: 20px;
+  font-weight: bold;
+  display: block;
+  margin-bottom: 6px;
+}
+
+/* Inputs & Textarea */
+.input-group input,
+.input-group textarea {
+  width: 100%;
+  padding: 14px;
+  border-radius: 22px;
+  border: none;
+  outline: none;
+  background: rgba(255, 255, 255, 0.55);
+  font-size: 17px;
+  color: black;
+  backdrop-filter: blur(4px);
+}
+
+/* First field blue border (matches screenshot) */
+.highlight-input {
+  border: 3px solid #4da3ff;
+  background: rgba(255, 255, 255, 0.75);
+}
+
+/* Textarea shape */
+.input-group textarea {
+  border-radius: 20px;
+}

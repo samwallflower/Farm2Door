@@ -1,43 +1,36 @@
 import React from "react";
 import "./HomeComponent.css";
 import bgImage from "./bg.jpg";
+import { Link, useNavigate } from "react-router-dom";
 
-const HomeComponent = ({ onNavigate }) => {
+const HomeComponent = () => {
+  const navigate = useNavigate();
+
   return (
     <div className="home-container">
       <header className="header">
         <div className="logo">Farm2Door</div>
 
+        {/* NAVIGATION BAR */}
         <nav className="nav">
-          <button
-            className="nav-link active"
-            onClick={() => onNavigate("home")}
-          >
+          <Link className="nav-link active" to="/home">
             Home
-          </button>
+          </Link>
 
-          <button
-            className="nav-link"
-            onClick={() => onNavigate("categories")}
-          >
+          <Link className="nav-link" to="/categories">
             Categories
-          </button>
+          </Link>
 
-          <button
-            className="nav-link"
-            onClick={() => onNavigate("shops")}
-          >
+          <Link className="nav-link" to="/shops">
             Shops
-          </button>
+          </Link>
 
-          <button
-            className="nav-link"
-            onClick={() => onNavigate("account")}
-          >
+          <Link className="nav-link" to="/account">
             Account
-          </button>
+          </Link>
         </nav>
 
+        {/* SEARCH BAR */}
         <div className="search-container">
           <input type="text" className="search-input" placeholder="" />
           <button className="search-button">
@@ -46,6 +39,7 @@ const HomeComponent = ({ onNavigate }) => {
         </div>
       </header>
 
+      {/* HERO SECTION */}
       <section
         className="hero"
         style={{ backgroundImage: `url(${bgImage})` }}

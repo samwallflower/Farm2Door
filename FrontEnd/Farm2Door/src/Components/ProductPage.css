@@ -1,0 +1,68 @@
+/* Full background */
+.product-bg {
+  width: 100vw;
+  height: 100vh;
+  background-image: url("Product.png");
+  background-size: cover;
+  background-position: center;
+  padding: 50px;
+  color: white;
+  text-shadow: 0 2px 4px rgba(0,0,0,0.7);
+}
+
+/* Main form wrapper spacing */
+.form-container {
+  width: 450px;
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+}
+
+/* Labels */
+.input-group label {
+  font-size: 20px;
+  font-weight: bold;
+  display: block;
+  margin-bottom: 6px;
+}
+
+/* Inputs + textareas */
+.input-group input,
+.input-group textarea {
+  width: 100%;
+  padding: 14px;
+  border-radius: 22px;
+  border: none;
+  outline: none;
+  background: rgba(255, 255, 255, 0.6);
+  color: black;
+  font-size: 17px;
+  backdrop-filter: blur(4px);
+}
+
+/* Layout rows for price+inventory */
+.row {
+  display: flex;
+  gap: 15px;
+}
+
+/* Box sizes */
+.large-box input {
+  height: 55px;
+  border-radius: 30px;
+}
+
+.small-box input {
+  height: 45px;
+  border-radius: 25px;
+}
+
+.medium-box input {
+  height: 45px;
+  border-radius: 25px;
+}
+
+.description-box textarea {
+  border-radius: 25px;
+  height: 120px;
+}

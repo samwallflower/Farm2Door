@@ -1,11 +1,18 @@
 import React from "react";
 import "./LoginPage.css";
-import bgImage from "./loginback.jpg"; // make sure this exists
+import bgImage from "./loginback.jpg";
+import { useNavigate } from "react-router-dom";
 
-const LoginPage = ({ onLogin, onRegister }) => {
+const LoginPage = () => {
+  const navigate = useNavigate();
+
   const handleSubmit = (e) => {
-    e.preventDefault();          // stop page refresh
-    if (onLogin) onLogin();      // go to home page
+    e.preventDefault();
+    navigate("/home"); // go to home page after login
+  };
+
+  const handleRegisterClick = () => {
+    navigate("/register"); // go to registration page
   };
 
   return (
@@ -34,16 +41,14 @@ const LoginPage = ({ onLogin, onRegister }) => {
               </label>
 
               <div className="login-actions">
-                {/* This submits the form -> handleSubmit -> onLogin -> Home */}
                 <button type="submit" className="login-submit-btn">
                   Login
                 </button>
 
-                {/* This switches to the registration page */}
                 <button
                   type="button"
                   className="login-register-btn"
-                  onClick={onRegister}
+                  onClick={handleRegisterClick}
                 >
                   Register
                 </button>
@@ -57,3 +62,4 @@ const LoginPage = ({ onLogin, onRegister }) => {
 };
 
 export default LoginPage;
+

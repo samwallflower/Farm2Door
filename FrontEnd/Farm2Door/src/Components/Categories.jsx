@@ -1,8 +1,7 @@
 import React from "react";
 import "./Categories.css";
-import { NavLink } from "react-router-dom";
+import { Link } from "react-router-dom";
 
-// IMAGES
 import heroImage from "./back3.jpg";
 import cat1 from "./veg1.jpg";
 import cat2 from "./veg1.jpg";
@@ -19,7 +18,6 @@ import fav6 from "./fruit.jpg";
 import fav7 from "./fruit.jpg";
 import fav8 from "./fruit.jpg";
 
-// CATEGORY CARDS
 const categoryCards = [
   { title: "Fresh Vegetables", subtitle: "Tomatoes, lettuce, carrots, and more.", image: cat1 },
   { title: "Grains & Legumes", subtitle: "Wheat, corn, soybeans, and lentils.", image: cat2 },
@@ -28,7 +26,6 @@ const categoryCards = [
   { title: "Free-Range Poultry", subtitle: "Eggs and poultry raised with care.", image: cat5 },
 ];
 
-// FAVORITES
 const favorites = [
   { id: 1, name: "Heirloom Tomato", price: "$7.99", oldPrice: "$9.50", rating: 5, sale: true, image: fav1 },
   { id: 2, name: "Organic Eggplant", price: "$5.99", rating: 5, image: fav2 },
@@ -49,10 +46,10 @@ const Categories = () => {
         <div className="cat-logo">Farm2Door</div>
 
         <nav className="cat-nav">
-          <NavLink to="/home" className="cat-nav-link">Home</NavLink>
-          <NavLink to="/categories" className="cat-nav-link">Categories</NavLink>
-          <NavLink to="/shops" className="cat-nav-link">Shops</NavLink>
-          <NavLink to="/user" className="cat-nav-link">Account</NavLink>
+          <Link className="cat-nav-link" to="/home">Home</Link>
+          <Link className="cat-nav-link active" to="/categories">Categories</Link>
+          <Link className="cat-nav-link" to="/shops">Shops</Link>
+          <Link className="cat-nav-link" to="/user">Account</Link>
         </nav>
       </header>
 
@@ -68,10 +65,8 @@ const Categories = () => {
                 Shop our seasonal produce and pantry staples — harvested with love.
               </p>
 
-              <div className="cat-hero-buttons">
-                <button className="cat-btn cat-btn-primary">Shop Now</button>
-                <button className="cat-btn cat-btn-outline">Weekly Farm Box</button>
-              </div>
+              {/* ❌ Removed the 2 hero buttons */}
+              <p className="cat-info-text">Explore our fresh categories below.</p>
             </div>
           </div>
         </section>
@@ -79,10 +74,22 @@ const Categories = () => {
         {/* FEATURES */}
         <section className="cat-features">
           <div className="cat-features-inner">
-            <div className="cat-feature"><h3>Family-Owned & Operated</h3><p>We’ve been growing with care.</p></div>
-            <div className="cat-feature"><h3>Seasonal Farm Boxes</h3><p>Fresh, local, and in-season.</p></div>
-            <div className="cat-feature"><h3>Sustainable</h3><p>Eco-friendly & minimal packaging.</p></div>
-            <div className="cat-feature"><h3>Delivered to Your Door</h3><p>Subscriptions & pickup options.</p></div>
+            <div className="cat-feature">
+              <h3>Family-Owned &amp; Operated</h3>
+              <p>We’ve been growing with care for generations.</p>
+            </div>
+            <div className="cat-feature">
+              <h3>Seasonal Farm Boxes</h3>
+              <p>What’s fresh, local, and in-season.</p>
+            </div>
+            <div className="cat-feature">
+              <h3>Sustainable &amp; Eco-Friendly</h3>
+              <p>Regenerative farming and minimal packaging.</p>
+            </div>
+            <div className="cat-feature">
+              <h3>Delivered to Your Door</h3>
+              <p>Flexible subscription and pickup options.</p>
+            </div>
           </div>
         </section>
 
@@ -96,6 +103,7 @@ const Categories = () => {
                 <div className="cat-category-image-wrap">
                   <img src={c.image} alt={c.title} />
                 </div>
+
                 <div className="cat-category-info">
                   <h3>{c.title}</h3>
                   <p>{c.subtitle}</p>
@@ -107,13 +115,16 @@ const Categories = () => {
 
         {/* FAVORITES */}
         <section className="cat-favorites">
-          <h2 className="cat-fav-title">This Week's Favorites</h2>
+          <h2 className="cat-fav-title">This Week&apos;s Favorites</h2>
 
           <div className="cat-fav-grid">
             {favorites.map((item) => (
               <article className="cat-fav-card" key={item.id}>
                 {item.sale && <span className="cat-sale-tag">SALE</span>}
-                <div className="cat-fav-image-wrap"><img src={item.image} alt={item.name} /></div>
+
+                <div className="cat-fav-image-wrap">
+                  <img src={item.image} alt={item.name} />
+                </div>
 
                 <div className="cat-fav-body">
                   <h3>{item.name}</h3>
@@ -124,15 +135,16 @@ const Categories = () => {
                     {item.oldPrice && <span className="cat-old-price">{item.oldPrice}</span>}
                   </div>
 
-                  <button className="cat-btn cat-btn-small cat-btn-outline">Add to Cart</button>
+                  {/* ✔ KEEP Add to Cart button */}
+                  <button className="cat-btn cat-btn-small cat-btn-outline">
+                    Add to Cart
+                  </button>
                 </div>
               </article>
             ))}
           </div>
 
-          <div className="cat-browse-all">
-            <button className="cat-btn cat-btn-primary">Browse All Products</button>
-          </div>
+          {/* ❌ Removed "Browse All Products" button */}
         </section>
 
         {/* PROMO */}
@@ -140,13 +152,16 @@ const Categories = () => {
           <div className="cat-promo-inner">
             <div className="cat-promo-text">
               <h2>Your Organic Essentials, Delivered</h2>
-              <p>Freshly picked and delivered weekly.</p>
+              <p>Freshly picked organic produce delivered weekly.</p>
+
               <ul>
                 <li>Always seasonal.</li>
                 <li>Curated by farmers.</li>
                 <li>Cancel anytime.</li>
               </ul>
-              <button className="cat-btn cat-btn-dark">Start Your Farm Box</button>
+
+              {/* ❌ Removed "Start Your Farm Box" button */}
+              <p className="cat-info-text">Join our weekly organic program.</p>
             </div>
 
             <div className="cat-promo-image-placeholder"></div>

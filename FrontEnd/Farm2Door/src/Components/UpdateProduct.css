@@ -1,59 +1,229 @@
-/* Background */
-.update-bg {
-  width: 100vw;
-  height: 100vh;
-  background-image: url("Product.png");
-  background-size: cover;
-  background-position: center;
-  padding: 40px;
-  color: white;
-  text-shadow: 0 2px 4px rgba(0,0,0,0.7);
+:root {
+  --upd-yellow: #f6d66c;
+  --upd-yellow-soft: #f9edc7;
+  --upd-cream: #f5efe6;
+  --upd-brown: #3e3625;
+  --upd-gray: #7a7468;
+  --upd-radius-lg: 24px;
 }
 
-/* Title */
-.update-title {
-  font-size: 48px;
-  font-weight: bold;
-  margin-bottom: 35px;
+/* PAGE WRAPPER */
+
+.upd-page {
+  min-height: 100vh;
+  background: var(--upd-cream);
+  font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI",
+    sans-serif;
+  color: var(--upd-brown);
 }
 
-/* Form Wrapper */
-.form-wrapper {
-  width: 380px;
+/* HEADER – matches other pages */
+
+.upd-header {
+  position: sticky;
+  top: 0;
+  z-index: 20;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 12px 40px;
+  background: rgba(255, 255, 255, 0.95);
+  backdrop-filter: blur(6px);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+}
+
+.upd-logo {
+  font-weight: 800;
+  font-size: 22px;
+}
+
+.upd-nav {
+  display: flex;
+  gap: 10px;
+}
+
+.upd-nav button {
+  border: none;
+  padding: 6px 16px;
+  border-radius: 999px;
+  font-size: 14px;
+  font-weight: 600;
+  background: transparent;
+  cursor: pointer;
+  color: var(--upd-brown);
+}
+
+.upd-nav button.active {
+  background: var(--upd-brown);
+  color: #fff;
+}
+
+/* MAIN */
+
+.upd-main {
+  padding: 30px 24px 40px;
+  display: flex;
+  justify-content: center;
+}
+
+/* CARD */
+
+.upd-card {
+  width: 100%;
+  max-width: 780px;
+  background: #ffffff;
+  border-radius: var(--upd-radius-lg);
+  padding: 22px 24px 24px;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.08);
+}
+
+.upd-card-header {
+  margin-bottom: 16px;
+}
+
+.upd-eyebrow {
+  text-transform: uppercase;
+  font-size: 11px;
+  letter-spacing: 0.18em;
+  color: var(--upd-gray);
+  margin: 0 0 6px;
+}
+
+.upd-title {
+  margin: 0 0 6px;
+  font-size: 26px;
+}
+
+.upd-subtitle {
+  margin: 0;
+  font-size: 14px;
+  color: var(--upd-gray);
+}
+
+/* FORM LAYOUT */
+
+.upd-form {
   display: flex;
   flex-direction: column;
-  gap: 18px;
+  gap: 14px;
 }
 
-/* Labels */
-.input-group label {
-  font-size: 20px;
-  font-weight: bold;
-  display: block;
-  margin-bottom: 6px;
+.upd-row {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 12px;
 }
 
-/* Inputs & Textarea */
-.input-group input,
-.input-group textarea {
+.upd-input-group {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.upd-full {
   width: 100%;
-  padding: 14px;
-  border-radius: 22px;
-  border: none;
+}
+
+/* LABELS + INPUTS */
+
+.upd-input-group label {
+  font-size: 13px;
+  font-weight: 600;
+}
+
+.upd-input-group input,
+.upd-input-group textarea {
+  border-radius: 999px;
+  border: 1px solid rgba(0, 0, 0, 0.1);
+  padding: 8px 12px;
+  font-size: 13px;
   outline: none;
-  background: rgba(255, 255, 255, 0.55);
-  font-size: 17px;
-  color: black;
-  backdrop-filter: blur(4px);
+  background: #faf7f0;
+  resize: vertical;
 }
 
-/* First field blue border (matches screenshot) */
-.highlight-input {
-  border: 3px solid #4da3ff;
-  background: rgba(255, 255, 255, 0.75);
+/* Highlighted name input */
+.upd-input-highlight {
+  background: #fffdf3;
+  border-color: var(--upd-yellow);
 }
 
-/* Textarea shape */
-.input-group textarea {
-  border-radius: 20px;
+/* textarea: slightly different radius */
+
+.upd-input-group textarea {
+  border-radius: 18px;
+  min-height: 80px;
+}
+
+.upd-input-group input:focus,
+.upd-input-group textarea:focus {
+  border-color: var(--upd-yellow);
+  box-shadow: 0 0 0 2px rgba(246, 214, 108, 0.35);
+}
+
+/* ACTION BUTTONS */
+
+.upd-actions {
+  margin-top: 10px;
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+}
+
+.upd-btn {
+  border-radius: 999px;
+  border: none;
+  padding: 9px 20px;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: transform 0.12s ease, box-shadow 0.12s ease,
+    background 0.12s ease, color 0.12s ease;
+}
+
+.upd-btn-primary {
+  background: var(--upd-yellow);
+  color: #2a2417;
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+}
+
+.upd-btn-outline {
+  background: #fff;
+  color: var(--upd-brown);
+  border: 1px solid rgba(0, 0, 0, 0.08);
+}
+
+.upd-btn:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 8px 18px rgba(0, 0, 0, 0.2);
+}
+
+.upd-btn:active {
+  transform: translateY(0);
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
+}
+
+/* RESPONSIVE */
+
+@media (max-width: 768px) {
+  .upd-header {
+    padding: 10px 16px;
+    gap: 8px;
+  }
+
+  .upd-nav {
+    gap: 4px;
+  }
+
+  .upd-main {
+    padding: 22px 16px 32px;
+  }
+
+  .upd-card {
+    padding: 20px 18px 22px;
+  }
+
+  .upd-row {
+    grid-template-columns: 1fr;
+  }
 }

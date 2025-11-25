@@ -1,0 +1,132 @@
+/* Page container */
+.basket-page {
+  max-width: 420px;
+  margin: 0 auto;
+  padding: 20px 16px;
+  background: #f5efe6;
+  min-height: 100vh;
+  font-family: "Segoe UI", sans-serif;
+}
+
+/* Header */
+.basket-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding-bottom: 10px;
+}
+
+.basket-title {
+  font-size: 22px;
+  font-weight: 700;
+}
+
+.basket-menu,
+.basket-cart {
+  font-size: 22px;
+  cursor: pointer;
+}
+
+/* Basket items */
+.basket-list {
+  margin-top: 10px;
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+}
+
+.basket-item {
+  display: flex;
+  align-items: center;
+  background: #ffffff;
+  padding: 12px;
+  border-radius: 20px;
+  box-shadow: 0 3px 8px rgba(0, 0, 0, 0.06);
+}
+
+.basket-item-img {
+  width: 70px;
+  height: 70px;
+  border-radius: 16px;
+  object-fit: cover;
+}
+
+.basket-info {
+  flex: 1;
+  margin-left: 14px;
+}
+
+.basket-price {
+  font-size: 16px;
+  font-weight: 700;
+  color: #2e7d32;
+  margin: 0;
+}
+
+.basket-name {
+  margin: 2px 0;
+  font-weight: 600;
+}
+
+.basket-rating {
+  font-size: 12px;
+  color: #f0a500;
+}
+
+/* Quantity buttons */
+.basket-qty {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.qty-btn {
+  width: 28px;
+  height: 28px;
+  border: 2px solid #d0c8b6;
+  border-radius: 50%;
+  font-size: 18px;
+  background: #fff;
+  cursor: pointer;
+  transition: 0.15s;
+}
+
+.qty-btn:hover {
+  background: #eee5d4;
+}
+
+.qty-number {
+  font-size: 16px;
+  font-weight: 600;
+}
+
+/* Delivery info */
+.basket-delivery {
+  margin-top: 25px;
+  display: flex;
+  justify-content: space-between;
+  background: #fff;
+  padding: 14px 18px;
+  border-radius: 16px;
+  box-shadow: 0 3px 8px rgba(0, 0, 0, 0.06);
+}
+
+/* Total button */
+.basket-total-btn {
+  margin-top: 20px;
+  width: 100%;
+  padding: 14px;
+  background: #8bcf82;
+  color: #fff;
+  font-size: 18px;
+  font-weight: 700;
+  border-radius: 30px;
+  border: none;
+  cursor: pointer;
+  box-shadow: 0 5px 10px rgba(0, 0, 0, 0.12);
+  transition: 0.2s;
+}
+
+.basket-total-btn:hover {
+  background: #79c673;
+}

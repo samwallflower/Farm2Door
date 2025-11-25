@@ -19,6 +19,7 @@ const HomeComponent = () => {
           >
             Home
           </button>
+
           <button
             className="home-nav-link"
             onClick={() => navigate("/categories")}
@@ -26,12 +27,12 @@ const HomeComponent = () => {
             Categories
           </button>
 
-        <button
-          className="home-nav-link"
-          onClick={() => navigate("/shops")}
-        >
-          Shops
-        </button>
+          <button
+            className="home-nav-link"
+            onClick={() => navigate("/shops")}
+          >
+            Shops
+          </button>
 
           <button
             className="home-nav-link"
@@ -50,7 +51,7 @@ const HomeComponent = () => {
       </header>
 
       <main className="home-main">
-        {/* HERO WITH BACKGROUND IMAGE + CREAM CARD */}
+        {/* HERO WITH BACKGROUND IMAGE */}
         <section
           className="home-hero"
           style={{ backgroundImage: `url(${bgImage})` }}
@@ -64,15 +65,11 @@ const HomeComponent = () => {
               </p>
 
               <div className="home-hero-buttons">
-                <button
-                  className="home-btn home-btn-primary"
-                  onClick={() => navigate("/categories")}
-                >
-                  Shop Now
-                </button>
+                {/* ❌ Removed SHOP NOW button */}
+
                 <button
                   className="home-btn home-btn-outline"
-                  onClick={() => navigate("/shop-management")}
+                  onClick={() => navigate("/shops")}  // ✅ FIXED
                 >
                   Browse Shops
                 </button>
@@ -81,7 +78,7 @@ const HomeComponent = () => {
           </div>
         </section>
 
-        {/* LITTLE FEATURE STRIP TO MATCH CATEGORIES FEEL */}
+        {/* Feature section */}
         <section className="home-features">
           <div className="home-features-inner">
             <div className="home-feature">

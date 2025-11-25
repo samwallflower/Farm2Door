@@ -8,7 +8,7 @@ const LoginPage = () => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    navigate("/home"); // go to home page after login
+    navigate("/HomeComponent"); // go to home page after login
   };
 
   const handleRegisterClick = () => {

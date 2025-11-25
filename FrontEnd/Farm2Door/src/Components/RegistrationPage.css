@@ -1,150 +1,144 @@
-/* full-page background */
+:root {
+  --reg-yellow: #f6d66c;
+  --reg-cream: #f5efe6;
+  --reg-brown: #3e3625;
+  --reg-gray: #7a7468;
+  --reg-green: #2e7d32;
+
+  --radius-lg: 24px;
+  --radius-md: 16px;
+  --radius-pill: 999px;
+}
+
+/* full-screen background */
 .reg-page {
-  position: relative;
   height: 100vh;
-  width: 100%;
+  width: 100vw;
   background-size: cover;
   background-position: center;
-  background-repeat: no-repeat;
-  color: #ffffff;
-}
-
-/* soft dark overlay for readability */
-.reg-overlay {
-  position: relative;
-  inset: 0;
-  height: 100%;
-  width: 100%;
-  background: radial-gradient(
-      circle at top,
-      rgba(0, 0, 0, 0.2),
-      rgba(0, 0, 0, 0.55)
-    );
-}
-
-/* content positioned slightly from left, vertically centered */
-.reg-content {
-  height: 100%;
   display: flex;
-  flex-direction: column;
+  align-items: center;
   justify-content: center;
-  padding: 40px 16px 40px 70px;
-  max-width: 480px;
 }
 
-/* header text */
+/* soft organic overlay */
+.reg-overlay {
+  width: 100%;
+  height: 100%;
+  background: rgba(255, 249, 232, 0.55);
+  backdrop-filter: blur(6px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* card container */
+.reg-content {
+  background: rgba(255, 255, 255, 0.85);
+  padding: 40px 50px;
+  border-radius: var(--radius-lg);
+  width: 90%;
+  max-width: 460px;
+  box-shadow: 0 10px 35px rgba(0, 0, 0, 0.18);
+  color: var(--reg-brown);
+}
+
+/* header */
 .reg-header {
-  margin-bottom: 24px;
+  text-align: center;
+  margin-bottom: 20px;
 }
 
 .reg-always-fresh {
   margin: 0;
-  font-size: 20px;
-  font-weight: 400;
+  font-size: 22px;
   font-family: "Dancing Script", cursive;
-  text-shadow: 0 2px 6px rgba(0, 0, 0, 0.8);
+  color: var(--reg-gray);
 }
 
 .reg-logo {
   margin: 0;
-  font-size: 42px;
-  font-weight: 700;
+  font-size: 46px;
   font-family: "Dancing Script", cursive;
-  text-shadow: 0 3px 10px rgba(0, 0, 0, 0.85);
+  color: var(--reg-brown);
 }
 
 .reg-title {
-  margin: 4px 0 0 0;
-  font-size: 24px;
-  font-weight: 600;
-  color: #a3f29b; /* light green like the screenshot */
-  text-shadow: 0 2px 6px rgba(0, 0, 0, 0.8);
+  margin-top: 6px;
+  font-size: 26px;
+  font-weight: 700;
+  color: var(--reg-green);
 }
 
-/* form container */
+/* form layout */
 .reg-form-wrapper {
-  margin-top: 8px;
+  margin-top: 12px;
 }
 
 .reg-form {
   display: flex;
   flex-direction: column;
-  gap: 12px;
+  gap: 18px;
 }
 
-/* glassy input pill */
+/* glass input */
 .reg-input-pill {
   position: relative;
-  display: flex;
-  flex-direction: column;
-  padding: 6px 18px;
-  border-radius: 999px;
-  background: rgba(255, 255, 255, 0.3);
-  backdrop-filter: blur(6px);
-  -webkit-backdrop-filter: blur(6px);
+  background: #ffffff;
+  border-radius: var(--radius-pill);
+  padding: 14px 22px;
+  box-shadow: 0 3px 10px rgba(0, 0, 0, 0.12);
 }
 
-/* label text */
-.reg-input-pill > span {
+.reg-input-pill span {
   position: absolute;
+  top: 6px;
   left: 22px;
-  top: 7px;
-  font-size: 13px;
+  font-size: 12px;
+  color: var(--reg-gray);
 }
 
-/* text fields */
 .reg-input-pill input {
-  margin-top: 18px; /* to clear the label text */
+  margin-top: 20px;
+  width: 100%;
   border: none;
-  outline: none;
   background: transparent;
-  color: #ffffff;
-  font-size: 14px;
-  padding: 4px 0 8px 0;
+  outline: none;
+  font-size: 15px;
+  color: var(--reg-brown);
 }
 
-.reg-input-pill input::placeholder {
-  color: rgba(255, 255, 255, 0.9);
-}
-
-/* submit button */
+/* button */
 .reg-submit-btn {
-  margin-top: 10px;
-  align-self: flex-start;
-  padding: 8px 26px;
-  border-radius: 999px;
+  margin-top: 8px;
+  padding: 12px 34px;
+  border-radius: var(--radius-pill);
   border: none;
-  cursor: pointer;
-  font-size: 14px;
+  background: var(--reg-yellow);
+  color: var(--reg-brown);
+  font-size: 18px;
   font-weight: 600;
-  background: rgba(255, 255, 255, 0.9);
-  color: #2f3c1f;
-  box-shadow: 0 5px 14px rgba(0, 0, 0, 0.5);
-  transition: transform 0.15s ease, box-shadow 0.15s ease;
+  cursor: pointer;
+  box-shadow: 0 5px 16px rgba(0, 0, 0, 0.25);
+  transition: 0.15s ease;
 }
 
 .reg-submit-btn:hover {
-  transform: translateY(-1px);
-  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.55);
+  transform: translateY(-2px);
+  box-shadow: 0 8px 22px rgba(0, 0, 0, 0.35);
 }
 
-.reg-submit-btn:active {
-  transform: translateY(0);
-  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.5);
-}
-
-/* responsive tweaks */
+/* mobile */
 @media (max-width: 600px) {
   .reg-content {
-    padding: 32px 16px;
-    max-width: 100%;
+    padding: 30px 24px;
   }
 
   .reg-logo {
-    font-size: 34px;
+    font-size: 38px;
   }
 
   .reg-title {
-    font-size: 20px;
+    font-size: 22px;
   }
 }

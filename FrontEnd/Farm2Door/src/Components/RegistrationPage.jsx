@@ -1,8 +1,16 @@
 import React from "react";
 import "./RegistrationPage.css";
-import regBg from "./loginback.jpg"; // put your image in Components folder and rename if needed
+import regBg from "./loginback.jpg";
+import { useNavigate } from "react-router-dom";
 
 const Registration = () => {
+  const navigate = useNavigate();
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    navigate("/home");
+  };
+
   return (
     <div
       className="reg-page"
@@ -10,16 +18,15 @@ const Registration = () => {
     >
       <div className="reg-overlay">
         <div className="reg-content">
-          {/* Title / branding */}
+
           <header className="reg-header">
             <p className="reg-always-fresh">Always Fresh</p>
             <h1 className="reg-logo">Farm2Door</h1>
             <h2 className="reg-title">Registration</h2>
           </header>
 
-          {/* Form */}
           <main className="reg-form-wrapper">
-            <form className="reg-form">
+            <form className="reg-form" onSubmit={handleSubmit}>
               <label className="reg-input-pill">
                 <span>First Name</span>
                 <input type="text" placeholder="First Name" />
@@ -40,12 +47,12 @@ const Registration = () => {
                 <input type="password" placeholder="Password" />
               </label>
 
-              {/* optional button */}
               <button type="submit" className="reg-submit-btn">
                 Sign Up
               </button>
             </form>
           </main>
+
         </div>
       </div>
     </div>

@@ -2,6 +2,9 @@ import React from "react";
 import "./ShopsMenu.css";
 import { useNavigate } from "react-router-dom";
 import CartIcon from "./CartIcon";
+import PillNav from "./PillNav";
+import logoImg from "./logo.png"; // <-- point to your real logo file
+import heroImage from "./product3.jpg";
 
 const shops = [
   {
@@ -30,38 +33,63 @@ const shops = [
   },
 ];
 
+// same nav as other pages
+const navItems = [
+  { label: "Home", href: "/home" },
+  { label: "Categories", href: "/categories" },
+  { label: "Shops", href: "/shops" },
+  { label: "Account", href: "/user" },
+];
+
 export default function ShopsMenu() {
   const navigate = useNavigate();
 
   return (
     <div className="shops-page">
-      {/* Header – same family as other pages */}
+      {/* HEADER with PillNav */}
       <header className="shops-header">
-        <div className="shops-logo">Farm2Door</div>
+        {/* left text logo */}
+        <div className="shops-logo-text">Farm2Door</div>
 
-        <nav className="shops-nav">
-          <button onClick={() => navigate("/home")}>Home</button>
-          <button onClick={() => navigate("/categories")}>Categories</button>
-          <button
-            className="active"
-            onClick={() => navigate("/shops")}
-          >
-            Shops
+        {/* center pill nav (Shops active) */}
+        <div className="shops-header-center">
+          <PillNav
+            logo={logoImg}
+            items={navItems}
+            activeHref="/shops"
+            baseColor="#ffffff"
+            pillColor="#3e3625"
+            hoveredPillTextColor="#3e3625"
+          />
+        </div>
+
+        {/* right search */}
+        <div className="shops-search">
+          <input
+            className="shops-search-input"
+            type="text"
+            placeholder="Search shops..."
+          />
+          <button className="shops-search-button">
+            <span className="shops-search-icon">🔍</span>
           </button>
-          <button onClick={() => navigate("/user")}>Account</button>
-        </nav>
+        </div>
       </header>
 
-      <CartIcon />   {/* <-- Add this */}
+      <CartIcon />
 
       <main className="shops-main">
-        {/* Hero / intro */}
-        <section className="shops-hero">
+        {/* HERO WITH BACKGROUND IMAGE */}
+        <section
+          className="shops-hero"
+          style={{ backgroundImage: `url(${heroImage})` }}
+        >
           <div className="shops-hero-inner">
-            <p className="shops-eyebrow">Shops</p>
+            <p className="shops-eyebrow">SHOPS</p>
             <h1 className="shops-title">Browse Local Shops</h1>
             <p className="shops-subtitle">
-              Discover nearby farms and producers and see what they&apos;re known for.
+              Discover nearby farms and producers and see what they&apos;re
+              known for.
             </p>
           </div>
         </section>

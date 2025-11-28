@@ -335,6 +335,29 @@
   font-weight: 700;
   border-radius: 999px;
 }
+.cat-header {
+  display: flex;
+  align-items: center;
+  padding: 12px 40px;
+  background: rgba(255, 255, 255, 0.96);
+  backdrop-filter: blur(6px);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+  gap: 24px;
+}
+
+.cat-logo-text {
+  font-weight: 800;
+  font-size: 22px;
+  color: #3e3625;
+  white-space: nowrap;
+}
+
+/* center the pill nav */
+.cat-header-center {
+  flex: 1;
+  display: flex;
+  justify-content: center;
+}
 
 /* PROMO */
 .cat-browse-all {

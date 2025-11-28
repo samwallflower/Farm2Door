@@ -2,42 +2,55 @@ import React from "react";
 import "./UserManagement.css";
 import sampleProduct from "./Product.jpg";
 import { useNavigate } from "react-router-dom";
+import CartIcon from "./CartIcon";
+import PillNav from "./PillNav";
+import logoImg from "./logo.png";
+
+
+const navItems = [
+  { label: "Home", href: "/home" },
+  { label: "Categories", href: "/categories" },
+  { label: "Shops", href: "/shops" },
+  { label: "Account", href: "/user" },
+];
 
 export default function UserManagement() {
   const navigate = useNavigate();
 
   return (
     <div className="um-page">
-
-      {/* HEADER */}
       <header className="um-header">
-        <div className="um-logo">Farm2Door</div>
+        <div className="um-logo-text">Farm2Door</div>
 
-        <nav className="um-nav">
-          <button onClick={() => navigate("/home")}>Home</button>
-          <button onClick={() => navigate("/categories")}>Categories</button>
-
-          {/* ✅ FIXED: shops button now goes to /shops */}
-          <button onClick={() => navigate("/shops")}>Shops</button>
-
-          <button className="active" onClick={() => navigate("/user")}>
-            Account
-          </button>
-        </nav>
+        <div className="um-header-center">
+          <PillNav
+            logo={logoImg}
+            items={navItems}
+            activeHref="/user"
+            baseColor="#ffffff"
+            pillColor="#3e3625"
+            hoveredPillTextColor="#3e3625"
+          />
+        </div>
       </header>
+
+      <CartIcon />
 
       <main className="um-main">
         <h1 className="um-page-title">User Management</h1>
 
         <div className="um-grid">
-
           {/* ORDERS */}
           <section className="um-card um-orders">
             <h2 className="um-section-title">Recent Orders</h2>
 
             <div className="um-order-card">
               <div className="um-order-image-wrap">
-                <img src={sampleProduct} alt="product" className="um-product-img" />
+                <img
+                  src={sampleProduct}
+                  alt="product"
+                  className="um-product-img"
+                />
               </div>
               <div className="um-order-text">
                 <p className="um-order-name">Farm Fresh Veggie Box</p>
@@ -47,7 +60,11 @@ export default function UserManagement() {
 
             <div className="um-order-card">
               <div className="um-order-image-wrap">
-                <img src={sampleProduct} alt="product" className="um-product-img" />
+                <img
+                  src={sampleProduct}
+                  alt="product"
+                  className="um-product-img"
+                />
               </div>
               <div className="um-order-text">
                 <p className="um-order-name">Seasonal Fruit Crate</p>
@@ -71,7 +88,10 @@ export default function UserManagement() {
 
             <div className="um-input-group">
               <label>Address</label>
-              <input type="text" placeholder="123 Farm Lane, Green Valley" />
+              <input
+                type="text"
+                placeholder="123 Farm Lane, Green Valley"
+              />
             </div>
 
             <div className="um-input-group">
@@ -97,12 +117,12 @@ export default function UserManagement() {
             </button>
           </section>
 
-          {/* CONTACT SUPPORT */}
           <section className="um-card um-contact">
             <h2 className="um-section-title">Contact Support</h2>
 
             <p className="um-support-text">
-              Need help with an order, your account, or your farm box? We’re here for you.
+              Need help with an order, your account, or your farm box? We’re
+              here for you.
             </p>
 
             <div className="um-input-group">
@@ -115,7 +135,6 @@ export default function UserManagement() {
               <input type="text" placeholder="support@farm2door.com" />
             </div>
 
-            {/* stays as Shop Management page */}
             <button
               className="um-btn um-btn-outline um-full-width"
               onClick={() => navigate("/shop-management")}
@@ -123,12 +142,8 @@ export default function UserManagement() {
               Shop Management Menu
             </button>
           </section>
-
         </div>
       </main>
     </div>
   );
 }
-
-
-

@@ -1,50 +1,46 @@
 import React from "react";
 import "./HomeComponent.css";
 import bgImage from "./bg.jpg";
-import { useNavigate } from "react-router-dom";
+import { useLocation } from "react-router-dom";
 import CartIcon from "./CartIcon";
+import PillNav from "./PillNav";
+import logoImg from "./logo.png";
 
+
+const navItems = [
+  { label: "Home", href: "/home" },
+  { label: "Categories", href: "/categories" },
+  { label: "Shops", href: "/shops" },
+  { label: "Account", href: "/user" },
+];
 
 const HomeComponent = () => {
-  const navigate = useNavigate();
+  const location = useLocation();
+
+  // treat "/" as "/home"
+  const activeHref =
+    location.pathname === "/" ? "/home" : location.pathname;
 
   return (
     <div className="home-page">
-      {/* Top bar – visually matches Categories header */}
+      {/* HEADER */}
       <header className="home-header">
+        {/* left text logo */}
+        <div className="home-logo-text">Farm2Door</div>
 
-        <div className="home-logo">Farm2Door</div>
+        {/* center pill nav */}
+        <div className="home-header-center">
+          <PillNav
+            logo={logoImg}
+            items={navItems}
+            activeHref={activeHref}
+            baseColor="#ffffff"
+            pillColor="#3e3625"
+            hoveredPillTextColor="#3e3625"
+          />
+        </div>
 
-        <nav className="home-nav">
-          <button
-            className="home-nav-link active"
-            onClick={() => navigate("/home")}
-          >
-            Home
-          </button>
-
-          <button
-            className="home-nav-link"
-            onClick={() => navigate("/categories")}
-          >
-            Categories
-          </button>
-
-          <button
-            className="home-nav-link"
-            onClick={() => navigate("/shops")}
-          >
-            Shops
-          </button>
-
-          <button
-            className="home-nav-link"
-            onClick={() => navigate("/user")}
-          >
-            Account
-          </button>
-        </nav>
-
+        {/* right search */}
         <div className="home-search">
           <input className="home-search-input" type="text" />
           <button className="home-search-button">
@@ -53,9 +49,10 @@ const HomeComponent = () => {
         </div>
       </header>
 
+      {/* floating cart icon */}
+      <CartIcon />
 
-      <CartIcon />   {/* <-- Add this */}
-
+      {/* MAIN CONTENT */}
       <main className="home-main">
         {/* HERO WITH BACKGROUND IMAGE */}
         <section
@@ -71,11 +68,9 @@ const HomeComponent = () => {
               </p>
 
               <div className="home-hero-buttons">
-                {/* ❌ Removed SHOP NOW button */}
-
                 <button
                   className="home-btn home-btn-outline"
-                  onClick={() => navigate("/shops")}  // ✅ FIXED
+                  onClick={() => (window.location.href = "/shops")}
                 >
                   Browse Shops
                 </button>
@@ -84,7 +79,7 @@ const HomeComponent = () => {
           </div>
         </section>
 
-        {/* Feature section */}
+        {/* FEATURES SECTION */}
         <section className="home-features">
           <div className="home-features-inner">
             <div className="home-feature">

@@ -1,6 +1,10 @@
 import React from "react";
 import "./ShopDetails.css";
 import { useNavigate, useParams } from "react-router-dom";
+
+import CartIcon from "./CartIcon";
+import PillNav from "./PillNav";
+import logoImg from "./logo.png"; // <-- use your real logo here
 import productPlaceholder from "./Product.jpg"; // placeholder, replace per product later
 
 // Dummy data – replace with API data later
@@ -58,6 +62,14 @@ const mockShops = [
   },
 ];
 
+// same nav items as other pages
+const navItems = [
+  { label: "Home", href: "/home" },
+  { label: "Categories", href: "/categories" },
+  { label: "Shops", href: "/shops" },
+  { label: "Account", href: "/user" },
+];
+
 export default function ShopDetails() {
   const navigate = useNavigate();
   const { shopId } = useParams(); // /shops/:shopId
@@ -66,19 +78,26 @@ export default function ShopDetails() {
 
   return (
     <div className="sd-page">
-      {/* Header – same family as other pages */}
+      {/* HEADER with PillNav */}
       <header className="sd-header">
-        <div className="sd-logo">Farm2Door</div>
+        {/* left text logo */}
+        <div className="sd-logo-text">Farm2Door</div>
 
-        <nav className="sd-nav">
-          <button onClick={() => navigate("/home")}>Home</button>
-          <button onClick={() => navigate("/categories")}>Categories</button>
-          <button className="active" onClick={() => navigate("/shops")}>
-            Shops
-          </button>
-          <button onClick={() => navigate("/user")}>Account</button>
-        </nav>
+        {/* center pill nav (Shops active) */}
+        <div className="sd-header-center">
+          <PillNav
+            logo={logoImg}
+            items={navItems}
+            activeHref="/shops"
+            baseColor="#ffffff"
+            pillColor="#3e3625"
+            hoveredPillTextColor="#3e3625"
+          />
+        </div>
       </header>
+
+      {/* floating cart icon */}
+      <CartIcon />
 
       <main className="sd-main">
         {/* Shop hero / summary */}

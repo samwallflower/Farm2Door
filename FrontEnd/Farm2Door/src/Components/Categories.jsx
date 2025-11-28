@@ -1,9 +1,11 @@
 import React from "react";
 import "./Categories.css";
-import { Link, useNavigate } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 import CartIcon from "./CartIcon";
+import PillNav from "./PillNav";
+import logoImg from "./logo.png";
 
-import heroImage from "./back3.jpg";
+import heroImage from "./product5.jpg";
 import cat1 from "./veg1.jpg";
 import cat2 from "./veg1.jpg";
 import cat3 from "./fruit.jpg";
@@ -20,11 +22,31 @@ import fav7 from "./fruit.jpg";
 import fav8 from "./fruit.jpg";
 
 const categoryCards = [
-  { title: "Fresh Vegetables", subtitle: "Tomatoes, lettuce, carrots, and more.", image: cat1 },
-  { title: "Grains & Legumes", subtitle: "Wheat, corn, soybeans, and lentils.", image: cat2 },
-  { title: "Seasonal Fruits", subtitle: "Apples, strawberries, blueberries, and peaches.", image: cat3 },
-  { title: "Leafy Greens", subtitle: "Organic kale, lettuce, baby spinach, and more.", image: cat4 },
-  { title: "Free-Range Poultry", subtitle: "Eggs and poultry raised with care.", image: cat5 },
+  {
+    title: "Fresh Vegetables",
+    subtitle: "Tomatoes, lettuce, carrots, and more.",
+    image: cat1,
+  },
+  {
+    title: "Grains & Legumes",
+    subtitle: "Wheat, corn, soybeans, and lentils.",
+    image: cat2,
+  },
+  {
+    title: "Seasonal Fruits",
+    subtitle: "Apples, strawberries, blueberries, and peaches.",
+    image: cat3,
+  },
+  {
+    title: "Leafy Greens",
+    subtitle: "Organic kale, lettuce, baby spinach, and more.",
+    image: cat4,
+  },
+  {
+    title: "Free-Range Poultry",
+    subtitle: "Eggs and poultry raised with care.",
+    image: cat5,
+  },
 ];
 
 const favorites = [
@@ -38,24 +60,42 @@ const favorites = [
   { id: 8, name: "Bell Pepper", price: "$5.99", rating: 5, image: fav8 },
 ];
 
+// same nav items as Home, but with `href`
+const navItems = [
+  { label: "Home", href: "/home" },
+  { label: "Categories", href: "/categories" },
+  { label: "Shops", href: "/shops" },
+  { label: "Account", href: "/user" },
+];
+
 const Categories = () => {
-  const navigate = useNavigate(); // hook for navigation
+  const navigate = useNavigate();
+  const location = useLocation();
+
+  const activeHref =
+    location.pathname === "/" ? "/home" : location.pathname;
 
   return (
     <div className="cat-page">
-      {/* HEADER */}
+      {/* HEADER with PillNav */}
       <header className="cat-header">
-        <div className="cat-logo">Farm2Door</div>
+        {/* left text logo */}
+        <div className="cat-logo-text">Farm2Door</div>
 
-        <nav className="cat-nav">
-          <Link className="cat-nav-link" to="/home">Home</Link>
-          <Link className="cat-nav-link active" to="/categories">Categories</Link>
-          <Link className="cat-nav-link" to="/shops">Shops</Link>
-          <Link className="cat-nav-link" to="/user">Account</Link>
-        </nav>
+        {/* center pill nav */}
+        <div className="cat-header-center">
+          <PillNav
+            logo={logoImg}
+            items={navItems}
+            activeHref={activeHref}
+            baseColor="#ffffff"
+            pillColor="#3e3625"
+            hoveredPillTextColor="#3e3625"
+          />
+        </div>
       </header>
 
-      {/* floating / fixed cart icon */}
+      {/* floating cart icon */}
       <CartIcon />
 
       <main className="cat-main">
@@ -133,7 +173,9 @@ const Categories = () => {
 
                 <div className="cat-fav-body">
                   <h3>{item.name}</h3>
-                  <div className="cat-fav-rating">{"★".repeat(item.rating)}</div>
+                  <div className="cat-fav-rating">
+                    {"★".repeat(item.rating)}
+                  </div>
 
                   <div className="cat-fav-price">
                     <span className="cat-price">{item.price}</span>
@@ -142,7 +184,6 @@ const Categories = () => {
                     )}
                   </div>
 
-                  {/* Add to Cart -> Basket page */}
                   <button
                     className="cat-btn cat-btn-small cat-btn-outline"
                     type="button"

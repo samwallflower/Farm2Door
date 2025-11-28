@@ -21,28 +21,37 @@
 /* HEADER – matches Categories header style */
 
 .home-header {
-  position: sticky;
-  top: 0;
-  z-index: 20;
   display: flex;
   align-items: center;
-  justify-content: space-between;
   padding: 12px 40px;
-  background: rgba(255, 255, 255, 0.9);
+  background: rgba(255, 255, 255, 0.96);
   backdrop-filter: blur(6px);
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+  gap: 24px;
+}
+.home-header-center {
+  flex: 1;
+  display: flex;
+  justify-content: center;
 }
 
-.home-logo {
+
+.home-logo-text {
   font-weight: 800;
   font-size: 22px;
+  color: #3e3625;
+  white-space: nowrap;
 }
 
 .home-nav {
   display: flex;
   gap: 10px;
 }
-
+.home-search {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
 .home-nav-link {
   border: none;
   padding: 6px 16px;
@@ -100,7 +109,7 @@
   background-size: cover;
   background-position: center;
   background-repeat: no-repeat;
-  padding: 60px 24px 80px;
+  padding: 80px 24px 100px;
 }
 
 .home-hero-inner {
@@ -108,41 +117,96 @@
   margin: 0 auto;
   display: flex;
   align-items: center;
-  min-height: 360px;
+  justify-content: center;
+  min-height: 400px;
 }
 
+/* Centered text, no card background */
 .home-hero-card {
-  max-width: 460px;
-  background: rgba(255, 249, 232, 0.9);
-  padding: 30px 34px;
+  max-width: 650px;
+  background: none;
+  padding: 40px 48px;
   border-radius: var(--home-radius-lg);
-  box-shadow: 0 12px 30px rgba(0, 0, 0, 0.18);
+  text-align: center;
 }
 
 .home-eyebrow {
   text-transform: uppercase;
-  font-size: 12px;
-  letter-spacing: 0.15em;
-  color: var(--home-gray);
-  margin: 0 0 8px;
+  font-size: 24px;          /* bigger */
+  letter-spacing: 0.18em;
+  color: white;
+  font-weight:400:
+  margin: 0 0 12px;
 }
 
+/* BIG Farm2Door */
 .home-title {
-  font-size: 40px;
-  margin: 0 0 10px;
+  font-size: clamp(3.5rem, 5vw, 4.5rem);  /* responsive big text */
+  font-weight: 800;
+  color: white;
+  margin: 0 0 16px;
 }
 
+/* bigger subtitle */
 .home-subtitle {
-  font-size: 15px;
-  color: var(--home-gray);
-  margin: 0 0 20px;
+  font-size: 28px;
+  color: White;
+  font-weight:400;
+  margin: 0 0 28px;
 }
 
+/* center the button row */
 .home-hero-buttons {
   display: flex;
+  justify-content: center;
   gap: 12px;
 }
 
+.home-pill-nav {
+  --active-index: 0;
+  --item-count: 4;
+
+  position: relative;
+  display: flex;
+  padding: 4px;
+  border-radius: 999px;
+  background: rgba(0, 0, 0, 0.06);
+  min-width: 320px; /* adjust if needed */
+}
+
+.home-pill-nav-highlight {
+  position: absolute;
+  inset: 4px;
+  width: calc(100% / var(--item-count));
+  transform: translateX(calc(var(--active-index) * 100%));
+  border-radius: 999px;
+  background: #3e3625; /* pill color */
+  transition: transform 0.25s ease;
+}
+
+.home-pill-nav-item {
+  flex: 1;
+  border: none;
+  background: transparent;
+  border-radius: 999px;
+  padding: 6px 20px;
+  font-size: 14px;
+  font-weight: 600;
+  color: #3e3625;
+  cursor: pointer;
+  position: relative;
+  z-index: 1; /* sits above the highlight */
+  text-align: center;
+  transition: color 0.2s ease;
+}
+
+.home-pill-nav-item.active {
+  color: #ffffff;
+}
+
+.home-pill-nav-item:not(.active):hover {
+  color: #1f180b;
+}
 /* BUTTONS */
 
 .home-btn {

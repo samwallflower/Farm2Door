@@ -199,6 +199,30 @@
   align-self: flex-end;
   margin-top: 4px;
 }
+.sd-header {
+  display: flex;
+  align-items: center;
+  padding: 12px 40px;
+  background: rgba(255, 255, 255, 0.96);
+  backdrop-filter: blur(6px);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+  gap: 24px;
+}
+
+/* left text logo */
+.sd-logo-text {
+  font-weight: 800;
+  font-size: 22px;
+  color: #3e3625;
+  white-space: nowrap;
+}
+
+/* center PillNav */
+.sd-header-center {
+  flex: 1;
+  display: flex;
+  justify-content: center;
+}
 
 /* RESPONSIVE */
 .sd-product-card {

@@ -1,3 +1,4 @@
+// src/Components/Shopcreation.jsx
 import React, { useState } from "react";
 import "./Shopcreation.css";
 import { useNavigate } from "react-router-dom";
@@ -7,7 +8,7 @@ export default function Shopcreation() {
     const navigate = useNavigate();
 
     const [form, setForm] = useState({
-        shopName: "",
+        name: "",            // 👈 use "name" here
         address: "",
         contactNumber: "",
         contactEmail: "",
@@ -34,20 +35,24 @@ export default function Shopcreation() {
 
             setLoading(true);
 
+            // 👇 matches AddShopRequest exactly
             const payload = {
-                shopName: form.shopName,
+                name: form.name,
                 address: form.address,
                 contactNumber: form.contactNumber,
                 contactEmail: form.contactEmail,
                 description: form.description,
             };
 
-            await addShop(userId, payload);
+            await addShop(userId, payload); // JWT is added by interceptor
 
             navigate("/shop-management");
         } catch (err) {
             console.error("Failed to create shop", err);
-            setError("Failed to create shop. Please try again.");
+            const backendMessage =
+                err.response?.data?.message ||
+                "Failed to create shop. Please try again.";
+            setError(backendMessage);
         } finally {
             setLoading(false);
         }
@@ -71,37 +76,34 @@ export default function Shopcreation() {
                     {error && <div className="sc-error">{error}</div>}
 
                     <form className="sc-form" onSubmit={handleSubmit}>
-                        {/* SHOP NAME */}
                         <div className="sc-input-group sc-full">
                             <label>Shop name</label>
                             <input
                                 type="text"
-                                placeholder="Green Valley Farm Shop"
-                                value={form.shopName}
-                                onChange={handleChange("shopName")}
+                                placeholder="Green Farm"
+                                value={form.name}
+                                onChange={handleChange("name")}
                                 required
                             />
                         </div>
 
-                        {/* ADDRESS */}
                         <div className="sc-input-group sc-full">
                             <label>Shop Address</label>
                             <input
                                 type="text"
-                                placeholder="123 Farm Lane, Green Valley"
+                                placeholder="Kassai ut 28"
                                 value={form.address}
                                 onChange={handleChange("address")}
                                 required
                             />
                         </div>
 
-                        {/* CONTACT ROW */}
                         <div className="sc-row">
                             <div className="sc-input-group">
                                 <label>Contact Number</label>
                                 <input
                                     type="tel"
-                                    placeholder="+1 (555) 123-4567"
+                                    placeholder="+3612345678"
                                     value={form.contactNumber}
                                     onChange={handleChange("contactNumber")}
                                     required
@@ -112,7 +114,7 @@ export default function Shopcreation() {
                                 <label>Contact Email</label>
                                 <input
                                     type="email"
-                                    placeholder="shop@example.com"
+                                    placeholder="greenfarm@gmail.com"
                                     value={form.contactEmail}
                                     onChange={handleChange("contactEmail")}
                                     required
@@ -120,18 +122,16 @@ export default function Shopcreation() {
                             </div>
                         </div>
 
-                        {/* DESCRIPTION */}
                         <div className="sc-input-group sc-full">
-                            <label>Shop description</label>
+                            <label>Description</label>
                             <textarea
                                 rows="4"
-                                placeholder="Describe what you sell, how you farm, and what makes your shop special..."
+                                placeholder="demo description"
                                 value={form.description}
                                 onChange={handleChange("description")}
                             />
                         </div>
 
-                        {/* ACTIONS */}
                         <div className="sc-actions">
                             <button
                                 type="button"

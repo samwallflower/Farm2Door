@@ -1,112 +1,209 @@
-import React from "react";
+// src/Components/AddProduct.jsx
+import React, { useState } from "react";
 import "./AddProduct.css";
 import { useNavigate } from "react-router-dom";
 import CartIcon from "./CartIcon";
+import { addProductToShop } from "../api/client";
 
 export default function AddProduct() {
-  const navigate = useNavigate();
+    const navigate = useNavigate();
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    // TODO: send new product data to backend
-    navigate("/shop-management"); // go back after "saving"
-  };
+    const [form, setForm] = useState({
+        name: "",
+        price: "",
+        inventory: "",
+        origin: "",
+        unit: "",
+        category: "",
+        description: "",
+    });
 
-  return (
-    <div className="ap-page">
-      {/* Header – same family as other pages */}
-      <header className="ap-header">
-        <div className="ap-logo">Farm2Door</div>
+    const [error, setError] = useState("");
+    const [loading, setLoading] = useState(false);
 
-        <nav className="ap-nav">
-          <button onClick={() => navigate("/home")}>Home</button>
-          <button onClick={() => navigate("/categories")}>Categories</button>
-          <button
-            className="active"
-            onClick={() => navigate("/shop-management")}
-          >
-            Shops
-          </button>
-          <button onClick={() => navigate("/user")}>Account</button>
-        </nav>
-      </header>
-      <CartIcon />   {/* <-- Add this */}
+    const handleChange = (field) => (e) => {
+        setForm((prev) => ({ ...prev, [field]: e.target.value }));
+    };
 
-      <main className="ap-main">
-        <div className="ap-card">
-          <div className="ap-card-header">
-            <div>
-              <p className="ap-eyebrow">Product</p>
-              <h1 className="ap-title">Add Product</h1>
-              <p className="ap-subtitle">
-                Create a new product listing for your shop.
-              </p>
-            </div>
-          </div>
+    const handleSubmit = async (e) => {
+        e.preventDefault();
+        setError("");
 
-          <form className="ap-form" onSubmit={handleSubmit}>
-            {/* NAME */}
-            <div className="ap-input-group ap-full">
-              <label>Name</label>
-              <input type="text" placeholder="Organic Tomato Box" />
-            </div>
+        const shopId = localStorage.getItem("shopId");
+        if (!shopId) {
+            setError("No shop selected. Please open Shop Management first.");
+            return;
+        }
 
-            {/* PRICE + INVENTORY */}
-            <div className="ap-row">
-              <div className="ap-input-group">
-                <label>Price</label>
-                <input type="text" placeholder="€4.99" />
-              </div>
+        try {
+            setLoading(true);
 
-              <div className="ap-input-group">
-                <label>Inventory</label>
-                <input type="text" placeholder="120" />
-              </div>
-            </div>
+            // Map to your AddProductRequest JSON
+            // If your fields differ (e.g. productName vs name), rename here.
+            const payload = {
+                name: form.name,
+                price: parseFloat(form.price || "0"),
+                inventory: parseInt(form.inventory || "0", 10),
+                origin: form.origin,
+                unit: form.unit,
+                category: form.category,
+                description: form.description,
+            };
 
-            {/* ORIGIN + UNIT */}
-            <div className="ap-row">
-              <div className="ap-input-group">
-                <label>Origin</label>
-                <input type="text" placeholder="Green Valley Farm" />
-              </div>
+            await addProductToShop(shopId, payload);
 
-              <div className="ap-input-group">
-                <label>Unit</label>
-                <input type="text" placeholder="per kg / per box" />
-              </div>
-            </div>
+            // On success, go back to Shop Management
+            navigate("/shop-management");
+        } catch (err) {
+            console.error("Failed to add product", err);
+            setError(
+                err.response?.data?.message ||
+                "Failed to add product. Please check your data and try again."
+            );
+        } finally {
+            setLoading(false);
+        }
+    };
 
-            {/* CATEGORY */}
-            <div className="ap-input-group ap-full">
-              <label>Category</label>
-              <input type="text" placeholder="Fresh Vegetables" />
-            </div>
+    return (
+        <div className="ap-page">
+            {/* Header – same family as other pages */}
+            <header className="ap-header">
+                <div className="ap-logo">Farm2Door</div>
 
-            {/* DESCRIPTION */}
-            <div className="ap-input-group ap-full">
-              <label>Description</label>
-              <textarea
-                rows="4"
-                placeholder="Write a short description of the product..."
-              ></textarea>
-            </div>
+                <nav className="ap-nav">
+                    <button onClick={() => navigate("/home")}>Home</button>
+                    <button onClick={() => navigate("/categories")}>Categories</button>
+                    <button
+                        className="active"
+                        onClick={() => navigate("/shop-management")}
+                    >
+                        Shops
+                    </button>
+                    <button onClick={() => navigate("/user")}>Account</button>
+                </nav>
+            </header>
 
-            <div className="ap-actions">
-              <button
-                type="button"
-                className="ap-btn ap-btn-outline"
-                onClick={() => navigate("/shop-management")}
-              >
-                Cancel
-              </button>
-              <button type="submit" className="ap-btn ap-btn-primary">
-                Save Product
-              </button>
-            </div>
-          </form>
+            <CartIcon />
+
+            <main className="ap-main">
+                <div className="ap-card">
+                    <div className="ap-card-header">
+                        <div>
+                            <p className="ap-eyebrow">Product</p>
+                            <h1 className="ap-title">Add Product</h1>
+                            <p className="ap-subtitle">
+                                Create a new product listing for your shop.
+                            </p>
+                        </div>
+                    </div>
+
+                    {error && <div className="ap-error">{error}</div>}
+
+                    <form className="ap-form" onSubmit={handleSubmit}>
+                        {/* NAME */}
+                        <div className="ap-input-group ap-full">
+                            <label>Name</label>
+                            <input
+                                type="text"
+                                placeholder="Organic Tomato Box"
+                                value={form.name}
+                                onChange={handleChange("name")}
+                                required
+                            />
+                        </div>
+
+                        {/* PRICE + INVENTORY */}
+                        <div className="ap-row">
+                            <div className="ap-input-group">
+                                <label>Price</label>
+                                <input
+                                    type="number"
+                                    step="0.01"
+                                    placeholder="4.99"
+                                    value={form.price}
+                                    onChange={handleChange("price")}
+                                    required
+                                />
+                            </div>
+
+                            <div className="ap-input-group">
+                                <label>Inventory</label>
+                                <input
+                                    type="number"
+                                    placeholder="120"
+                                    value={form.inventory}
+                                    onChange={handleChange("inventory")}
+                                    required
+                                />
+                            </div>
+                        </div>
+
+                        {/* ORIGIN + UNIT */}
+                        <div className="ap-row">
+                            <div className="ap-input-group">
+                                <label>Origin</label>
+                                <input
+                                    type="text"
+                                    placeholder="Green Valley Farm"
+                                    value={form.origin}
+                                    onChange={handleChange("origin")}
+                                />
+                            </div>
+
+                            <div className="ap-input-group">
+                                <label>Unit</label>
+                                <input
+                                    type="text"
+                                    placeholder="per kg / per box"
+                                    value={form.unit}
+                                    onChange={handleChange("unit")}
+                                />
+                            </div>
+                        </div>
+
+                        {/* CATEGORY */}
+                        <div className="ap-input-group ap-full">
+                            <label>Category</label>
+                            <input
+                                type="text"
+                                placeholder="Fresh Vegetables"
+                                value={form.category}
+                                onChange={handleChange("category")}
+                            />
+                        </div>
+
+                        {/* DESCRIPTION */}
+                        <div className="ap-input-group ap-full">
+                            <label>Description</label>
+                            <textarea
+                                rows="4"
+                                placeholder="Write a short description of the product..."
+                                value={form.description}
+                                onChange={handleChange("description")}
+                            ></textarea>
+                        </div>
+
+                        <div className="ap-actions">
+                            <button
+                                type="button"
+                                className="ap-btn ap-btn-outline"
+                                onClick={() => navigate("/shop-management")}
+                                disabled={loading}
+                            >
+                                Cancel
+                            </button>
+                            <button
+                                type="submit"
+                                className="ap-btn ap-btn-primary"
+                                disabled={loading}
+                            >
+                                {loading ? "Saving..." : "Save Product"}
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </main>
         </div>
-      </main>
-    </div>
-  );
+    );
 }

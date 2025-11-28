@@ -1,8 +1,13 @@
+// src/Components/ShopManagement.jsx
 import React, { useEffect, useState } from "react";
 import "./ShopManagement.css";
 import sampleProduct from "./Product.jpg";
 import { useNavigate } from "react-router-dom";
-import { fetchShopByUserId } from "../api/client"; // ⬅️ only this now
+import {
+    fetchShopByUserId,
+    fetchProductsForShop,
+    fetchOrdersForShop,
+} from "../api/client";
 
 export default function ShopManagement() {
     const navigate = useNavigate();
@@ -11,7 +16,13 @@ export default function ShopManagement() {
     const [loadingShop, setLoadingShop] = useState(true);
     const [error, setError] = useState("");
 
-    // 🔹 Load the current user's shop (if any)
+    const [products, setProducts] = useState([]);
+    const [loadingProducts, setLoadingProducts] = useState(true);
+
+    const [orders, setOrders] = useState([]);
+    const [loadingOrders, setLoadingOrders] = useState(true);
+
+    // 🔹 Load shop for current user
     useEffect(() => {
         const loadShop = async () => {
             try {
@@ -24,9 +35,12 @@ export default function ShopManagement() {
 
                 const shopData = await fetchShopByUserId(userId);
                 setShop(shopData || null);
+
+                if (shopData?.id != null) {
+                    localStorage.setItem("shopId", String(shopData.id));
+                }
             } catch (e) {
                 console.error("Failed to load shop for user", e);
-                // If backend returns 404 (no shop yet), that's okay – user can create one
                 setShop(null);
             } finally {
                 setLoadingShop(false);
@@ -35,6 +49,41 @@ export default function ShopManagement() {
 
         loadShop();
     }, []);
+
+    // 🔹 Once we know the shopId, load products + orders
+    useEffect(() => {
+        if (!shop?.id) return;
+        const shopId = shop.id;
+
+        const loadProducts = async () => {
+            try {
+                setLoadingProducts(true);
+                const list = await fetchProductsForShop(shopId);
+                setProducts(Array.isArray(list) ? list : []);
+            } catch (e) {
+                console.error("Failed to load products for shop", e);
+                setProducts([]);
+            } finally {
+                setLoadingProducts(false);
+            }
+        };
+
+        const loadOrders = async () => {
+            try {
+                setLoadingOrders(true);
+                const list = await fetchOrdersForShop(shopId);
+                setOrders(Array.isArray(list) ? list : []);
+            } catch (e) {
+                console.error("Failed to load orders for shop", e);
+                setOrders([]);
+            } finally {
+                setLoadingOrders(false);
+            }
+        };
+
+        loadProducts();
+        loadOrders();
+    }, [shop?.id]);
 
     return (
         <div className="sm-page">
@@ -71,14 +120,14 @@ export default function ShopManagement() {
               {loadingShop ? "Loading shop..." : "Current shop"}
             </span>
                         <span className="sm-shop-name">
-              {shop?.shopName || "No shop created yet"}
+              {shop?.shopName || shop?.name || "No shop created yet"}
             </span>
                     </div>
                 </div>
 
                 {/* Two-column layout: Products + Pending Orders */}
                 <div className="sm-grid">
-                    {/* PRODUCTS COLUMN (still using sample products for now) */}
+                    {/* PRODUCTS COLUMN */}
                     <section className="sm-card sm-products">
                         <div className="sm-card-header">
                             <h2>Products</h2>
@@ -92,61 +141,57 @@ export default function ShopManagement() {
                         </div>
 
                         <div className="sm-product-list">
-                            <article className="sm-product-row">
-                                <div className="sm-product-thumb">
-                                    <img src={sampleProduct} alt="product" />
-                                </div>
-                                <div className="sm-product-info">
-                                    <h3>Farm Fresh Veggie Box</h3>
-                                    <p className="sm-product-meta">€24.99 · In stock: 18</p>
-                                </div>
-                                <div className="sm-product-actions">
-                                    <button
-                                        className="sm-btn sm-btn-outline sm-btn-small"
-                                        onClick={() => navigate("/update-product")}
-                                    >
-                                        Edit
-                                    </button>
-                                    <button
-                                        className="sm-btn sm-btn-outline sm-btn-small"
-                                        onClick={() => navigate("/product")}
-                                    >
-                                        View
-                                    </button>
-                                </div>
-                            </article>
+                            {loadingProducts ? (
+                                <p>Loading products...</p>
+                            ) : products.length === 0 ? (
+                                <p>No products yet. Use &quot;Add Product&quot; to create one.</p>
+                            ) : (
+                                products.map((product) => {
+                                    const name = product.name || product.productName;
+                                    const price =
+                                        product.price ??
+                                        product.unitPrice ??
+                                        product.productPrice;
+                                    const stock =
+                                        product.inventory ??
+                                        product.stock ??
+                                        product.quantity ??
+                                        0;
 
-                            <article className="sm-product-row">
-                                <div className="sm-product-thumb">
-                                    <img src={sampleProduct} alt="product" />
-                                </div>
-                                <div className="sm-product-info">
-                                    <h3>Seasonal Fruit Crate</h3>
-                                    <p className="sm-product-meta">€19.99 · In stock: 12</p>
-                                </div>
-                                <div className="sm-product-actions">
-                                    <button
-                                        className="sm-btn sm-btn-outline sm-btn-small"
-                                        onClick={() => navigate("/update-product")}
-                                    >
-                                        Edit
-                                    </button>
-                                    <button
-                                        className="sm-btn sm-btn-outline sm-btn-small"
-                                        onClick={() => navigate("/product")}
-                                    >
-                                        View
-                                    </button>
-                                </div>
-                            </article>
+                                    return (
+                                        <article
+                                            className="sm-product-row"
+                                            key={product.id || name}
+                                        >
+                                            <div className="sm-product-thumb">
+                                                {/* TODO: use real image url when available */}
+                                                <img src={sampleProduct} alt={name} />
+                                            </div>
+                                            <div className="sm-product-info">
+                                                <h3>{name}</h3>
+                                                <p className="sm-product-meta">
+                                                    €{price} · In stock: {stock}
+                                                </p>
+                                            </div>
+                                            <div className="sm-product-actions">
+                                                <button
+                                                    className="sm-btn sm-btn-outline sm-btn-small"
+                                                    onClick={() => navigate("/update-product")}
+                                                >
+                                                    Edit
+                                                </button>
+                                                <button
+                                                    className="sm-btn sm-btn-outline sm-btn-small"
+                                                    onClick={() => navigate("/product")}
+                                                >
+                                                    View
+                                                </button>
+                                            </div>
+                                        </article>
+                                    );
+                                })
+                            )}
                         </div>
-
-                        <button
-                            className="sm-btn sm-btn-outline sm-full-width"
-                            onClick={() => navigate("/product")}
-                        >
-                            View All Products
-                        </button>
                     </section>
 
                     {/* PENDING ORDERS COLUMN */}
@@ -162,42 +207,44 @@ export default function ShopManagement() {
                         </div>
 
                         <div className="sm-order-list">
-                            <article className="sm-order-row">
-                                <div>
-                                    <h3>Order #12345</h3>
-                                    <p className="sm-order-meta">
-                                        Farm Fresh Veggie Box · Qty: 2 · €49.98
-                                    </p>
-                                </div>
-                                <button className="sm-chip sm-chip-pending">Pending</button>
-                            </article>
+                            {loadingOrders ? (
+                                <p>Loading orders...</p>
+                            ) : orders.length === 0 ? (
+                                <p>No pending orders for this shop yet.</p>
+                            ) : (
+                                orders.map((order) => {
+                                    const id = order.id;
+                                    const status = order.status || order.orderStatus || "Pending";
+                                    const total =
+                                        order.totalAmount ??
+                                        order.totalPrice ??
+                                        order.total ??
+                                        null;
 
-                            <article className="sm-order-row">
-                                <div>
-                                    <h3>Order #12344</h3>
-                                    <p className="sm-order-meta">
-                                        Seasonal Fruit Crate · Qty: 1 · €19.99
-                                    </p>
-                                </div>
-                                <button className="sm-chip sm-chip-pending">Pending</button>
-                            </article>
+                                    return (
+                                        <article className="sm-order-row" key={id}>
+                                            <div>
+                                                <h3>Order #{id}</h3>
+                                                <p className="sm-order-meta">
+                                                    Status: {status}
+                                                    {total != null && ` · Total: €${total}`}
+                                                </p>
+                                            </div>
+                                            <button className="sm-chip sm-chip-pending">
+                                                {status}
+                                            </button>
+                                        </article>
+                                    );
+                                })
+                            )}
                         </div>
 
-                        {/* existing update shop button */}
                         <button
                             className="sm-btn sm-btn-primary sm-full-width"
                             onClick={() => navigate("/update-shop")}
                             disabled={!shop}
                         >
                             Update Shop Details
-                        </button>
-
-                        {/* ✅ NEW: go to Shopcreation page instead of inline API */}
-                        <button
-                            className="sm-btn sm-btn-outline sm-full-width"
-                            onClick={() => navigate("/shop-creation")}
-                        >
-                            Create Shop
                         </button>
                     </section>
                 </div>

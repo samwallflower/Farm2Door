@@ -22,22 +22,17 @@ const LoginPage = () => {
         }
 
         try {
-            setLoading(true);
-
-            // 🔐 calls backend with exact JSON { "email": "...", "password": "..." }
             const apiResponse = await loginUser(email, password);
+// apiResponse = { message, data: { id, token } }
 
             const jwtData = apiResponse.data || {};
             const token = jwtData.token;
             const userId = jwtData.id;
 
-            if (!token) {
-                throw new Error("No token returned from backend");
-            }
+            if (!token) throw new Error("No token returned from backend");
 
             localStorage.setItem("authToken", token);
             if (userId != null) localStorage.setItem("userId", String(userId));
-
             navigate("/home");
         } catch (err) {
             console.error("Login failed", err);

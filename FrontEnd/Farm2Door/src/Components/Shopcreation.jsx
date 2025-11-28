@@ -1,49 +1,157 @@
-import React from "react";
-import "./Shopcreation.css";      // uses your existing CSS
-import bgImage from "./onwer4.jpg";   // change file name if you use a different image
+import React, { useState } from "react";
+import "./Shopcreation.css";
+import { useNavigate } from "react-router-dom";
+import { addShop } from "../api/client";
 
-export default function ShopCreation() {
-return (
-<div
-        className="shop-page"
-style={{ backgroundImage: `url(${bgImage})` }}>
-    <div className="overlay">
-        <header className="logo">
-            <span className="logo-text">Farm2Door</span>
-            <span className="logo-underline"></span>
-        </header>
+export default function Shopcreation() {
+    const navigate = useNavigate();
 
-        <main className="form-wrapper">
-            <h1 className="form-title">Shop Creation</h1>
+    const [form, setForm] = useState({
+        shopName: "",
+        address: "",
+        contactNumber: "",
+        contactEmail: "",
+        description: "",
+    });
 
-            <form className="shop-form">
-                <label className="input-pill">
-                    <span>Shop name</span>
-                    <input type="text" placeholder="Shop name" />
-                </label>
+    const [error, setError] = useState("");
+    const [loading, setLoading] = useState(false);
 
-                <label className="input-pill">
-                    <span>Shop Address</span>
-                    <input type="text" placeholder="Shop Address" />
-                </label>
+    const handleChange = (field) => (e) => {
+        setForm((prev) => ({ ...prev, [field]: e.target.value }));
+    };
 
-                <label className="input-pill">
-                    <span>Contact Number</span>
-                    <input type="tel" placeholder="Contact Number" />
-                </label>
+    const handleSubmit = async (e) => {
+        e.preventDefault();
+        setError("");
 
-                <label className="input-pill">
-                    <span>Contact Email</span>
-                    <input type="email" placeholder="Contact Email" />
-                </label>
+        try {
+            const userId = localStorage.getItem("userId");
+            if (!userId) {
+                setError("No userId found. Please log in again.");
+                return;
+            }
 
-                <label className="input-pill textarea-pill">
-                    <span>Shop description</span>
-                    <textarea placeholder="Shop description" />
-                </label>
-            </form>
-        </main>
-    </div>
-</div>
-);
+            setLoading(true);
+
+            const payload = {
+                shopName: form.shopName,
+                address: form.address,
+                contactNumber: form.contactNumber,
+                contactEmail: form.contactEmail,
+                description: form.description,
+            };
+
+            await addShop(userId, payload);
+
+            navigate("/shop-management");
+        } catch (err) {
+            console.error("Failed to create shop", err);
+            setError("Failed to create shop. Please try again.");
+        } finally {
+            setLoading(false);
+        }
+    };
+
+    return (
+        <div className="sc-page">
+            <main className="sc-main">
+                <div className="sc-card">
+                    <div className="sc-card-header">
+                        <div>
+                            <p className="sc-eyebrow">Shop</p>
+                            <h1 className="sc-title">Shop Creation</h1>
+                            <p className="sc-subtitle">
+                                Set up your Farm2Door shop so you can start adding products and
+                                receiving orders.
+                            </p>
+                        </div>
+                    </div>
+
+                    {error && <div className="sc-error">{error}</div>}
+
+                    <form className="sc-form" onSubmit={handleSubmit}>
+                        {/* SHOP NAME */}
+                        <div className="sc-input-group sc-full">
+                            <label>Shop name</label>
+                            <input
+                                type="text"
+                                placeholder="Green Valley Farm Shop"
+                                value={form.shopName}
+                                onChange={handleChange("shopName")}
+                                required
+                            />
+                        </div>
+
+                        {/* ADDRESS */}
+                        <div className="sc-input-group sc-full">
+                            <label>Shop Address</label>
+                            <input
+                                type="text"
+                                placeholder="123 Farm Lane, Green Valley"
+                                value={form.address}
+                                onChange={handleChange("address")}
+                                required
+                            />
+                        </div>
+
+                        {/* CONTACT ROW */}
+                        <div className="sc-row">
+                            <div className="sc-input-group">
+                                <label>Contact Number</label>
+                                <input
+                                    type="tel"
+                                    placeholder="+1 (555) 123-4567"
+                                    value={form.contactNumber}
+                                    onChange={handleChange("contactNumber")}
+                                    required
+                                />
+                            </div>
+
+                            <div className="sc-input-group">
+                                <label>Contact Email</label>
+                                <input
+                                    type="email"
+                                    placeholder="shop@example.com"
+                                    value={form.contactEmail}
+                                    onChange={handleChange("contactEmail")}
+                                    required
+                                />
+                            </div>
+                        </div>
+
+                        {/* DESCRIPTION */}
+                        <div className="sc-input-group sc-full">
+                            <label>Shop description</label>
+                            <textarea
+                                rows="4"
+                                placeholder="Describe what you sell, how you farm, and what makes your shop special..."
+                                value={form.description}
+                                onChange={handleChange("description")}
+                            />
+                        </div>
+
+                        {/* ACTIONS */}
+                        <div className="sc-actions">
+                            <button
+                                type="button"
+                                className="sc-btn sc-btn-outline"
+                                onClick={() => navigate("/shop-management")}
+                                disabled={loading}
+                            >
+                                Cancel
+                            </button>
+                            <button
+                                type="submit"
+                                className="sc-btn sc-btn-primary"
+                                disabled={loading}
+                            >
+                                {loading ? "Creating..." : "Create Shop"}
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </main>
+        </div>
+    );
 }

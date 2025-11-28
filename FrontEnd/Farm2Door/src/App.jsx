@@ -15,7 +15,8 @@ import ShopManagement from "./Components/ShopManagement.jsx";
 import Categories from "./Components/Categories.jsx";
 import ShopsMenu from "./Components/ShopsMenu.jsx";
 import ShopDetails from "./Components/ShopDetails.jsx";
-import Basket from "./Components/Basket.jsx";   // ✅ ADD THIS
+import Basket from "./Components/Basket.jsx";
+import Shopcreation from "./Components/Shopcreation.jsx";// ✅ ADD THIS
 
 export default function App() {
   return (
@@ -37,7 +38,7 @@ export default function App() {
         <Route path="/home" element={<HomeComponent />} />
         <Route path="/categories" element={<Categories />} />
         <Route path="/user" element={<UserManagement />} />
-
+          <Route path="/shop-creation" element={<Shopcreation />} />
         {/* ⭐ User / Orders / Products / Shop Management */}
         <Route path="/update-info" element={<UpdateInfo />} />
         <Route path="/orders" element={<OrderPage />} />

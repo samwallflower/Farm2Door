@@ -31,6 +31,17 @@ api.interceptors.request.use(
     },
     (error) => Promise.reject(error)
 );
+export const registerUser = async (firstName, lastName, email, password) => {
+    const body = {
+        firstName: firstName,
+        lastName: lastName,
+        email,
+        password
+    };
+
+    const res = await api.post("/users/add", body);
+    return res.data;
+};
 
 // (optional but recommended) Response interceptor to handle expired tokens
 api.interceptors.response.use(

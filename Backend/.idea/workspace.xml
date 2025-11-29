@@ -4,12 +4,7 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="cd8ee9f1-7fa2-4b2c-bbf0-6725d6c625d0" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/../FrontEnd/Farm2Door/src/App.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/../FrontEnd/Farm2Door/src/App.jsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../FrontEnd/Farm2Door/src/Components/LoginPage.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/../FrontEnd/Farm2Door/src/Components/LoginPage.jsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../FrontEnd/Farm2Door/src/Components/ShopManagement.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/../FrontEnd/Farm2Door/src/Components/ShopManagement.jsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../FrontEnd/Farm2Door/src/api/client.js" beforeDir="false" afterPath="$PROJECT_DIR$/../FrontEnd/Farm2Door/src/api/client.js" afterDir="false" />
-    </list>
+    <list default="true" id="cd8ee9f1-7fa2-4b2c-bbf0-6725d6c625d0" name="Changes" comment="" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -25,12 +20,12 @@
     &quot;assignee&quot;: &quot;trkalmed&quot;
   }
 }</component>
-  <component name="GithubPullRequestsUISettings"><![CDATA[{
-  "selectedUrlAndAccountId": {
-    "url": "https://github.com/samwallflower/Farm2Door.git",
-    "accountId": "64657595-5999-40ac-8c5f-da69589a5af5"
+  <component name="GithubPullRequestsUISettings">{
+  &quot;selectedUrlAndAccountId&quot;: {
+    &quot;url&quot;: &quot;https://github.com/samwallflower/Farm2Door.git&quot;,
+    &quot;accountId&quot;: &quot;64657595-5999-40ac-8c5f-da69589a5af5&quot;
   }
-}]]></component>
+}</component>
   <component name="ProjectColorInfo">{
   &quot;associatedIndex&quot;: 4
 }</component>
@@ -87,6 +82,7 @@
       <workItem from="1763989251974" duration="5000" />
       <workItem from="1763989455184" duration="8000" />
       <workItem from="1764366557682" duration="10000" />
+      <workItem from="1764451824414" duration="20000" />
     </task>
     <servers />
   </component>

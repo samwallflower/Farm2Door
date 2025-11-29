@@ -8,7 +8,7 @@ export default function Shopcreation() {
     const navigate = useNavigate();
 
     const [form, setForm] = useState({
-        name: "",            // 👈 use "name" here
+        name: "",
         address: "",
         contactNumber: "",
         contactEmail: "",

@@ -108,9 +108,6 @@ export const fetchOrdersForShop = async (shopId) => {
 
 // ==================== PRODUCTS FOR SHOP ====================
 
-// ⚠️ Adjust this path if your ProductController uses a different URL
-// Example assumption: @RequestMapping("${api.prefix}/products")
-// and: @GetMapping("/shop/{shopId}/products")
 export const fetchProductsForShop = async (shopId) => {
     const res = await api.get(`/products/shops/${shopId}/products`);
     return res.data.data; // List<ProductDto>

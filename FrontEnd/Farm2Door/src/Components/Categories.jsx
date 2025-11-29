@@ -16,7 +16,6 @@ import cat5 from "./veg1.jpg";
 
 import fav1 from "./fruit.jpg"; // fallback image
 
-// API
 import { fetchProductsByCategory } from "../api/client";
 
 const categoryCards = [

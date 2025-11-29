@@ -3,7 +3,6 @@ import React, { useEffect, useState } from "react";
 import "./ProductPage.css";
 import { useNavigate } from "react-router-dom";
 import CartIcon from "./CartIcon";
-import { fetchProductById } from "../api/client";
 
 export default function ProductPage() {
     const navigate = useNavigate();

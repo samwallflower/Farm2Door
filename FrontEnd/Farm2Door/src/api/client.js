@@ -119,3 +119,8 @@ export const addProductToShop = async (shopId, productPayload) => {
     const res = await api.post(`/products/shop/${shopId}/product/add`, productPayload);
     return res.data.data; // ProductDto
 };
+
+export const fetchProductsByCategory = async (categoryName) => {
+  const res = await api.get(`/products/category/${categoryName}/all/products`);
+  return res.data.data; // ApiResponse → { message, data: [...] }
+};

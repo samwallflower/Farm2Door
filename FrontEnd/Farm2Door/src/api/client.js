@@ -100,6 +100,18 @@ export const addShop = async (userId, shopPayload) => {
     return res.data.data; // ShopDto
 };
 
+// PUT /shops/shop/{shopId}/update
+export const updateShop = async (shopId, updatePayload) => {
+    const res = await api.put(`/shops/shop/${shopId}/update`, updatePayload);
+    return res.data.data; // ShopDto
+};
+
+// DELETE /shops/shop/{shopId}/delete
+export const deleteShop = async (shopId) => {
+    const res = await api.delete(`/shops/shop/${shopId}/delete`);
+    return res.data; // ApiResponse
+};
+
 // GET /shops/shop/{shopId}/orders
 export const fetchOrdersForShop = async (shopId) => {
     const res = await api.get(`/shops/shop/${shopId}/orders`);
@@ -117,5 +129,24 @@ export const fetchProductsForShop = async (shopId) => {
 };
 export const addProductToShop = async (shopId, productPayload) => {
     const res = await api.post(`/products/shop/${shopId}/product/add`, productPayload);
+    return res.data.data; // ProductDto
+};
+// PUT /products/shop/{shopId}/product/{productId}/update
+export const updateProduct = async (shopId, productId, payload) => {
+    const res = await api.put(`/products/shop/${shopId}/product/${productId}/update`, payload);
+    return res.data.data;
+};
+
+// DELETE /products/shop/{shopId}/product/{productId}/delete
+export const deleteProduct = async (shopId, productId) => {
+    const res = await api.delete(`/products/shop/${shopId}/product/${productId}/delete`);
+    return res.data;
+};
+
+// GET /products/product/{productId}  <-- FOR LOADING EXISTING PRODUCT
+// get product by id
+export const fetchProductById = async (productId) => {
+    const res = await api.get(`/products/product/${productId}/product`);
+    // matches: @GetMapping("/product/{productId}/product")
     return res.data.data; // ProductDto
 };

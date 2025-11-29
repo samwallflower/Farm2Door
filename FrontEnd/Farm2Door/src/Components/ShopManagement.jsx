@@ -176,13 +176,23 @@ export default function ShopManagement() {
                                             <div className="sm-product-actions">
                                                 <button
                                                     className="sm-btn sm-btn-outline sm-btn-small"
-                                                    onClick={() => navigate("/update-product")}
+                                                    onClick={() => {
+                                                        if (product.id != null) {
+                                                            localStorage.setItem("productId", String(product.id));
+                                                        }
+                                                        navigate("/update-product");
+                                                    }}
                                                 >
                                                     Edit
                                                 </button>
                                                 <button
                                                     className="sm-btn sm-btn-outline sm-btn-small"
-                                                    onClick={() => navigate("/product")}
+                                                    onClick={() => {
+                                                        if (product.id != null) {
+                                                            localStorage.setItem("productId", String(product.id));
+                                                        }
+                                                        navigate("/product");
+                                                    }}
                                                 >
                                                     View
                                                 </button>
@@ -239,13 +249,21 @@ export default function ShopManagement() {
                             )}
                         </div>
 
-                        <button
-                            className="sm-btn sm-btn-primary sm-full-width"
-                            onClick={() => navigate("/update-shop")}
-                            disabled={!shop}
-                        >
-                            Update Shop Details
-                        </button>
+                        {shop ? (
+                            <button
+                                className="sm-btn sm-btn-primary sm-full-width"
+                                onClick={() => navigate("/update-shop")}
+                            >
+                                Update Shop Details
+                            </button>
+                        ) : (
+                            <button
+                                className="sm-btn sm-btn-primary sm-full-width"
+                                onClick={() => navigate("/shop-creation")}
+                            >
+                                + Create Shop
+                            </button>
+                        )}
                     </section>
                 </div>
             </main>

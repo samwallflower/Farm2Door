@@ -43,6 +43,18 @@ export const registerUser = async (firstName, lastName, email, password) => {
     return res.data;
 };
 
+export const updateUser = async (userId, firstName, lastName) => {
+    const body = {
+        firstName: firstName,
+        lastName: lastName
+    };
+
+    const res = await api.put(`/users/${userId}/update`, body);
+    return res.data;
+};
+
+
+
 // (optional but recommended) Response interceptor to handle expired tokens
 api.interceptors.response.use(
     (response) => response,

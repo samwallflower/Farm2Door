@@ -5,12 +5,10 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="cd8ee9f1-7fa2-4b2c-bbf0-6725d6c625d0" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/.idea/libraries/junit_jupiter.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/Backend.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/Backend.iml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Farm2Door/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/Farm2Door/pom.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Farm2Door/src/test/java/com/greenstack/farm2door/Farm2DoorApplicationTests.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../FrontEnd/Farm2Door/src/App.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/../FrontEnd/Farm2Door/src/App.jsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../FrontEnd/Farm2Door/src/Components/LoginPage.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/../FrontEnd/Farm2Door/src/Components/LoginPage.jsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../FrontEnd/Farm2Door/src/Components/ShopManagement.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/../FrontEnd/Farm2Door/src/Components/ShopManagement.jsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../FrontEnd/Farm2Door/src/api/client.js" beforeDir="false" afterPath="$PROJECT_DIR$/../FrontEnd/Farm2Door/src/api/client.js" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -27,12 +25,12 @@
     &quot;assignee&quot;: &quot;trkalmed&quot;
   }
 }</component>
-  <component name="GithubPullRequestsUISettings">{
-  &quot;selectedUrlAndAccountId&quot;: {
-    &quot;url&quot;: &quot;https://github.com/samwallflower/Farm2Door&quot;,
-    &quot;accountId&quot;: &quot;4be5970c-a5dc-4d0a-b42a-b3804ab73332&quot;
+  <component name="GithubPullRequestsUISettings"><![CDATA[{
+  "selectedUrlAndAccountId": {
+    "url": "https://github.com/samwallflower/Farm2Door.git",
+    "accountId": "64657595-5999-40ac-8c5f-da69589a5af5"
   }
-}</component>
+}]]></component>
   <component name="ProjectColorInfo">{
   &quot;associatedIndex&quot;: 4
 }</component>
@@ -68,8 +66,8 @@
   <component name="SharedIndexes">
     <attachedChunks>
       <set>
-        <option value="bundled-jdk-9823dce3aa75-bf35d07a577b-intellij.indexing.shared.core-IU-252.28238.7" />
-        <option value="bundled-js-predefined-d6986cc7102b-a71380e98a7c-JavaScript-IU-252.28238.7" />
+        <option value="bundled-jdk-9823dce3aa75-bf35d07a577b-intellij.indexing.shared.core-IU-252.27397.103" />
+        <option value="bundled-js-predefined-d6986cc7102b-3aa1da707db6-JavaScript-IU-252.27397.103" />
       </set>
     </attachedChunks>
   </component>
@@ -88,6 +86,7 @@
       <workItem from="1763988939882" duration="284000" />
       <workItem from="1763989251974" duration="5000" />
       <workItem from="1763989455184" duration="8000" />
+      <workItem from="1764366557682" duration="10000" />
     </task>
     <servers />
   </component>

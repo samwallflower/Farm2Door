@@ -2,6 +2,7 @@
 import React, { useEffect, useState } from "react";
 import "./UpdateShop.css";
 import { useNavigate } from "react-router-dom";
+import { fetchShopByUserId, updateShop, deleteShop } from "../api/client";
 
 export default function UpdateShop() {
     const navigate = useNavigate();

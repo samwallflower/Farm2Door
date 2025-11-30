@@ -1,165 +1,187 @@
-import React from "react";
+// src/Components/ShopDetails.jsx
+import React, { useEffect, useState } from "react";
 import "./ShopDetails.css";
 import { useNavigate, useParams } from "react-router-dom";
 
 import CartIcon from "./CartIcon";
 import PillNav from "./PillNav";
-import logoImg from "./logo.png"; // <-- use your real logo here
-import productPlaceholder from "./Product.jpg"; // placeholder, replace per product later
+import logoImg from "./logo.png";
+import productPlaceholder from "./Product.jpg";
 
-// Dummy data – replace with API data later
-const mockShops = [
-  {
-    id: "1",
-    name: "Green Valley Farm",
-    address: "123 Farm Lane, Green Valley",
-    description: "Local, seasonal produce grown with sustainable practices.",
-    products: [
-      {
-        id: "p1",
-        name: "Farm Fresh Veggie Box",
-        price: "€24.99",
-        amount: "1 box",
-        image: productPlaceholder,
-      },
-      {
-        id: "p2",
-        name: "Organic Carrots",
-        price: "€3.50",
-        amount: "1 kg",
-        image: productPlaceholder,
-      },
-      {
-        id: "p3",
-        name: "Mixed Herbs Bundle",
-        price: "€2.99",
-        amount: "1 bundle",
-        image: productPlaceholder,
-      },
-    ],
-  },
-  {
-    id: "2",
-    name: "Sunrise Orchard",
-    address: "45 Orchard Road, Riverside",
-    description: "Apples, pears, and fresh-pressed seasonal juices.",
-    products: [
-      {
-        id: "p4",
-        name: "Apple Crate",
-        price: "€19.99",
-        amount: "5 kg",
-        image: productPlaceholder,
-      },
-      {
-        id: "p5",
-        name: "Fresh Apple Juice",
-        price: "€4.50",
-        amount: "1 L bottle",
-        image: productPlaceholder,
-      },
-    ],
-  },
-];
+import { fetchShopById, fetchProductsForShop } from "../api/client";
 
-// same nav items as other pages
 const navItems = [
-  { label: "Home", href: "/home" },
-  { label: "Categories", href: "/categories" },
-  { label: "Shops", href: "/shops" },
-  { label: "Account", href: "/user" },
+    { label: "Home", href: "/home" },
+    { label: "Categories", href: "/categories" },
+    { label: "Shops", href: "/shops" },
+    { label: "Account", href: "/user" },
 ];
 
 export default function ShopDetails() {
-  const navigate = useNavigate();
-  const { shopId } = useParams(); // /shops/:shopId
+    const navigate = useNavigate();
+    const { shopId } = useParams(); // /shops/:shopId
 
-  const shop = mockShops.find((s) => s.id === shopId) || mockShops[0];
+    const [shop, setShop] = useState(null);
+    const [products, setProducts] = useState([]);
+    const [loadingShop, setLoadingShop] = useState(true);
+    const [loadingProducts, setLoadingProducts] = useState(true);
+    const [error, setError] = useState("");
 
-  return (
-    <div className="sd-page">
-      {/* HEADER with PillNav */}
-      <header className="sd-header">
-        {/* left text logo */}
-        <div className="sd-logo-text">Farm2Door</div>
+    // Load shop details
+    useEffect(() => {
+        const loadShop = async () => {
+            try {
+                const data = await fetchShopById(shopId);
+                setShop(data || null);
+            } catch (err) {
+                console.error("Failed to load shop", err);
+                setError(
+                    err.response?.data?.message || "Failed to load shop details."
+                );
+            } finally {
+                setLoadingShop(false);
+            }
+        };
 
-        {/* center pill nav (Shops active) */}
-        <div className="sd-header-center">
-          <PillNav
-            logo={logoImg}
-            items={navItems}
-            activeHref="/shops"
-            baseColor="#ffffff"
-            pillColor="#3e3625"
-            hoveredPillTextColor="#3e3625"
-          />
+        loadShop();
+    }, [shopId]);
+
+    // Load products for this shop
+    useEffect(() => {
+        const loadProducts = async () => {
+            try {
+                const list = await fetchProductsForShop(shopId);
+                setProducts(Array.isArray(list) ? list : []);
+            } catch (err) {
+                console.error("Failed to load products for shop", err);
+                setError((prev) =>
+                    prev ||
+                    err.response?.data?.message ||
+                    "Failed to load products for this shop."
+                );
+            } finally {
+                setLoadingProducts(false);
+            }
+        };
+
+        loadProducts();
+    }, [shopId]);
+
+    const displayName = shop?.name || shop?.shopName || "Shop";
+    const displayAddress = shop?.address || "Address not available";
+    const displayDescription =
+        shop?.description || "This shop has not added a description yet.";
+
+    return (
+        <div className="sd-page">
+            {/* HEADER with PillNav */}
+            <header className="sd-header">
+                <div className="sd-logo-text">Farm2Door</div>
+
+                <div className="sd-header-center">
+                    <PillNav
+                        logo={logoImg}
+                        items={navItems}
+                        activeHref="/shops"
+                        baseColor="#ffffff"
+                        pillColor="#3e3625"
+                        hoveredPillTextColor="#3e3625"
+                    />
+                </div>
+            </header>
+
+            <CartIcon />
+
+            <main className="sd-main">
+                {/* Shop hero / summary */}
+                <section className="sd-hero">
+                    <div className="sd-hero-inner">
+                        <div className="sd-hero-text">
+                            <p className="sd-eyebrow">Shop</p>
+
+                            {loadingShop ? (
+                                <h1 className="sd-title">Loading shop...</h1>
+                            ) : (
+                                <>
+                                    <h1 className="sd-title">{displayName}</h1>
+                                    <p className="sd-address">{displayAddress}</p>
+                                    {displayDescription && (
+                                        <p className="sd-description">{displayDescription}</p>
+                                    )}
+                                </>
+                            )}
+
+                            <button
+                                className="sd-btn sd-btn-outline"
+                                onClick={() => navigate("/shops")}
+                            >
+                                ← Back to Shops
+                            </button>
+                        </div>
+                    </div>
+                </section>
+
+                {/* Products list */}
+                <section className="sd-products-section">
+                    <h2 className="sd-products-title">Products</h2>
+
+                    {loadingProducts ? (
+                        <p>Loading products...</p>
+                    ) : error && products.length === 0 ? (
+                        <p className="sd-error">{error}</p>
+                    ) : products.length === 0 ? (
+                        <p>This shop has no products yet.</p>
+                    ) : (
+                        <div className="sd-products-grid">
+                            {products.map((product) => {
+                                const name = product.name || product.productName;
+                                const price =
+                                    product.price ??
+                                    product.unitPrice ??
+                                    product.productPrice ??
+                                    null;
+
+
+                                const inventory = product.inventory ?? 0;
+
+                                return (
+                                    <article key={product.id} className="sd-product-card">
+                                        <div className="sd-product-image-wrap">
+                                            <img
+                                                src={product.image || productPlaceholder}
+                                                alt={name}
+                                                className="sd-product-image"
+                                            />
+                                        </div>
+
+                                        <div className="sd-product-header">
+                                            <h3 className="sd-product-name">{name}</h3>
+                                        </div>
+
+                                        <div className="sd-product-meta">
+                                            {price != null && (
+                                                <span className="sd-product-price">€{price}</span>
+                                            )}
+                                            <span className="sd-product-amount">
+                                              In stock: {inventory}
+                                                 </span>
+                                        </div>
+
+                                        <button
+                                            className="sd-btn sd-btn-primary sd-add-btn"
+                                            type="button"
+                                            onClick={() => console.log("Add to cart:", product.id)}
+                                        >
+                                            Add to Cart
+                                        </button>
+                                    </article>
+                                );
+                            })}
+
+                        </div>
+                    )}
+                </section>
+            </main>
         </div>
-      </header>
-
-      {/* floating cart icon */}
-      <CartIcon />
-
-      <main className="sd-main">
-        {/* Shop hero / summary */}
-        <section className="sd-hero">
-          <div className="sd-hero-inner">
-            <div className="sd-hero-text">
-              <p className="sd-eyebrow">Shop</p>
-              <h1 className="sd-title">{shop.name}</h1>
-              <p className="sd-address">{shop.address}</p>
-              {shop.description && (
-                <p className="sd-description">{shop.description}</p>
-              )}
-
-              <button
-                className="sd-btn sd-btn-outline"
-                onClick={() => navigate("/shops")}
-              >
-                ← Back to Shops
-              </button>
-            </div>
-          </div>
-        </section>
-
-        {/* Products list */}
-        <section className="sd-products-section">
-          <h2 className="sd-products-title">Products</h2>
-
-          <div className="sd-products-grid">
-            {shop.products.map((product) => (
-              <article key={product.id} className="sd-product-card">
-                <div className="sd-product-image-wrap">
-                  <img
-                    src={product.image}
-                    alt={product.name}
-                    className="sd-product-image"
-                  />
-                </div>
-
-                <div className="sd-product-header">
-                  <h3 className="sd-product-name">{product.name}</h3>
-                </div>
-
-                <div className="sd-product-meta">
-                  <span className="sd-product-price">{product.price}</span>
-                  <span className="sd-product-amount">{product.amount}</span>
-                </div>
-
-                <button
-                  className="sd-btn sd-btn-primary sd-add-btn"
-                  type="button"
-                  // TODO: wire to real cart logic
-                  onClick={() => {
-                    console.log("Add to cart:", product.id);
-                  }}
-                >
-                  Add to Cart
-                </button>
-              </article>
-            ))}
-          </div>
-        </section>
-      </main>
-    </div>
-  );
+    );
 }

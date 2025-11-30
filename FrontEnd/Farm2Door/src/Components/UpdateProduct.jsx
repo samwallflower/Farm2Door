@@ -2,6 +2,7 @@
 import React, { useState, useEffect } from "react";
 import "./UpdateProduct.css";
 import { useNavigate } from "react-router-dom";
+import { fetchProductById, updateProduct, deleteProduct } from "../api/client";
 
 
 export default function UpdateProduct() {

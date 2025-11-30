@@ -3,6 +3,7 @@ import React, { useEffect, useState } from "react";
 import "./ProductPage.css";
 import { useNavigate } from "react-router-dom";
 import CartIcon from "./CartIcon";
+import { fetchProductById } from "../api/client";
 
 export default function ProductPage() {
     const navigate = useNavigate();
@@ -29,25 +30,21 @@ export default function ProductPage() {
                 }
 
                 const data = await fetchProductById(productId);
-                console.log("Product from backend:", data); // 👈 so you can see real shape
+                console.log("Product from backend:", data);
 
                 setName(data.name || data.productName || "");
-
                 setPrice(
                     data.price ??
                     data.unitPrice ??
                     data.productPrice ??
                     ""
                 );
-
                 setInventory(
                     data.inventory ??
                     data.stock ??
                     data.quantity ??
                     ""
                 );
-
-                // 🔹 Origin & Unit: try a few likely names
                 setOrigin(
                     data.origin ||
                     data.originName ||
@@ -62,7 +59,6 @@ export default function ProductPage() {
                     ""
                 );
 
-                // 🔹 Category: if it's an object, use name-ish field
                 const cat =
                     typeof data.category === "string"
                         ? data.category
@@ -71,7 +67,6 @@ export default function ProductPage() {
                         "";
 
                 setCategory(cat);
-
                 setDescription(data.description || "");
             } catch (err) {
                 console.error("Failed to load product", err);
@@ -87,13 +82,11 @@ export default function ProductPage() {
         loadProduct();
     }, []);
 
-
     return (
         <div className="pp-page">
-            {/* Header – same family as other pages */}
+            {/* Header */}
             <header className="pp-header">
                 <div className="pp-logo">Farm2Door</div>
-
                 <nav className="pp-nav">
                     <button onClick={() => navigate("/home")}>Home</button>
                     <button onClick={() => navigate("/categories")}>Categories</button>
@@ -112,13 +105,11 @@ export default function ProductPage() {
             <main className="pp-main">
                 <div className="pp-card">
                     <div className="pp-card-header">
-                        <div>
-                            <p className="pp-eyebrow">Product</p>
-                            <h1 className="pp-title">Product Details</h1>
-                            <p className="pp-subtitle">
-                                View your product information as customers will see it.
-                            </p>
-                        </div>
+                        <p className="pp-eyebrow">Product</p>
+                        <h1 className="pp-title">Product Details</h1>
+                        <p className="pp-subtitle">
+                            View your product information as customers will see it.
+                        </p>
                     </div>
 
                     {loading ? (
@@ -127,82 +118,41 @@ export default function ProductPage() {
                         <p className="pp-error">{error}</p>
                     ) : (
                         <form className="pp-form">
-                            {/* NAME – large pill */}
                             <div className="pp-input-group pp-full">
                                 <label>Name</label>
-                                <input
-                                    type="text"
-                                    value={name}
-                                    readOnly
-                                    placeholder="Organic Tomato Box"
-                                />
+                                <input type="text" value={name} readOnly />
                             </div>
 
-                            {/* PRICE + INVENTORY */}
                             <div className="pp-row">
                                 <div className="pp-input-group">
                                     <label>Price</label>
-                                    <input
-                                        type="text"
-                                        value={price}
-                                        readOnly
-                                        placeholder="€4.99"
-                                    />
+                                    <input type="text" value={price} readOnly />
                                 </div>
 
                                 <div className="pp-input-group">
                                     <label>Inventory</label>
-                                    <input
-                                        type="text"
-                                        value={inventory}
-                                        readOnly
-                                        placeholder="120"
-                                    />
+                                    <input type="text" value={inventory} readOnly />
                                 </div>
                             </div>
 
-                            {/* ORIGIN */}
                             <div className="pp-input-group pp-half">
                                 <label>Origin</label>
-                                <input
-                                    type="text"
-                                    value={origin}
-                                    readOnly
-                                    placeholder="Green Valley Farm"
-                                />
+                                <input type="text" value={origin} readOnly />
                             </div>
 
-                            {/* UNIT */}
                             <div className="pp-input-group pp-half">
                                 <label>Unit</label>
-                                <input
-                                    type="text"
-                                    value={unit}
-                                    readOnly
-                                    placeholder="per kg / per box"
-                                />
+                                <input type="text" value={unit} readOnly />
                             </div>
 
-                            {/* CATEGORY */}
                             <div className="pp-input-group pp-full">
                                 <label>Category</label>
-                                <input
-                                    type="text"
-                                    value={category}
-                                    readOnly
-                                    placeholder="Fresh Vegetables"
-                                />
+                                <input type="text" value={category} readOnly />
                             </div>
 
-                            {/* DESCRIPTION */}
                             <div className="pp-input-group pp-full">
                                 <label>Description</label>
-                                <textarea
-                                    rows="4"
-                                    value={description}
-                                    readOnly
-                                    placeholder="Write a short description of the product..."
-                                ></textarea>
+                                <textarea rows="4" value={description} readOnly />
                             </div>
 
                             <div className="pp-actions">

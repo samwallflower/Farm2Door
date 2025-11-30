@@ -85,7 +85,10 @@ export const logoutUser = () => {
     localStorage.removeItem("authToken");
     localStorage.removeItem("userId");
 };
-
+export const fetchUserById = async (userId) => {
+    const res = await api.get(`/users/user/${userId}/user`);
+    return res.data.data; // UserDto
+};
 // ==================== SHOPS ====================
 
 // GET /shops/shop/user/{userId}/shop
@@ -93,6 +96,7 @@ export const fetchShopByUserId = async (userId) => {
     const res = await api.get(`/shops/shop/user/${userId}/shop`);
     return res.data.data; // ShopDto
 };
+
 
 // POST /shops/add/{userId}/shop
 export const addShop = async (userId, shopPayload) => {
@@ -104,6 +108,40 @@ export const addShop = async (userId, shopPayload) => {
 export const fetchOrdersForShop = async (shopId) => {
     const res = await api.get(`/shops/shop/${shopId}/orders`);
     return res.data.data; // List<OrderDto>
+};
+export const updateShop = async (shopId, updatePayload) => {
+    const res = await api.put(`/shops/shop/${shopId}/update`, updatePayload);
+    return res.data.data; // ShopDto
+};
+
+// DELETE /shops/shop/{shopId}/delete
+export const deleteShop = async (shopId) => {
+    const res = await api.delete(`/shops/shop/${shopId}/delete`);
+    return res.data; // ApiResponse
+};
+export const fetchAllShops = async () => {
+    const res = await api.get("/shops/all");
+    return res.data.data; // List<ShopDto>
+};
+
+// GET /shops/shop/{shopId}/shop
+export const fetchShopById = async (shopId) => {
+    const res = await api.get(`/shops/shop/${shopId}/shop`);
+    return res.data.data; // ShopDto
+};
+
+// GET /shops/shop/by-shopName?shopName=...
+export const fetchShopByName = async (shopName) => {
+    const res = await api.get("/shops/shop/by-shopName", {
+        params: { shopName },
+    });
+    return res.data.data; // ShopDto
+};
+
+// GET /shops/shop/{shopId}/products/count
+export const countProductsInShop = async (shopId) => {
+    const res = await api.get(`/shops/shop/${shopId}/products/count`);
+    return res.data.data; // Long
 };
 
 // ==================== PRODUCTS FOR SHOP ====================
@@ -120,4 +158,28 @@ export const addProductToShop = async (shopId, productPayload) => {
 export const fetchProductsByCategory = async (categoryName) => {
   const res = await api.get(`/products/category/${categoryName}/all/products`);
   return res.data.data; // ApiResponse → { message, data: [...] }
+};
+// GET product by id
+export const fetchProductById = async (productId) => {
+    const res = await api.get(`/products/product/${productId}/product`);
+    return res.data.data; // ProductDto
+};
+export const updateProduct = async (shopId, productId, payload) => {
+    const res = await api.put(
+        `/products/shop/${shopId}/product/${productId}/update`,
+        payload
+    );
+    return res.data.data; // ProductDto
+};
+// ✅ delete product
+// matches: @DeleteMapping("/shop/{shopId}/product/{productId}/delete")
+export const deleteProduct = async (shopId, productId) => {
+    const res = await api.delete(
+        `/products/shop/${shopId}/product/${productId}/delete`
+    );
+    return res.data; // ApiResponse
+};
+export const fetchOrdersForUser = async (userId) => {
+    const res = await api.get(`/orders/user/${userId}/orders`);
+    return res.data.data; // List<OrderDto>
 };

@@ -30,7 +30,8 @@ const LoginPage = () => {
             const userId = jwtData.id;
 
             if (!token) throw new Error("No token returned from backend");
-
+            console.log("login response:", apiResponse);
+            console.log("userId from login:", userId);
             localStorage.setItem("authToken", token);
             if (userId != null) localStorage.setItem("userId", String(userId));
             navigate("/home");

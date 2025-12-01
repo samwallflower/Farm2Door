@@ -70,21 +70,9 @@ export default function UserManagement() {
         loadOrders();
     }, []);
 
-    const fullName =
-        (user?.firstName || user?.name || "") +
-        (user?.lastName ? ` ${user.lastName}` : "");
-
-    const address =
-        user?.address ||
-        user?.shippingAddress ||
-        user?.billingAddress ||
-        "";
-
-    const phone =
-        user?.phoneNumber ||
-        user?.phone ||
-        "";
-
+    // Only fields that actually come back from backend
+    const firstName = user?.firstName || "";
+    const lastName = user?.lastName || "";
     const email = user?.email || "";
 
     return (
@@ -136,7 +124,6 @@ export default function UserManagement() {
                                     return (
                                         <div className="um-order-card" key={orderId}>
                                             <div className="um-order-image-wrap">
-                                                {/* If you add product image in order, use that instead */}
                                                 <img
                                                     src={sampleProduct}
                                                     alt="product"
@@ -160,7 +147,7 @@ export default function UserManagement() {
                         )}
                     </section>
 
-                    {/* ACCOUNT INFO */}
+                    {/* ACCOUNT INFO – only first name, last name, email */}
                     <section className="um-card um-account">
                         <h2 className="um-section-title">Account Info</h2>
 
@@ -169,31 +156,21 @@ export default function UserManagement() {
                         ) : (
                             <>
                                 <div className="um-input-group">
-                                    <label>Name</label>
+                                    <label>First Name</label>
                                     <input
                                         type="text"
-                                        placeholder="Name"
-                                        value={fullName}
+                                        placeholder="First Name"
+                                        value={firstName}
                                         readOnly
                                     />
                                 </div>
 
                                 <div className="um-input-group">
-                                    <label>Address</label>
+                                    <label>Last Name</label>
                                     <input
                                         type="text"
-                                        placeholder="Address"
-                                        value={address}
-                                        readOnly
-                                    />
-                                </div>
-
-                                <div className="um-input-group">
-                                    <label>Phone Number</label>
-                                    <input
-                                        type="text"
-                                        placeholder="Phone"
-                                        value={phone}
+                                        placeholder="Last Name"
+                                        value={lastName}
                                         readOnly
                                     />
                                 </div>
@@ -218,7 +195,7 @@ export default function UserManagement() {
                         )}
                     </section>
 
-                    {/* CONTACT / SHOP MGMT */}
+                    {/* CONTACT / SHOP MGMT – keep box on the right, same style, with phone + email */}
                     <section className="um-card um-contact">
                         <h2 className="um-section-title">Contact Support</h2>
 

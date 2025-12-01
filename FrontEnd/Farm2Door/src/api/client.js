@@ -86,7 +86,7 @@ export const logoutUser = () => {
     localStorage.removeItem("userId");
 };
 export const fetchUserById = async (userId) => {
-    const res = await api.get(`/users/user/${userId}/user`);
+    const res = await api.get(`/users/${userId}/user`);
     return res.data.data; // UserDto
 };
 // ==================== SHOPS ====================
@@ -180,6 +180,35 @@ export const deleteProduct = async (shopId, productId) => {
     return res.data; // ApiResponse
 };
 export const fetchOrdersForUser = async (userId) => {
-    const res = await api.get(`/orders/user/${userId}/orders`);
+    const res = await api.get(`/user/${userId}/orders`);
     return res.data.data; // List<OrderDto>
 };
+// ==================== PRODUCT IMAGES ====================
+
+// POST /images/upload  (files + productId)
+export const uploadProductImages = async (productId, files) => {
+    const formData = new FormData();
+
+    // backend expects List<MultipartFile> named "files"
+    files.forEach((file) => {
+        formData.append("files", file);
+    });
+    formData.append("productId", productId);
+
+    const res = await api.post("/images/upload", formData, {
+        headers: {
+            "Content-Type": "multipart/form-data", // override JSON default
+        },
+    });
+
+    // ApiResponse("Upload successful", List<ImageDto>)
+    return res.data.data;
+};
+
+
+// GET /images/product/{productId}/images
+export const fetchImagesForProduct = async (productId) => {
+    const res = await api.get(`/images/product/${productId}/images`);
+    return res.data.data; // List<ImageDto>
+};
+

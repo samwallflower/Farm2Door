@@ -8,7 +8,11 @@ import PillNav from "./PillNav";
 import logoImg from "./logo.png";
 import productPlaceholder from "./Product.jpg";
 
-import { fetchShopById, fetchProductsForShop } from "../api/client";
+import {
+    fetchShopById,
+    fetchProductsForShop,
+    fetchImagesForProduct,
+} from "../api/client";
 
 const navItems = [
     { label: "Home", href: "/home" },
@@ -16,6 +20,15 @@ const navItems = [
     { label: "Shops", href: "/shops" },
     { label: "Account", href: "/user" },
 ];
+
+const API_BASE =
+    import.meta.env.VITE_API_BASE_URL || "http://localhost:8080/api/v1";
+
+// Build a full download URL from an image id
+const buildImageUrlFromId = (imageId) => {
+    const base = API_BASE.replace(/\/$/, "");
+    return `${base}/images/image/download/${imageId}`;
+};
 
 export default function ShopDetails() {
     const navigate = useNavigate();
@@ -46,18 +59,43 @@ export default function ShopDetails() {
         loadShop();
     }, [shopId]);
 
-    // Load products for this shop
+    // Load products and their images
     useEffect(() => {
         const loadProducts = async () => {
             try {
                 const list = await fetchProductsForShop(shopId);
-                setProducts(Array.isArray(list) ? list : []);
+                const productsArray = Array.isArray(list) ? list : [];
+
+                const productsWithImages = await Promise.all(
+                    productsArray.map(async (product) => {
+                        try {
+                            const images = await fetchImagesForProduct(product.id);
+                            // Expecting List<ImageDto> – take the first one if present
+                            const first = Array.isArray(images) && images.length > 0 ? images[0] : null;
+
+                            const imageUrl = first
+                                ? buildImageUrlFromId(first.id) // build from image id
+                                : null;
+
+                            return {
+                                ...product,
+                                imageUrl,
+                            };
+                        } catch (err) {
+                            console.error("Failed to fetch images for product", product.id, err);
+                            return product; // keep product, just no image
+                        }
+                    })
+                );
+
+                setProducts(productsWithImages);
             } catch (err) {
                 console.error("Failed to load products for shop", err);
-                setError((prev) =>
-                    prev ||
-                    err.response?.data?.message ||
-                    "Failed to load products for this shop."
+                setError(
+                    (prev) =>
+                        prev ||
+                        err.response?.data?.message ||
+                        "Failed to load products for this shop."
                 );
             } finally {
                 setLoadingProducts(false);
@@ -140,15 +178,15 @@ export default function ShopDetails() {
                                     product.unitPrice ??
                                     product.productPrice ??
                                     null;
-
-
                                 const inventory = product.inventory ?? 0;
+
+                                const imageSrc = product.imageUrl || productPlaceholder;
 
                                 return (
                                     <article key={product.id} className="sd-product-card">
                                         <div className="sd-product-image-wrap">
                                             <img
-                                                src={product.image || productPlaceholder}
+                                                src={imageSrc}
                                                 alt={name}
                                                 className="sd-product-image"
                                             />
@@ -163,8 +201,8 @@ export default function ShopDetails() {
                                                 <span className="sd-product-price">€{price}</span>
                                             )}
                                             <span className="sd-product-amount">
-                                              In stock: {inventory}
-                                                 </span>
+                        In stock: {inventory}
+                      </span>
                                         </div>
 
                                         <button
@@ -177,7 +215,6 @@ export default function ShopDetails() {
                                     </article>
                                 );
                             })}
-
                         </div>
                     )}
                 </section>

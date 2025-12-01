@@ -1,7 +1,6 @@
 // src/Components/ShopManagement.jsx
 import React, { useEffect, useState } from "react";
 import "./ShopManagement.css";
-import sampleProduct from "./Product.jpg";
 import { useNavigate } from "react-router-dom";
 import {
     fetchShopByUserId,
@@ -27,6 +26,8 @@ export default function ShopManagement() {
         const loadShop = async () => {
             try {
                 const userId = localStorage.getItem("userId");
+                console.log("userId from localStorage in UserManagement:", userId);
+
                 if (!userId) {
                     setError("No userId found. Please log in again.");
                     setLoadingShop(false);
@@ -157,6 +158,11 @@ export default function ShopManagement() {
                                         product.stock ??
                                         product.quantity ??
                                         0;
+                                    const getProductImage = (product, fallback) =>
+                                        product.imageUrl ||
+                                        product.image ||
+                                        product.images?.[0]?.downloadUrl ||
+                                        fallback;
 
                                     return (
                                         <article
@@ -164,8 +170,8 @@ export default function ShopManagement() {
                                             key={product.id || name}
                                         >
                                             <div className="sm-product-thumb">
-                                                {/* TODO: use real image url when available */}
-                                                <img src={sampleProduct} alt={name} />
+
+                                                <img src={getProductImage(product)} alt={name} />
                                             </div>
                                             <div className="sm-product-info">
                                                 <h3>{name}</h3>

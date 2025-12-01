@@ -16,7 +16,7 @@ import cat5 from "./veg1.jpg";
 
 import fav1 from "./fruit.jpg"; // fallback image
 
-import { fetchProductsByCategory } from "../api/client";
+import { fetchProductsByCategory  } from "../api/client";
 
 const categoryCards = [
   { id: "Fresh Vegetables", title: "Fresh Vegetables", subtitle: "Tomatoes, lettuce, carrots, and more.", image: cat1 },
@@ -37,6 +37,11 @@ const Categories = () => {
   const navigate = useNavigate();
   const location = useLocation();
   const activeHref = location.pathname === "/" ? "/home" : location.pathname;
+    const getProductImage = (item) =>
+        item.imageUrl ||
+        item.image ||
+        item.images?.[0]?.downloadUrl ||
+        fav1;
 
   const [selectedCategory, setSelectedCategory] = useState(null);
   const [products, setProducts] = useState([]);
@@ -134,7 +139,7 @@ const Categories = () => {
             {products.map((item) => (
               <div key={item.id} className="cat-product-card">
                 <div className="cat-fav-image-wrap">
-                  <img src={item.imageUrl || fav1} alt={item.name} />
+                    <img src={getProductImage(item)} alt={item.name} />
                 </div>
 
                 <h3>{item.name}</h3>

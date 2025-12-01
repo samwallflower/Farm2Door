@@ -3,7 +3,7 @@ import React, { useState } from "react";
 import "./AddProduct.css";
 import { useNavigate } from "react-router-dom";
 import CartIcon from "./CartIcon";
-import { addProductToShop } from "../api/client";
+import { addProductToShop, uploadProductImages } from "../api/client";
 
 export default function AddProduct() {
     const navigate = useNavigate();
@@ -20,11 +20,14 @@ export default function AddProduct() {
 
     const [error, setError] = useState("");
     const [loading, setLoading] = useState(false);
-
+    const [images, setImages] = useState([]); // ⬅️ NEW
     const handleChange = (field) => (e) => {
         setForm((prev) => ({ ...prev, [field]: e.target.value }));
     };
-
+    const handleImageChange = (e) => {
+        const files = Array.from(e.target.files || []);
+        setImages(files);
+    };
     const handleSubmit = async (e) => {
         e.preventDefault();
         setError("");
@@ -38,8 +41,6 @@ export default function AddProduct() {
         try {
             setLoading(true);
 
-            // Map to your AddProductRequest JSON
-            // If your fields differ (e.g. productName vs name), rename here.
             const payload = {
                 name: form.name,
                 price: parseFloat(form.price || "0"),
@@ -50,7 +51,22 @@ export default function AddProduct() {
                 description: form.description,
             };
 
-            await addProductToShop(shopId, payload);
+            // 1) Create product
+            const created = await addProductToShop(shopId, payload);
+
+            // Try to get the product id from the response
+            const productId = created?.id ?? created?.productId;
+
+            // 2) Upload images if we have files and an id
+            if (productId && images.length > 0) {
+                try {
+                    await uploadProductImages(productId, images);
+                } catch (uploadErr) {
+                    console.error("Failed to upload product images", uploadErr);
+                    // Optional: set a non-blocking warning
+                    // setError((prev) => prev || "Product saved, but image upload failed.");
+                }
+            }
 
             // On success, go back to Shop Management
             navigate("/shop-management");
@@ -64,6 +80,7 @@ export default function AddProduct() {
             setLoading(false);
         }
     };
+
 
     return (
         <div className="ap-page">
@@ -101,6 +118,20 @@ export default function AddProduct() {
                     {error && <div className="ap-error">{error}</div>}
 
                     <form className="ap-form" onSubmit={handleSubmit}>
+                        {/* IMAGES */}
+                        <div className="ap-input-group ap-full">
+                            <label>Product Images</label>
+                            <input
+                                type="file"
+                                accept="image/*"
+                                multiple
+                                onChange={handleImageChange}
+                            />
+                            <small className="ap-help-text">
+                                You can select multiple images. The first one will be used as the main image.
+                            </small>
+                        </div>
+
                         {/* NAME */}
                         <div className="ap-input-group ap-full">
                             <label>Name</label>

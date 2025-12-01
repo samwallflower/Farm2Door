@@ -1,7 +1,5 @@
 package com.greenstack.farm2door.dto;
 
-
-
 import lombok.Data;
 
 import java.util.List;

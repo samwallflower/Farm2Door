@@ -13,6 +13,8 @@ public class ProductDto {
     private int inventory;
     private String description;
     private Category category;
+    private String origin; // e.g., farm location
+    private String unit; // e.g., kg, lb, dozen
     private List<ImageDto> images;
     private Long shopId;
 }

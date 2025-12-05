@@ -105,10 +105,7 @@ export const addShop = async (userId, shopPayload) => {
 };
 
 // GET /shops/shop/{shopId}/orders
-export const fetchOrdersForShop = async (shopId) => {
-    const res = await api.get(`/shops/shop/${shopId}/orders`);
-    return res.data.data; // List<OrderDto>
-};
+
 export const updateShop = async (shopId, updatePayload) => {
     const res = await api.put(`/shops/shop/${shopId}/update`, updatePayload);
     return res.data.data; // ShopDto
@@ -179,11 +176,7 @@ export const deleteProduct = async (shopId, productId) => {
     );
     return res.data; // ApiResponse
 };
-export const fetchOrdersForUser = async (userId) => {
-    const res = await api.get(`/user/${userId}/orders`);
-    return res.data.data; // List<OrderDto>
-};
-// ==================== PRODUCT IMAGES ====================
+//==================== PRODUCT IMAGES ====================
 
 // POST /images/upload  (files + productId)
 export const uploadProductImages = async (productId, files) => {
@@ -212,3 +205,31 @@ export const fetchImagesForProduct = async (productId) => {
     return res.data.data; // List<ImageDto>
 };
 
+// ==================== ORDERS ====================
+
+// POST /orders/order/create?userId=...
+export const createOrderForUser = async (userId) => {
+    const res = await api.post("/orders/order/create", null, {
+        params: { userId },
+    });
+    return res.data.data; // OrderDto
+};
+
+
+
+// GET /orders/{orderId}/order
+export const fetchOrderById = async (orderId) => {
+    const res = await api.get(`/orders/${orderId}/order`);
+    return res.data.data; // OrderDto
+};
+// USER orders – GET /orders/user/{userId}/orders
+export const fetchOrdersForUser = async (userId) => {
+    const res = await api.get(`/orders/user/${userId}/orders`);
+    return res.data.data; // List<OrderDto>
+};
+
+// SHOP orders – GET /orders/shop/{shopId}/orders
+export const fetchOrdersForShop = async (shopId) => {
+    const res = await api.get(`/orders/shop/${shopId}/orders`);
+    return res.data.data; // List<OrderDto>
+};

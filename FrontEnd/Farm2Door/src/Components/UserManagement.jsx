@@ -56,6 +56,13 @@ export default function UserManagement() {
                 setOrders(Array.isArray(list) ? list : []);
             } catch (err) {
                 console.error("Failed to load orders for user", err);
+
+                if (err.response?.status === 404) {
+                    // Treat "no orders" as an empty list, not an error
+                    setOrders([]);
+                    return;
+                }
+
                 setError((prev) =>
                     prev ||
                     err.response?.data?.message ||
@@ -65,6 +72,7 @@ export default function UserManagement() {
                 setLoadingOrders(false);
             }
         };
+
 
         loadUser();
         loadOrders();

@@ -30,6 +30,58 @@ const buildImageUrlFromId = (imageId) => {
     return `${base}/images/image/download/${imageId}`;
 };
 
+
+const getProductImageSrc = (product) => {
+    if (product.imageUrl) return product.imageUrl;
+
+    // if you ever populate product.images etc, we can still use them
+    const firstImage =
+        (product.images && product.images[0]) || null;
+    if (firstImage && firstImage.id) {
+        return buildImageUrlFromId(firstImage.id);
+    }
+
+    return productPlaceholder;
+};
+
+/**
+ * Add product to cart in localStorage.
+ */
+const addToCartLocal = (product) => {
+    const raw = localStorage.getItem("cartItems");
+    let current = [];
+    try {
+        current = raw ? JSON.parse(raw) : [];
+        if (!Array.isArray(current)) current = [];
+    } catch {
+        current = [];
+    }
+
+    const existingIndex = current.findIndex((p) => p.id === product.id);
+
+    if (existingIndex !== -1) {
+        const existing = current[existingIndex];
+        current[existingIndex] = {
+            ...existing,
+            quantity: (existing.quantity || 1) + 1,
+        };
+    } else {
+        current.push({
+            id: product.id,
+            name: product.name || product.productName,
+            price:
+                product.price ??
+                product.unitPrice ??
+                product.productPrice ??
+                0,
+            quantity: 1,
+            imageUrl: getProductImageSrc(product),
+        });
+    }
+
+    localStorage.setItem("cartItems", JSON.stringify(current));
+};
+
 export default function ShopDetails() {
     const navigate = useNavigate();
     const { shopId } = useParams(); // /shops/:shopId
@@ -59,7 +111,7 @@ export default function ShopDetails() {
         loadShop();
     }, [shopId]);
 
-    // Load products and their images
+    // Load products and their images (downloaded directly)
     useEffect(() => {
         const loadProducts = async () => {
             try {
@@ -70,20 +122,24 @@ export default function ShopDetails() {
                     productsArray.map(async (product) => {
                         try {
                             const images = await fetchImagesForProduct(product.id);
-                            // Expecting List<ImageDto> – take the first one if present
-                            const first = Array.isArray(images) && images.length > 0 ? images[0] : null;
+                            const first =
+                                Array.isArray(images) && images.length > 0
+                                    ? images[0]
+                                    : null;
 
-                            const imageUrl = first
-                                ? buildImageUrlFromId(first.id) // build from image id
-                                : null;
+                            const imageUrl = first ? buildImageUrlFromId(first.id) : null;
 
                             return {
                                 ...product,
                                 imageUrl,
                             };
                         } catch (err) {
-                            console.error("Failed to fetch images for product", product.id, err);
-                            return product; // keep product, just no image
+                            console.error(
+                                "Failed to fetch images for product",
+                                product.id,
+                                err
+                            );
+                            return product; // keep product, no image
                         }
                     })
                 );
@@ -91,11 +147,10 @@ export default function ShopDetails() {
                 setProducts(productsWithImages);
             } catch (err) {
                 console.error("Failed to load products for shop", err);
-                setError(
-                    (prev) =>
-                        prev ||
-                        err.response?.data?.message ||
-                        "Failed to load products for this shop."
+                setError((prev) =>
+                    prev ||
+                    err.response?.data?.message ||
+                    "Failed to load products for this shop."
                 );
             } finally {
                 setLoadingProducts(false);
@@ -180,7 +235,7 @@ export default function ShopDetails() {
                                     null;
                                 const inventory = product.inventory ?? 0;
 
-                                const imageSrc = product.imageUrl || productPlaceholder;
+                                const imageSrc = getProductImageSrc(product);
 
                                 return (
                                     <article key={product.id} className="sd-product-card">
@@ -208,7 +263,7 @@ export default function ShopDetails() {
                                         <button
                                             className="sd-btn sd-btn-primary sd-add-btn"
                                             type="button"
-                                            onClick={() => console.log("Add to cart:", product.id)}
+                                            onClick={() => addToCartLocal(product)}
                                         >
                                             Add to Cart
                                         </button>

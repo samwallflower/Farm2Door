@@ -1,150 +1,194 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import "./Basket.css";
 import { useNavigate } from "react-router-dom";
+import CartIcon from "./CartIcon";
+import PillNav from "./PillNav";
+import logoImg from "./logo.png";
+import { createOrderForUser } from "../api/client";
 
-// TEMP sample items — replace with your own data
-const sampleItems = [
-  {
-    id: 1,
-    name: "Tasty Italian Piada",
-    price: 28.0,
-    rating: 5,
-    image: "https://via.placeholder.com/80",
-    quantity: 2,
-  },
-  {
-    id: 2,
-    name: "Land & Sea",
-    price: 19.99,
-    rating: 4,
-    image: "https://via.placeholder.com/80",
-    quantity: 1,
-  },
-  {
-    id: 3,
-    name: "Healthy Salad",
-    price: 34.99,
-    rating: 5,
-    image: "https://via.placeholder.com/80",
-    quantity: 2,
-  },
-  {
-    id: 4,
-    name: "French Fries",
-    price: 9.99,
-    rating: 4,
-    image: "https://via.placeholder.com/80",
-    quantity: 1,
-  },
+const navItems = [
+    { label: "Home", href: "/home" },
+    { label: "Categories", href: "/categories" },
+    { label: "Shops", href: "/shops" },
+    { label: "Account", href: "/user" },
 ];
 
 export default function Basket() {
-  const [items, setItems] = useState(sampleItems);
-  const navigate = useNavigate();
+    const navigate = useNavigate();
 
-  const increase = (id) => {
-    setItems((prev) =>
-      prev.map((i) =>
-        i.id === id ? { ...i, quantity: i.quantity + 1 } : i
-      )
+    const [items, setItems] = useState([]);
+    const [placing, setPlacing] = useState(false);
+    const [error, setError] = useState("");
+    const [successMsg, setSuccessMsg] = useState("");
+
+    // Load cart from localStorage
+    useEffect(() => {
+        const raw = localStorage.getItem("cartItems");
+        try {
+            const parsed = raw ? JSON.parse(raw) : [];
+            setItems(Array.isArray(parsed) ? parsed : []);
+        } catch (e) {
+            console.error("Failed to parse cartItems", e);
+            setItems([]);
+        }
+    }, []);
+
+    const total = items.reduce(
+        (sum, item) => sum + (item.price || 0) * (item.quantity || 1),
+        0
     );
-  };
 
-  const decrease = (id) => {
-    setItems((prev) =>
-      prev.map((i) =>
-        i.id === id && i.quantity > 1
-          ? { ...i, quantity: i.quantity - 1 }
-          : i
-      )
-    );
-  };
+    const handleRemove = (id) => {
+        const filtered = items.filter((item) => item.id !== id);
+        setItems(filtered);
+        localStorage.setItem("cartItems", JSON.stringify(filtered));
+    };
 
-  const total = items
-    .reduce((sum, item) => sum + item.price * item.quantity, 0)
-    .toFixed(2);
+    const handleQuantityChange = (id, delta) => {
+        const updated = items
+            .map((item) =>
+                item.id === id
+                    ? { ...item, quantity: Math.max(1, (item.quantity || 1) + delta) }
+                    : item
+            )
+            .filter((item) => item.quantity > 0);
 
-  return (
-    <div className="basket-page">
-      {/* HEADER – same family as other pages */}
-      <header className="basket-header">
-        <div className="basket-logo">Farm2Door</div>
+        setItems(updated);
+        localStorage.setItem("cartItems", JSON.stringify(updated));
+    };
 
-        <nav className="basket-nav">
-          <button onClick={() => navigate("/home")}>Home</button>
-          <button onClick={() => navigate("/categories")}>Categories</button>
-          <button onClick={() => navigate("/shops")}>Shops</button>
-          <button onClick={() => navigate("/user")}>Account</button>
-        </nav>
-      </header>
+    const handleCheckout = async () => {
+        setError("");
+        setSuccessMsg("");
 
-      <main className="basket-main">
-        <section className="basket-card">
-          <div className="basket-card-header">
-            <div>
-              <p className="basket-eyebrow">Cart</p>
-              <h1 className="basket-title">My Basket</h1>
-              <p className="basket-subtitle">
-                Review your items before checkout.
-              </p>
-            </div>
-            <div className="basket-delivery">
-              <span>⏱ Time of delivery</span>
-              <strong>20–25 min</strong>
-            </div>
-          </div>
+        if (items.length === 0) {
+            setError("Your cart is empty.");
+            return;
+        }
 
-          {/* ITEMS LIST */}
-          <div className="basket-list">
-            {items.length === 0 ? (
-              <p className="basket-empty">Your basket is empty.</p>
-            ) : (
-              items.map((item) => (
-                <div className="basket-item" key={item.id}>
-                  <div className="basket-item-img-wrap">
-                    <img src={item.image} className="basket-item-img" alt={item.name} />
-                  </div>
+        const userId = localStorage.getItem("userId");
+        if (!userId) {
+            setError("No userId found. Please log in again.");
+            return;
+        }
 
-                  <div className="basket-info">
-                    <p className="basket-name">{item.name}</p>
-                    <div className="basket-rating">
-                      {"★".repeat(item.rating)}
-                    </div>
-                    <p className="basket-price">${item.price.toFixed(2)}</p>
-                  </div>
+        try {
+            setPlacing(true);
+            const order = await createOrderForUser(userId);
 
-                  <div className="basket-qty">
-                    <button
-                      className="qty-btn"
-                      onClick={() => decrease(item.id)}
-                    >
-                      –
-                    </button>
-                    <span className="qty-number">{item.quantity}</span>
-                    <button
-                      className="qty-btn"
-                      onClick={() => increase(item.id)}
-                    >
-                      +
-                    </button>
-                  </div>
+            // Clear cart on success
+            localStorage.removeItem("cartItems");
+            setItems([]);
+            setSuccessMsg(`Order #${order?.id || ""} placed successfully!`);
+
+            // Optional: redirect to account page
+            // navigate("/user");
+        } catch (err) {
+            console.error("Failed to place order", err);
+            setError(
+                err.response?.data?.message ||
+                "Failed to place order. Please try again."
+            );
+        } finally {
+            setPlacing(false);
+        }
+    };
+
+    return (
+        <div className="basket-page">
+            {/* Header */}
+            <header className="basket-header">
+                <div className="basket-logo-text">Farm2Door</div>
+                <div className="basket-header-center">
+                    <PillNav
+                        logo={logoImg}
+                        items={navItems}
+                        activeHref="/basket"
+                        baseColor="#ffffff"
+                        pillColor="#3e3625"
+                        hoveredPillTextColor="#3e3625"
+                    />
                 </div>
-              ))
-            )}
-          </div>
+            </header>
 
-          {/* FOOTER / TOTAL */}
-          <div className="basket-footer">
-            <div className="basket-total-text">
-              <span>Total</span>
-              <strong>${total}</strong>
-            </div>
-            <button className="basket-checkout-btn">
-                Pay Now!
-            </button>
-          </div>
-        </section>
-      </main>
-    </div>
-  );
+            <CartIcon />
+
+            <main className="basket-main">
+                <section className="basket-card">
+                    <h1 className="basket-title">Your Cart</h1>
+
+                    {error && <p className="basket-error">{error}</p>}
+                    {successMsg && <p className="basket-success">{successMsg}</p>}
+
+                    {items.length === 0 ? (
+                        <p>Your cart is empty.</p>
+                    ) : (
+                        <>
+                            <div className="basket-items">
+                                {items.map((item) => (
+                                    <div className="basket-item" key={item.id}>
+                                        <div className="basket-item-main">
+                                            <div className="basket-item-info">
+                                                {/* If you stored imageUrl, use that, otherwise fallback */}
+                                                {item.imageUrl && (
+                                                    <img
+                                                        src={item.imageUrl}
+                                                        alt={item.name}
+                                                        className="basket-item-image"
+                                                    />
+                                                )}
+                                                <div>
+                                                    <h3>{item.name}</h3>
+                                                    <p className="basket-item-price">
+                                                        €{item.price?.toFixed?.(2) ?? item.price}
+                                                    </p>
+                                                </div>
+                                            </div>
+
+                                            <div className="basket-item-controls">
+                                                <button
+                                                    type="button"
+                                                    onClick={() => handleQuantityChange(item.id, -1)}
+                                                >
+                                                    -
+                                                </button>
+                                                <span>{item.quantity || 1}</span>
+                                                <button
+                                                    type="button"
+                                                    onClick={() => handleQuantityChange(item.id, 1)}
+                                                >
+                                                    +
+                                                </button>
+                                            </div>
+                                        </div>
+
+                                        <button
+                                            className="basket-remove"
+                                            onClick={() => handleRemove(item.id)}
+                                        >
+                                            Remove
+                                        </button>
+                                    </div>
+                                ))}
+                            </div>
+
+                            <div className="basket-footer">
+                                <div className="basket-total-text">
+                                    <span>Total</span>
+                                    <strong>€{total.toFixed(2)}</strong>
+                                </div>
+                                <button
+                                    className="basket-checkout-btn"
+                                    onClick={handleCheckout}
+                                    disabled={placing || items.length === 0}
+                                >
+                                    {placing ? "Placing order..." : "Pay Now!"}
+                                </button>
+                            </div>
+                        </>
+                    )}
+                </section>
+            </main>
+        </div>
+    );
 }

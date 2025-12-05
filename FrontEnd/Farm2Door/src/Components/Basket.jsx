@@ -4,7 +4,7 @@ import { useNavigate } from "react-router-dom";
 import CartIcon from "./CartIcon";
 import PillNav from "./PillNav";
 import logoImg from "./logo.png";
-import { createOrderForUser } from "../api/client";
+import { createOrderForUser, addItemToCart } from "../api/client";
 
 const navItems = [
     { label: "Home", href: "/home" },
@@ -74,15 +74,42 @@ export default function Basket() {
 
         try {
             setPlacing(true);
+
+            // 1) Best-effort: sync localStorage cart to backend cart
+            for (const item of items) {
+                const productId = item.id;
+                const quantity = item.quantity || 1;
+                if (!productId) continue;
+
+                try {
+                    await addItemToCart(productId, quantity);
+                } catch (err) {
+                    const status = err.response?.status;
+
+                    if (status === 409) {
+                        // Conflict: item already in cart or similar – safe to ignore and continue
+                        console.warn("Item already in cart, skipping:", productId);
+                        continue;
+                    }
+
+                    if (status === 401) {
+                        setError("You must be logged in to place an order.");
+                        setPlacing(false);
+                        return;
+                    }
+
+                    console.error("Failed to sync item to backend cart", err);
+                    // For now we just continue so other items and the order can still go through
+                }
+            }
+
+            // 2) Place order using backend cart for this user
             const order = await createOrderForUser(userId);
 
-            // Clear cart on success
+            // 3) Clear local cart on success
             localStorage.removeItem("cartItems");
             setItems([]);
             setSuccessMsg(`Order #${order?.id || ""} placed successfully!`);
-
-            // Optional: redirect to account page
-            // navigate("/user");
         } catch (err) {
             console.error("Failed to place order", err);
             setError(
@@ -93,6 +120,8 @@ export default function Basket() {
             setPlacing(false);
         }
     };
+
+
 
     return (
         <div className="basket-page">
@@ -129,7 +158,6 @@ export default function Basket() {
                                     <div className="basket-item" key={item.id}>
                                         <div className="basket-item-main">
                                             <div className="basket-item-info">
-                                                {/* If you stored imageUrl, use that, otherwise fallback */}
                                                 {item.imageUrl && (
                                                     <img
                                                         src={item.imageUrl}

@@ -215,6 +215,29 @@ export const createOrderForUser = async (userId) => {
     return res.data.data; // OrderDto
 };
 
+// NEW: Create order including cart items
+export const createOrderWithItems = async (userId, items) => {
+    const payload = {
+        userId,
+        items: items.map(item => ({
+            productId: item.id,
+            quantity: item.quantity || 1
+        }))
+    };
+
+    const res = await api.post("/orders/order/create", payload);
+    return res.data.data; // OrderDto
+};
+
+// ==================== CART ITEMS ====================
+
+// POST /cartItems/item/add?productId=...&quantity=...
+export const addItemToCart = async (productId, quantity = 1) => {
+    const res = await api.post("/cartItems/item/add", null, {
+        params: { productId, quantity },
+    });
+    return res.data; // ApiResponse
+};
 
 
 // GET /orders/{orderId}/order
@@ -233,3 +256,40 @@ export const fetchOrdersForShop = async (shopId) => {
     const res = await api.get(`/orders/shop/${shopId}/orders`);
     return res.data.data; // List<OrderDto>
 };
+// ==================== CART ====================
+
+// GET /carts/user/{userId}/cart
+export const fetchCartForUser = async (userId) => {
+    const res = await api.get(`/carts/user/${userId}/cart`);
+    return res.data.data; // CartDto
+};
+
+// DELETE /carts/{cartId}/clear   (optional, if you want to clear on success)
+export const clearCart = async (cartId) => {
+    const res = await api.delete(`/carts/${cartId}/clear`);
+    return res.data; // ApiResponse
+};
+
+// ==================== CART ITEMS ====================
+
+// DELETE /cartItems/cart/{cartId}/item/{productId}/remove
+export const removeCartItem = async (cartId, productId) => {
+    const res = await api.delete(
+        `/cartItems/cart/${cartId}/item/${productId}/remove`
+    );
+    return res.data; // ApiResponse
+};
+
+// PUT /cartItems/cart/{cartId}/item/{productId}/update?quantity=...
+export const updateCartItemQuantity = async (cartId, productId, quantity) => {
+    const res = await api.put(
+        `/cartItems/cart/${cartId}/item/${productId}/update`,
+        null,
+        { params: { quantity } }
+    );
+    return res.data; // ApiResponse
+};
+// ==================== CART ITEMS ====================
+
+// POST /cartItems/item/add?productId=...&quantity=...
+

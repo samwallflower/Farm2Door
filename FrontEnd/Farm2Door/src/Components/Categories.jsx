@@ -16,15 +16,16 @@ import cat5 from "./veg1.jpg";
 
 import fav1 from "./fruit.jpg"; // fallback image
 
-import { fetchProductsByCategory  } from "../api/client";
+import { fetchProductsByCategory, addItemToCart } from "../api/client";
 
 const categoryCards = [
-  { id: "Fresh Vegetables", title: "Fresh Vegetables", subtitle: "Tomatoes, lettuce, carrots, and more.", image: cat1 },
-  { id: "Grains & Legumes", title: "Grains & Legumes", subtitle: "Wheat, corn, soybeans, and lentils.", image: cat2 },
-  { id: "Seasonal Fruits", title: "Seasonal Fruits", subtitle: "Apples, strawberries, blueberries, and peaches.", image: cat3 },
-  { id: "Leafy Greens", title: "Leafy Greens", subtitle: "Organic kale, lettuce, baby spinach, and more.", image: cat4 },
-  { id: "Free-Range Poultry", title: "Free-Range Poultry", subtitle: "Eggs and poultry raised with care.", image: cat5 },
+    { id: "Vegetables", title: "Vegetables", subtitle: "Fresh everyday veggies.", image: cat1 },
+    { id: "Fruits", title: "Fruits", subtitle: "Seasonal and sweet fruits.", image: cat3 },
+    { id: "Grains", title: "Grains", subtitle: "Rice, wheat, oats & more.", image: cat2 },
+    { id: "Dairy", title: "Dairy", subtitle: "Milk and products", image: cat4 },
+    { id: "Meats", title: "Meats", subtitle: "Farm-fresh eggs & chicken,Beef.", image: cat5 },
 ];
+
 
 const navItems = [
   { label: "Home", href: "/home" },
@@ -45,9 +46,53 @@ const Categories = () => {
 
   const [selectedCategory, setSelectedCategory] = useState(null);
   const [products, setProducts] = useState([]);
+    const handleAddToCart = async (product) => {
+        try {
+            // 1) Add to backend cart (server uses authenticated user via JWT)
+            await addItemToCart(product.id, 1);
+
+            // 2) Also add to localStorage so Basket shows the item
+            const raw = localStorage.getItem("cartItems");
+            let cart = [];
+            try {
+                cart = raw ? JSON.parse(raw) : [];
+            } catch {
+                cart = [];
+            }
+
+            const existing = cart.find((i) => i.id === product.id);
+
+            if (existing) {
+                existing.quantity += 1;
+            } else {
+                cart.push({
+                    id: product.id,
+                    name: product.name,
+                    price: product.price,
+                    quantity: 1,
+                    imageUrl:
+                        product.imageUrl ||
+                        product.images?.[0]?.downloadUrl ||
+                        product.image ||
+                        fav1,
+                });
+            }
+
+            localStorage.setItem("cartItems", JSON.stringify(cart));
+
+            // 3) Confirmation (you can replace alert with a toast later)
+            alert("Added to cart!");
+        } catch (err) {
+            console.error("Add to cart failed", err);
+            alert(
+                err.response?.data?.message ||
+                "Failed to add item to cart. Please log in first."
+            );
+        }
+    };
 
   useEffect(() => {
-    if (selectedCategory !== null) {
+    if (selectedCategory != null) {
       loadProducts(selectedCategory);
     }
   }, [selectedCategory]);
@@ -146,12 +191,13 @@ const Categories = () => {
 
                 <p className="cat-price">${item.price}</p>
 
-                <button
-                  className="cat-btn cat-btn-small cat-btn-outline"
-                  onClick={() => navigate("/basket")}
-                >
-                  Add to Cart
-                </button>
+                  <button
+                      className="cat-btn cat-btn-small cat-btn-outline"
+                      onClick={() => handleAddToCart(item)}
+                  >
+                      Add to Cart
+                  </button>
+
               </div>
             ))}
           </div>

@@ -250,7 +250,7 @@ const Categories = () => {
               <p className="cat-info-text">Join our weekly organic program.</p>
             </div>
 
-            <div className="cat-promo-image-placeholder"></div>
+
           </div>
         </section>
       </main>

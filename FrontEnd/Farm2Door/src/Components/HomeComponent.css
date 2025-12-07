@@ -258,6 +258,36 @@
   grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
   gap: 18px;
 }
+/* LOGIN CTA SECTION */
+
+.home-login-cta {
+    display: flex;
+    justify-content: center;
+    margin: 40px 0 20px;
+}
+
+.home-login-btn {
+    border: none;
+    border-radius: 999px;
+    padding: 12px 28px;
+    font-size: 16px;
+    font-weight: 600;
+    cursor: pointer;
+    background: var(--basket-yellow, #f6d66c);
+    color: #2a2417;
+    box-shadow: 0 6px 14px rgba(0,0,0,0.12);
+    transition: transform 0.12s ease, box-shadow 0.12s ease;
+}
+
+.home-login-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 10px 20px rgba(0,0,0,0.18);
+}
+
+.home-login-btn:active {
+    transform: translateY(0);
+    box-shadow: 0 5px 10px rgba(0,0,0,0.14);
+}
 
 .home-feature h3 {
   font-size: 15px;

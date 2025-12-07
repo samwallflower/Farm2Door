@@ -35,7 +35,6 @@ export default function Shopcreation() {
 
             setLoading(true);
 
-            // 👇 matches AddShopRequest exactly
             const payload = {
                 name: form.name,
                 address: form.address,

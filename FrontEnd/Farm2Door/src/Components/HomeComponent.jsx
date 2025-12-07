@@ -98,9 +98,19 @@ const HomeComponent = () => {
               <h3>Easy Ordering</h3>
               <p>Shop by category, by shop, or with a weekly farm box.</p>
             </div>
+
           </div>
         </section>
+          <div className="home-login-cta">
+              <button
+                  className="home-login-btn"
+                  onClick={() => (window.location.href = "/login")}
+              >
+                  Log In to Start Ordering →
+              </button>
+          </div>
       </main>
+
     </div>
   );
 };

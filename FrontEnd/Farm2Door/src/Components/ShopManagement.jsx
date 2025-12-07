@@ -1,4 +1,3 @@
-// src/Components/ShopManagement.jsx
 import React, { useEffect, useState } from "react";
 import "./ShopManagement.css";
 import { useNavigate } from "react-router-dom";
@@ -7,6 +6,50 @@ import {
     fetchProductsForShop,
     fetchOrdersForShop,
 } from "../api/client";
+
+import PillNav from "./PillNav";
+import logoImg from "./logo.png";
+import productPlaceholder from "./Product.jpg"; // ✅ placeholder image
+
+const navItems = [
+    { label: "Home", href: "/home" },
+    { label: "Categories", href: "/categories" },
+    { label: "Shops", href: "/shops" },
+    { label: "Account", href: "/user" },
+];
+
+const API_BASE =
+    import.meta.env.VITE_API_BASE_URL || "http://localhost:8080/api/v1";
+
+// Build a full download URL from an image id
+const buildImageUrlFromId = (imageId) => {
+    const base = API_BASE.replace(/\/$/, ""); // strip trailing slash
+    return `${base}/images/image/download/${imageId}`;
+};
+
+const getProductImage = (product) => {
+    // 1) Direct URL on product
+    if (product.imageUrl && product.imageUrl.startsWith("http")) {
+        return product.imageUrl;
+    }
+
+    // 2) First image from images array
+    const firstImage = product.images?.[0] || null;
+    if (firstImage) {
+        if (firstImage.downloadUrl && firstImage.downloadUrl.startsWith("http")) {
+            return firstImage.downloadUrl;
+        }
+        if (firstImage.imageUrl && firstImage.imageUrl.startsWith("http")) {
+            return firstImage.imageUrl;
+        }
+        if (firstImage.id != null) {
+            return buildImageUrlFromId(firstImage.id);
+        }
+    }
+
+    // 3) Fallback placeholder
+    return productPlaceholder;
+};
 
 export default function ShopManagement() {
     const navigate = useNavigate();
@@ -90,19 +133,18 @@ export default function ShopManagement() {
         <div className="sm-page">
             {/* Header / Nav */}
             <header className="sm-header">
-                <div className="sm-logo">Farm2Door</div>
+                <div className="sm-logo-text">Farm2Door</div>
 
-                <nav className="sm-nav">
-                    <button onClick={() => navigate("/home")}>Home</button>
-                    <button onClick={() => navigate("/categories")}>Categories</button>
-                    <button
-                        className="active"
-                        onClick={() => navigate("/shop-management")}
-                    >
-                        Shops
-                    </button>
-                    <button onClick={() => navigate("/user")}>Account</button>
-                </nav>
+                <div className="sm-header-center">
+                    <PillNav
+                        logo={logoImg}
+                        items={navItems}
+                        activeHref="/shop-management"
+                        baseColor="#ffffff"
+                        pillColor="#3e3625"
+                        hoveredPillTextColor="#3e3625"
+                    />
+                </div>
             </header>
 
             <main className="sm-main">
@@ -158,11 +200,6 @@ export default function ShopManagement() {
                                         product.stock ??
                                         product.quantity ??
                                         0;
-                                    const getProductImage = (product, fallback) =>
-                                        product.imageUrl ||
-                                        product.image ||
-                                        product.images?.[0]?.downloadUrl ||
-                                        fallback;
 
                                     return (
                                         <article
@@ -170,7 +207,7 @@ export default function ShopManagement() {
                                             key={product.id || name}
                                         >
                                             <div className="sm-product-thumb">
-
+                                                {/* ✅ use shared image helper */}
                                                 <img src={getProductImage(product)} alt={name} />
                                             </div>
                                             <div className="sm-product-info">
@@ -184,7 +221,10 @@ export default function ShopManagement() {
                                                     className="sm-btn sm-btn-outline sm-btn-small"
                                                     onClick={() => {
                                                         if (product.id != null) {
-                                                            localStorage.setItem("productId", String(product.id));
+                                                            localStorage.setItem(
+                                                                "productId",
+                                                                String(product.id)
+                                                            );
                                                         }
                                                         navigate("/update-product");
                                                     }}
@@ -195,7 +235,10 @@ export default function ShopManagement() {
                                                     className="sm-btn sm-btn-outline sm-btn-small"
                                                     onClick={() => {
                                                         if (product.id != null) {
-                                                            localStorage.setItem("productId", String(product.id));
+                                                            localStorage.setItem(
+                                                                "productId",
+                                                                String(product.id)
+                                                            );
                                                         }
                                                         navigate("/product");
                                                     }}

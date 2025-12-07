@@ -23,7 +23,6 @@ const LoginPage = () => {
 
         try {
             const apiResponse = await loginUser(email, password);
-// apiResponse = { message, data: { id, token } }
 
             const jwtData = apiResponse.data || {};
             const token = jwtData.token;

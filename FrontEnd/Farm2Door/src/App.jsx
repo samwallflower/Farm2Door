@@ -16,39 +16,107 @@ import Categories from "./Components/Categories.jsx";
 import ShopsMenu from "./Components/ShopsMenu.jsx";
 import ShopDetails from "./Components/ShopDetails.jsx";
 import Basket from "./Components/Basket.jsx";
-import Shopcreation from "./Components/Shopcreation.jsx";// ✅ ADD THIS
+import Shopcreation from "./Components/Shopcreation.jsx";
+
+import ProtectedRoute from "./Components/ProtectedRoute";
 
 export default function App() {
-  return (
-    <Router>
-      <Routes>
+    return (
+        <Router>
+            <Routes>
 
-        {/* ⭐ Shops Menu + Shop Details */}
-        <Route path="/shops" element={<ShopsMenu />} />
-        <Route path="/shops/:shopId" element={<ShopDetails />} />
+                <Route path="/" element={<HomeComponent />} />
+                <Route path="/home" element={<HomeComponent />} />
+                <Route path="/categories" element={<Categories />} />
+                <Route path="/shops" element={<ShopsMenu />} />
+                <Route path="/shops/:shopId" element={<ShopDetails />} />
 
-        {/* ⭐ Cart/Basket Page */}
-        <Route path="/basket" element={<Basket />} />   {/* ✅ FIXED */}
 
-        {/* ⭐ Login + Register */}
-        <Route path="/" element={<LoginPage />} />
-        <Route path="/register" element={<Registration />} />
+                <Route path="/login" element={<LoginPage />} />
+                <Route path="/register" element={<Registration />} />
 
-        {/* ⭐ Main Pages */}
-        <Route path="/home" element={<HomeComponent />} />
-        <Route path="/categories" element={<Categories />} />
-        <Route path="/user" element={<UserManagement />} />
-          <Route path="/shop-creation" element={<Shopcreation />} />
-        {/* ⭐ User / Orders / Products / Shop Management */}
-        <Route path="/update-info" element={<UpdateInfo />} />
-        <Route path="/orders" element={<OrderPage />} />
-        <Route path="/add-product" element={<AddProduct />} />
-        <Route path="/update-product" element={<UpdateProduct />} />
-        <Route path="/product" element={<ProductPage />} />
-        <Route path="/update-shop" element={<UpdateShop />} />
-        <Route path="/shop-management" element={<ShopManagement />} />
 
-      </Routes>
-    </Router>
-  );
+                <Route
+                    path="/basket"
+                    element={
+                        <ProtectedRoute>
+                            <Basket />
+                        </ProtectedRoute>
+                    }
+                />
+                <Route
+                    path="/user"
+                    element={
+                        <ProtectedRoute>
+                            <UserManagement />
+                        </ProtectedRoute>
+                    }
+                />
+                <Route
+                    path="/shop-creation"
+                    element={
+                        <ProtectedRoute>
+                            <Shopcreation />
+                        </ProtectedRoute>
+                    }
+                />
+                <Route
+                    path="/shop-management"
+                    element={
+                        <ProtectedRoute>
+                            <ShopManagement />
+                        </ProtectedRoute>
+                    }
+                />
+                <Route
+                    path="/update-info"
+                    element={
+                        <ProtectedRoute>
+                            <UpdateInfo />
+                        </ProtectedRoute>
+                    }
+                />
+                <Route
+                    path="/orders"
+                    element={
+                        <ProtectedRoute>
+                            <OrderPage />
+                        </ProtectedRoute>
+                    }
+                />
+                <Route
+                    path="/add-product"
+                    element={
+                        <ProtectedRoute>
+                            <AddProduct />
+                        </ProtectedRoute>
+                    }
+                />
+                <Route
+                    path="/update-product"
+                    element={
+                        <ProtectedRoute>
+                            <UpdateProduct />
+                        </ProtectedRoute>
+                    }
+                />
+                <Route
+                    path="/product"
+                    element={
+                        <ProtectedRoute>
+                            <ProductPage />
+                        </ProtectedRoute>
+                    }
+                />
+                <Route
+                    path="/update-shop"
+                    element={
+                        <ProtectedRoute>
+                            <UpdateShop />
+                        </ProtectedRoute>
+                    }
+                />
+            </Routes>
+        </Router>
+    );
 }

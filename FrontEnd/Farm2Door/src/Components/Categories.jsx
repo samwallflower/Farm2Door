@@ -9,19 +9,19 @@ import logoImg from "./logo.png";
 // images
 import heroImage from "./product5.jpg";
 import cat1 from "./veg1.jpg";
-import cat2 from "./veg1.jpg";
-import cat3 from "./fruit.jpg";
+import cat3 from "./grains.jpg";
 import cat4 from "./chose.jpg";
-import cat5 from "./veg1.jpg";
+import cat5 from "./Meats.jpg";
 
 import fav1 from "./fruit.jpg"; // fallback image
 
-import { fetchProductsByCategory, addItemToCart } from "../api/client";
+import { fetchProductsByCategory, addItemToCart ,fetchImagesForProduct} from "../api/client";
+import productPlaceholder from "./Product.jpg";
 
 const categoryCards = [
     { id: "Vegetables", title: "Vegetables", subtitle: "Fresh everyday veggies.", image: cat1 },
-    { id: "Fruits", title: "Fruits", subtitle: "Seasonal and sweet fruits.", image: cat3 },
-    { id: "Grains", title: "Grains", subtitle: "Rice, wheat, oats & more.", image: cat2 },
+    { id: "Fruits", title: "Fruits", subtitle: "Seasonal and sweet fruits.", image: fav1 },
+    { id: "Grains", title: "Grains", subtitle: "Rice, wheat, oats & more.", image: cat3 },
     { id: "Dairy", title: "Dairy", subtitle: "Milk and products", image: cat4 },
     { id: "Meats", title: "Meats", subtitle: "Farm-fresh eggs & chicken,Beef.", image: cat5 },
 ];
@@ -38,13 +38,44 @@ const Categories = () => {
   const navigate = useNavigate();
   const location = useLocation();
   const activeHref = location.pathname === "/" ? "/home" : location.pathname;
-    const getProductImage = (item) =>
-        item.imageUrl ||
-        item.image ||
-        item.images?.[0]?.downloadUrl ||
-        fav1;
+    const API_BASE =
+        import.meta.env.VITE_API_BASE_URL || "http://localhost:8080/api/v1";
 
-  const [selectedCategory, setSelectedCategory] = useState(null);
+// Build a full download URL from an image id
+    const buildImageUrlFromId = (imageId) => {
+        const base = API_BASE.replace(/\/$/, ""); // remove trailing slash
+        return `${base}/images/image/download/${imageId}`;
+    };
+
+    const getProductImage = (product) => {
+        // 1) Direct URL from backend
+        if (product.imageUrl && product.imageUrl.startsWith("http")) {
+            return product.imageUrl;
+        }
+
+        // 2) If product has an images array
+        const firstImage = product.images?.[0] || null;
+        if (firstImage) {
+            // if backend sends downloadUrl / imageUrl directly
+            if (firstImage.downloadUrl && firstImage.downloadUrl.startsWith("http")) {
+                return firstImage.downloadUrl;
+            }
+            if (firstImage.imageUrl && firstImage.imageUrl.startsWith("http")) {
+                return firstImage.imageUrl;
+            }
+            if (firstImage.id != null) {
+                return buildImageUrlFromId(firstImage.id);
+            }
+        }
+
+        // 3) Fallback placeholder
+        return productPlaceholder;
+    };
+
+
+
+
+    const [selectedCategory, setSelectedCategory] = useState(null);
   const [products, setProducts] = useState([]);
     const handleAddToCart = async (product) => {
         try {

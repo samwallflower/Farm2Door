@@ -118,6 +118,8 @@ export const deleteShop = async (shopId) => {
 };
 export const fetchAllShops = async () => {
     const res = await api.get("/shops/all");
+    console.log("Base URL:", api.defaults.baseURL);
+
     return res.data.data; // List<ShopDto>
 };
 

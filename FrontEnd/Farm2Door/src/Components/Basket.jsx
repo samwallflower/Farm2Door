@@ -121,8 +121,6 @@ export default function Basket() {
         }
     };
 
-
-
     return (
         <div className="basket-page">
             {/* Header */}
@@ -145,6 +143,15 @@ export default function Basket() {
             <main className="basket-main">
                 <section className="basket-card">
                     <h1 className="basket-title">Your Cart</h1>
+
+                    {/* NEW: continue shopping button uses navigate, fixes the warning */}
+                    <button
+                        type="button"
+                        className="basket-continue-btn"
+                        onClick={() => navigate("/categories")}
+                    >
+                        ← Continue Shopping
+                    </button>
 
                     {error && <p className="basket-error">{error}</p>}
                     {successMsg && <p className="basket-success">{successMsg}</p>}

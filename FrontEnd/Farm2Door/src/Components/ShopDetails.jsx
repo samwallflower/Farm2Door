@@ -44,9 +44,7 @@ const getProductImageSrc = (product) => {
     return productPlaceholder;
 };
 
-/**
- * Add product to cart in localStorage.
- */
+
 const addToCartLocal = (product) => {
     const raw = localStorage.getItem("cartItems");
     let current = [];

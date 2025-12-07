@@ -232,6 +232,12 @@ export default function UserManagement() {
                         >
                             Shop Management Menu
                         </button>
+                        <button
+                            className="um-btn um-btn-outline um-full-width um-btn-login"
+                            onClick={() => navigate("/login")}
+                        >
+                            Log In
+                        </button>
                     </section>
                 </div>
             </main>

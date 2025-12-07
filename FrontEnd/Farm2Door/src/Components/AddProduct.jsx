@@ -1,4 +1,3 @@
-// src/Components/AddProduct.jsx
 import React, { useState } from "react";
 import "./AddProduct.css";
 import { useNavigate } from "react-router-dom";
@@ -51,7 +50,6 @@ export default function AddProduct() {
                 description: form.description,
             };
 
-            // 1) Create product
             const created = await addProductToShop(shopId, payload);
 
             // Try to get the product id from the response
@@ -118,7 +116,6 @@ export default function AddProduct() {
                     {error && <div className="ap-error">{error}</div>}
 
                     <form className="ap-form" onSubmit={handleSubmit}>
-                        {/* IMAGES */}
                         <div className="ap-input-group ap-full">
                             <label>Product Images</label>
                             <input
@@ -132,7 +129,6 @@ export default function AddProduct() {
                             </small>
                         </div>
 
-                        {/* NAME */}
                         <div className="ap-input-group ap-full">
                             <label>Name</label>
                             <input
@@ -144,7 +140,6 @@ export default function AddProduct() {
                             />
                         </div>
 
-                        {/* PRICE + INVENTORY */}
                         <div className="ap-row">
                             <div className="ap-input-group">
                                 <label>Price</label>
@@ -170,7 +165,6 @@ export default function AddProduct() {
                             </div>
                         </div>
 
-                        {/* ORIGIN + UNIT */}
                         <div className="ap-row">
                             <div className="ap-input-group">
                                 <label>Origin</label>
@@ -193,7 +187,6 @@ export default function AddProduct() {
                             </div>
                         </div>
 
-                        {/* CATEGORY */}
                         <div className="ap-input-group ap-full">
                             <label>Category</label>
                             <input

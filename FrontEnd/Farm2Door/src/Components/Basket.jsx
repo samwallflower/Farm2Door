@@ -20,6 +20,39 @@ export default function Basket() {
     const [placing, setPlacing] = useState(false);
     const [error, setError] = useState("");
     const [successMsg, setSuccessMsg] = useState("");
+    const API_BASE =
+        import.meta.env.VITE_API_BASE_URL || "http://localhost:8080/api/v1";
+
+    const buildImageUrlFromId = (imageId) => {
+        const base = API_BASE.replace(/\/$/, "");
+        return `${base}/images/image/download/${imageId}`;
+    };
+
+    const getProductImage = (product) => {
+        // LocalStorage stores raw objects; ensure fallback
+        if (!product) return productPlaceholder;
+
+        // Already a full URL?
+        if (product.imageUrl && product.imageUrl.startsWith("http")) {
+            return product.imageUrl;
+        }
+
+        // If it's a relative backend path
+        if (product.imageUrl && product.imageUrl.startsWith("/")) {
+            return `${API_BASE.replace("/api/v1", "")}${product.imageUrl}`;
+        }
+
+        // Check images array
+        const firstImage = product.images?.[0] || null;
+        if (firstImage) {
+            if (firstImage.downloadUrl?.startsWith("http")) return firstImage.downloadUrl;
+            if (firstImage.imageUrl?.startsWith("http")) return firstImage.imageUrl;
+            if (firstImage.id != null) return buildImageUrlFromId(firstImage.id);
+        }
+
+        // fallback
+        return productPlaceholder;
+    };
 
     // Load cart from localStorage
     useEffect(() => {
@@ -165,13 +198,12 @@ export default function Basket() {
                                     <div className="basket-item" key={item.id}>
                                         <div className="basket-item-main">
                                             <div className="basket-item-info">
-                                                {item.imageUrl && (
-                                                    <img
-                                                        src={item.imageUrl}
-                                                        alt={item.name}
-                                                        className="basket-item-image"
-                                                    />
-                                                )}
+                                                <img
+                                                    src={getProductImage(item)}
+                                                    alt={item.name}
+                                                    className="basket-item-image"
+                                                />
+
                                                 <div>
                                                     <h3>{item.name}</h3>
                                                     <p className="basket-item-price">
@@ -181,19 +213,17 @@ export default function Basket() {
                                             </div>
 
                                             <div className="basket-item-controls">
-                                                <button
-                                                    type="button"
-                                                    onClick={() => handleQuantityChange(item.id, -1)}
-                                                >
-                                                    -
-                                                </button>
                                                 <span>{item.quantity || 1}</span>
-                                                <button
-                                                    type="button"
-                                                    onClick={() => handleQuantityChange(item.id, 1)}
-                                                >
-                                                    +
-                                                </button>
+
+                                                <div className="qty-row">
+                                                    <button type="button" onClick={() => handleQuantityChange(item.id, -1)}>
+                                                        -
+                                                    </button>
+
+                                                    <button type="button" onClick={() => handleQuantityChange(item.id, 1)}>
+                                                        +
+                                                    </button>
+                                                </div>
                                             </div>
                                         </div>
 

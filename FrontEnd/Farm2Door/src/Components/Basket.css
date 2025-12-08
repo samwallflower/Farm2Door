@@ -285,6 +285,94 @@
 .basket-total-text strong {
   font-size: 18px;
 }
+/* QUANTITY BUTTONS – styled to match theme */
+.basket-item-controls button {
+    width: 32px;
+    height: 32px;
+
+    border: none;
+    border-radius: 999px;
+
+    background: #ffffff;
+    color: var(--basket-brown);
+
+    font-size: 18px;
+    font-weight: 700;
+    cursor: pointer;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    box-shadow: 0 3px 8px rgba(0, 0, 0, 0.1);
+    transition: 0.15s ease;
+}
+
+.basket-item-controls button:hover {
+    background: var(--basket-yellow-soft);
+    transform: translateY(-2px);
+    box-shadow: 0 5px 14px rgba(0, 0, 0, 0.18);
+}
+
+.basket-item-controls button:active {
+    transform: translateY(0);
+    box-shadow: 0 3px 7px rgba(0, 0, 0, 0.12);
+}
+
+.basket-item-controls span {
+    min-width: 28px;
+    text-align: center;
+    font-weight: 600;
+    font-size: 15px;
+}
+/* QUANTITY CONTROLS – horizontal buttons, number on top */
+.basket-item-controls {
+    display: flex;
+    flex-direction: column;   /* number on top, buttons below */
+    align-items: center;
+    gap: 6px;
+}
+
+.basket-item-controls .qty-row {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px; /* space between - and + */
+}
+
+.basket-item-controls span {
+    font-size: 18px;
+    font-weight: 700;
+    color: var(--basket-brown);
+}
+.basket-item-controls button {
+    width: 36px;
+    height: 36px;
+    border: none;
+    border-radius: 999px;
+
+    background: #ffffff;
+    color: var(--basket-brown);
+    font-size: 20px;
+    font-weight: 700;
+    cursor: pointer;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    box-shadow: 0 3px 8px rgba(0, 0, 0, 0.1);
+    transition: 0.15s ease;
+}
+
+.basket-item-controls button:hover {
+    background: var(--basket-yellow-soft);
+    transform: translateY(-1px);
+}
+
+.basket-item-controls button:active {
+    transform: translateY(0);
+}
 
 
 .basket-checkout-btn {
